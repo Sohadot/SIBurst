@@ -307,6 +307,13 @@ class SiteValidator:
                     continue
                 path, _, fragment = target.partition("#")
                 base = os.path.dirname(rel)
+                if path.startswith("/"):
+                    # Root-absolute paths are for 404.html only: GitHub Pages serves
+                    # it at any missing path, where relative links would break.
+                    if rel != "404.html":
+                        self.fail("links.root_absolute", rel, target)
+                        continue
+                    base, path = "", path.lstrip("/") or "."
                 resolved = os.path.normpath(os.path.join(base, path)).replace(os.sep, "/") if path else rel
                 if resolved.endswith("/") or os.path.isdir(os.path.join(self.docs, resolved)) or resolved == ".":
                     resolved = os.path.normpath(os.path.join(resolved, "index.html")).replace(os.sep, "/")
@@ -528,6 +535,97 @@ class SiteValidator:
                 if listed != truth:
                     self.fail("reference.list", page, "%s explicit references listed as %s" % (n, sorted(listed)))
 
+    # -- Publication (PUBLICATION.md) ---------------------------------------------
+
+    DEV_URL = re.compile(r"localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\]|file://|github\.io|:\d{4,5}/|\bhttp://(?!www\.w3\.org/2000/svg|www\.sitemaps\.org/schemas)", re.I)
+
+    def publication(self):
+        def text(name):
+            path = os.path.join(self.docs, name)
+            return read_bytes(path).decode("utf-8") if os.path.exists(path) else None
+
+        cname = os.path.join(self.docs, "CNAME")
+        if not os.path.exists(cname) or read_bytes(cname) != build_site.SITE_DOMAIN.encode("ascii"):
+            self.fail("publication.cname", "CNAME", "must contain exactly %r" % build_site.SITE_DOMAIN)
+        stray = os.path.join(os.path.dirname(os.path.abspath(self.docs)), "CNAME")
+        if os.path.exists(stray):
+            self.fail("publication.cname", "CNAME", "only docs/CNAME may define the custom domain; remove the root-level CNAME")
+        nojekyll = os.path.join(self.docs, ".nojekyll")
+        if not os.path.exists(nojekyll) or read_bytes(nojekyll):
+            self.fail("publication.nojekyll", ".nojekyll", "must exist and be empty so Pages serves the artifact unprocessed")
+        expected_robots = "User-agent: *\nAllow: /\n\nSitemap: %ssitemap.xml\n" % build_site.SITE_URL
+        if text("robots.txt") != expected_robots:
+            self.fail("publication.robots", "robots.txt", "must allow indexing and name the canonical sitemap")
+        sitemap = text("sitemap.xml")
+        locs = []
+        if sitemap is None:
+            self.fail("publication.sitemap", "sitemap.xml", "missing")
+        else:
+            try:
+                import xml.etree.ElementTree as ET
+                root = ET.fromstring(sitemap)
+                ns = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
+                if root.tag != ns + "urlset":
+                    self.fail("publication.sitemap", "sitemap.xml", "root must be a sitemaps.org urlset")
+                locs = [(u.findtext(ns + "loc") or "").strip() for u in root.findall(ns + "url")]
+            except ET.ParseError as error:
+                self.fail("publication.sitemap", "sitemap.xml", "malformed XML: %s" % error)
+        canonicals = {}
+        for path in self.html_files():
+            rel = os.path.relpath(path, self.docs).replace(os.sep, "/")
+            if rel == "404.html":
+                continue
+            found = [a.get("href") for t, a in parse(path).elements if t == "link" and a.get("rel") == "canonical"]
+            if len(found) != 1:
+                self.fail("publication.canonical", rel, "exactly one canonical link required")
+                continue
+            expected = build_site.SITE_URL + ("" if rel == "index.html" else rel[:-len("index.html")] if rel.endswith("/index.html") else rel)
+            if found[0] != expected:
+                self.fail("publication.canonical", rel, "canonical %r, expected %r" % (found[0], expected))
+            canonicals[found[0]] = rel
+        if locs:
+            if len(set(locs)) != len(locs):
+                self.fail("publication.sitemap", "sitemap.xml", "duplicate entries")
+            for loc in locs:
+                if not loc.startswith(build_site.SITE_URL) or loc not in canonicals:
+                    self.fail("publication.sitemap", "sitemap.xml", "entry %r is not a canonical public page" % loc)
+            for url in sorted(set(canonicals) - set(locs)):
+                self.fail("publication.sitemap", "sitemap.xml", "public page %r missing" % url)
+            if locs != build_site.public_urls():
+                self.fail("publication.sitemap", "sitemap.xml", "entries differ from the build's public URL list")
+        self.report["sitemap_urls"] = len(locs)
+        index = parse(os.path.join(self.docs, "index.html"))
+        metas = {(a.get("name") or a.get("property")): a.get("content", "") for t, a in index.elements if t == "meta"}
+        if not metas.get("description") or metas.get("og:url") != build_site.SITE_URL or not metas.get("og:title"):
+            self.fail("publication.metadata", "index.html", "description, og:title and og:url are required")
+        if not "".join(index.text).strip() or not any(t == "title" for t, _ in index.elements):
+            self.fail("publication.metadata", "index.html", "missing <title>")
+        not_found = text("404.html")
+        if not_found is None:
+            self.fail("publication.404", "404.html", "missing")
+        else:
+            page = parse(os.path.join(self.docs, "404.html"))
+            if any(t == "script" for t, _ in page.elements):
+                self.fail("publication.404", "404.html", "must work without scripts")
+            if not any(t == "a" and a.get("href") == "/" for t, a in page.elements):
+                self.fail("publication.404", "404.html", "must link to /")
+            if not any(t == "meta" and a.get("name") == "robots" and "noindex" in a.get("content", "") for t, a in page.elements):
+                self.fail("publication.404", "404.html", "must not be indexed")
+        for base, _, names in os.walk(self.docs):
+            for name in names:
+                path = os.path.join(base, name)
+                rel = os.path.relpath(path, self.docs).replace(os.sep, "/")
+                if name.endswith(".html"):
+                    values = [v for _, a in parse(path).elements for k, v in a.items()
+                              if k in ("href", "src", "content", "action", "srcset", "data", "poster") and v]
+                elif name.endswith((".css", ".js", ".txt", ".xml")) or name == "CNAME":
+                    values = re.findall(r"""(?:https?:|file:)?//[^\s"'`)<>]+|localhost[^\s"'`)<>]*|127\.0\.0\.1[^\s"'`)<>]*""", read_bytes(path).decode("utf-8"))
+                else:
+                    continue
+                for value in values:
+                    if self.DEV_URL.search(value):
+                        self.fail("publication.dev_url", rel, value)
+
     def public_safety(self):
         targets = [os.path.join(self.docs, "index.html"), os.path.join(self.docs, "assets", "system.js"),
                    os.path.join(self.docs, "assets", "system.css")]
@@ -550,6 +648,7 @@ class SiteValidator:
         self.fixture_integration()
         self.identity()
         self.reference_field()
+        self.publication()
         self.contrast()
         self.budgets()
         self.public_safety()
@@ -581,6 +680,7 @@ def main(argv):
     lm, um, ratio = v.report["reference_distances"]
     print("reference field: %d documents, %d source-derived edges (%d drawn); mean linked %.4f, unlinked %.4f, ratio %.3f" % (
         nodes, edges, drawn, lm, um, ratio))
+    print("sitemap: %d canonical public URLs; CNAME %s" % (v.report["sitemap_urls"], build_site.SITE_DOMAIN))
     for role, (value, ratio, minimum, use) in v.report["contrast"].items():
         print("%-26s %s  %5.2f:1 (min %.1f, %s)" % (role, value, ratio, minimum, use))
     return 0
