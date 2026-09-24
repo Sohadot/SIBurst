@@ -102,7 +102,27 @@ threshold, or regime, it should not exist.
 5. Is any interface state readable as a claim about real-world AI? If so, it
    fails.
 
+## Implementation contracts
+
+Sprint 1 turns this conceptual architecture into implementation contracts:
+
+| Document | Governs |
+|---|---|
+| `INTERFACE_CONTRACT.md` | The state machine (S0–S6 = stages 00–06), the geometry grammar and rule change, the semantic primitives, final interface-state language and framing, progress, content architecture, and implementation constraints. |
+| `VISUAL_SYSTEM.md` | Spatial character, color roles, typography roles, and density progression. |
+| `MOTION_SEMANTICS.md` | The motion taxonomy and reduced-motion behavior. |
+| `RESPONSIVE_ACCESSIBILITY.md` | Viewport behavior, keyboard, zoom, and assistive-technology requirements. |
+| `INTERFACE_ACCEPTANCE.md` | The pass/fail tests every implementation must meet. |
+
+The preliminary interface states listed above are finalized, with their
+framing rule, in `INTERFACE_CONTRACT.md` §5.
+
+**Authority.** This document defines the conceptual experience. The Sprint 1
+contracts define how that concept may be implemented. If an implementation
+contract contradicts this document, the implementation contract is defective.
+
 ## Scope
 
-No HTML, site code, or visual production assets are part of Sprint 0. This
-document is the specification against which that later work will be reviewed.
+No HTML, site code, or visual production assets are part of Sprint 0 or
+Sprint 1. This document and the implementation contracts are the specification
+against which that later work will be reviewed.
