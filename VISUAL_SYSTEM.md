@@ -134,5 +134,6 @@ signal of S4. The signal of S4 is the change of rule defined in
 - The stage navigation and state readout sit outside the boundary, in stable
   positions that do not change between stages.
 - Captions sit outside the boundary and never overlap nodes or links.
-- In S5, the transition record (a reduced Lattice beside the Field) uses the
-  same primitives at a smaller scale. It introduces no new visual elements.
+- In S5, the transition record (a smaller-scale Lattice beside the Field) uses
+  the same primitives and all 24 entities at a smaller scale. It introduces no
+  new visual elements.

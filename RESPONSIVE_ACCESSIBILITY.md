@@ -10,8 +10,11 @@ Target: **WCAG 2.2 Level AA.**
 
 On every viewport and with every input method, the visitor experiences the same
 seven-stage state machine, the same rule change (Lattice → Field), and the same
-continuity of identity. Geometry, proportions, entity count, and layout may adapt.
-The semantics may not.
+continuity of identity. Geometry, proportions, orientation, and layout may
+adapt. The entity set and anchor set may not: all 24 canonical entities and all
+four anchors of `data/demonstration-fixture.json` appear on every viewport and
+at every zoom level. Viewport adaptation changes representation, never fixture
+membership. The semantics may not change.
 
 ## 2. Viewports
 
@@ -97,9 +100,10 @@ text, as specified in `VISUAL_SYSTEM.md` §2.
 - Reading text is never smaller than the user agent's default size.
 - Text resizes to 200% without loss of content or function.
 - At 400% zoom (a 320 CSS px wide viewport), text content reflows into a single
-  column with no two-dimensional scrolling. The demonstration system scales to
-  fit, keeping all fixture entities and anchors; if identifiers cannot fit at
-  their minimum size, the demonstration takes more vertical space.
+  column with no two-dimensional scrolling. The demonstration may reflow, scale,
+  change orientation, or occupy more vertical space. It keeps all 24 entities
+  and all four anchors: no entity or anchor is dropped. Accessibility is
+  achieved through layout, never by removing parts of the system.
 - Line length in the reference layer stays readable at all widths.
 
 ### 3.6 Descriptive state text

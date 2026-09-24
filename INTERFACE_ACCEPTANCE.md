@@ -331,7 +331,7 @@ once each, and decorative geometry is not announced.
 
 **PASS** if there are no external script or font sources, no framework or
 analytics dependency without a recorded decision, no required WebGL, video, or
-autoplay media, and the indicative budgets in INTERFACE_CONTRACT §8 are met, or
+autoplay media, and the indicative size budgets in INTERFACE_CONTRACT §8 are met, or
 any excess is recorded and justified.
 
 **FAIL** otherwise.

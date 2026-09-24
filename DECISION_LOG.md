@@ -246,11 +246,11 @@ Status values: **Accepted**, **Superseded**, **Proposed**.
 - **Decision:** The demonstration uses 24 entities (`N01`–`N24`) in a 4 × 6
   logical Lattice, with the arrival schedule 3 / 15 / 22 / 24 entities at
   S0 / S1 / S2 / S3.
-- **Rationale:** 24 fits both the wide and narrow node budgets in
-  `INTERFACE_CONTRACT.md` §8, and it produces exact sparse, scale,
-  near-capacity, and full-capacity states without separate entity sets for
-  different viewports. **24 has no scientific meaning.** It is an
-  implementation choice.
+- **Rationale:** One fixed 24-entity system serves every viewport, so no
+  viewport-specific fixture variant exists. 24 fills the 4 × 6 Lattice exactly,
+  which gives exact sparse, scale, near-capacity, and full-capacity states
+  (3 / 15 / 22 / 24). **24 has no scientific meaning.** It is an implementation
+  choice.
 - **Consequences:** Viewports may transform the logical coordinates but may not
   add or remove entities or anchors. The node-count adaptations previously
   allowed in `RESPONSIVE_ACCESSIBILITY.md` and `VISUAL_SYSTEM.md` are replaced

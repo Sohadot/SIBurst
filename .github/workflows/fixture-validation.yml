@@ -9,9 +9,14 @@ on:
       - "schemas/**"
       - "tools/**"
       - "tests/**"
-      - "DEMONSTRATION_FIXTURE.md"
+      - "SITE_ARCHITECTURE.md"
       - "INTERFACE_CONTRACT.md"
+      - "VISUAL_SYSTEM.md"
+      - "MOTION_SEMANTICS.md"
+      - "RESPONSIVE_ACCESSIBILITY.md"
       - "INTERFACE_ACCEPTANCE.md"
+      - "DEMONSTRATION_FIXTURE.md"
+      - "DECISION_LOG.md"
       - ".github/workflows/fixture-validation.yml"
   push:
     branches: [main]
@@ -20,9 +25,14 @@ on:
       - "schemas/**"
       - "tools/**"
       - "tests/**"
-      - "DEMONSTRATION_FIXTURE.md"
+      - "SITE_ARCHITECTURE.md"
       - "INTERFACE_CONTRACT.md"
+      - "VISUAL_SYSTEM.md"
+      - "MOTION_SEMANTICS.md"
+      - "RESPONSIVE_ACCESSIBILITY.md"
       - "INTERFACE_ACCEPTANCE.md"
+      - "DEMONSTRATION_FIXTURE.md"
+      - "DECISION_LOG.md"
       - ".github/workflows/fixture-validation.yml"
 
 permissions:

@@ -297,8 +297,8 @@ Occupancy means the share of Lattice cells holding a node.
 - **Semantic purpose:** name the crossing.
 - **Visual condition:** the Field is stable. The name **SIBurst** appears in the
   display voice, placed at the boundary, not on any node. A **transition
-  record** shows a reduced Lattice view (the end of S3) next to the Field, with
-  the same anchors marked in both.
+  record** shows a smaller-scale Lattice view (the end of S3, with all 24
+  entities) next to the Field, with the same anchors marked in both.
 - **Geometry:** Field.
 - **Density:** unchanged.
 - **Relationship behavior:** static.
@@ -573,9 +573,12 @@ reproducible. No renderer is selected by this contract.
   ordinary mid-range phone. Where motion cannot run smoothly, the
   implementation falls back to the reduced-motion path rather than degrading
   meaning.
-- **Indicative budgets:** 24–64 nodes on wide viewports and 16–40 on narrow
-  ones; JavaScript no more than about 30 KB compressed; the complete first view
-  no more than about 150 KB compressed, excluding reference pages.
+- **Canonical entity set:** the canonical demonstration contains exactly 24
+  entities on every viewport. No viewport may add, remove, substitute, or
+  independently regenerate entities or anchors (§8.2, DEC-018, DEC-019).
+- **Indicative size budgets:** JavaScript no more than about 30 KB compressed;
+  the complete first view no more than about 150 KB compressed, excluding
+  reference pages.
 
 ### 8.1 Progressive enhancement
 

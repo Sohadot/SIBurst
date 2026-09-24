@@ -43,10 +43,12 @@ must never appear as public readouts (`INTERFACE_CONTRACT.md` §5.3, §6.1).
 
 24 is an **implementation choice with no scientific meaning.** It:
 
-- fits both node budgets in `INTERFACE_CONTRACT.md` §8 (24–64 wide, 16–40
-  narrow), so every viewport shows the same entities;
 - fills a 4 × 6 Lattice exactly, so the stages reach exact states: sparse
-  (3/24), scale (15/24), near capacity (22/24), and full (24/24);
+  (3/24), scale (15/24), near capacity (22/24), and full (24/24), in the
+  canonical 3 / 15 / 22 / 24 progression;
+- is small enough to remain legible as one system on every viewport, from
+  wide desktop to very narrow screens, so a single entity set serves all of
+  them and no viewport-specific fixture variant is needed;
 - divides into four clusters of six.
 
 ## 4. The Lattice
