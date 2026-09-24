@@ -45,7 +45,10 @@
   <div class="system-layout">
     <div class="panel" id="demonstration" hidden>
       <p class="readout" id="readout">$readout_s0</p>
-      <svg class="system" aria-hidden="true" focusable="false"></svg>
+      <div class="figure-area" data-layout="landscape">
+        <svg class="system" aria-hidden="true" focusable="false"></svg>
+        <p class="boundary-name" aria-hidden="true">SIBurst</p>
+      </div>
       <p class="scope">$scope</p>
     </div>
     <p class="visually-hidden" id="stage-announcer" aria-live="polite"></p>
@@ -99,7 +102,6 @@
         <h2 id="s5-title"><span class="stage-index">S5</span> $name_s5</h2>
         <p class="readout">$readout_s5</p>
         <figure class="stage-figure">$figure_s5<figcaption class="scope">$scope</figcaption></figure>
-        <p class="display-name">SIBurst</p>
         <p class="caption">$caption_s5</p>
         <p class="description" id="s5-description">Demonstration stage 6 of 7: SIBurst. The field is stable. The transition record compares the end of the lattice with the field: the same $entities_s5 entities and the same anchors, organized by different rules.</p>
         <figure class="transition-record" aria-labelledby="record-title">
@@ -126,6 +128,11 @@
   <section class="reference" id="reference" aria-labelledby="reference-title">
     <h2 id="reference-title">Reference</h2>
     <p>The governed doctrine behind the demonstration. Each page is generated from its canonical Markdown source.</p>
+    <figure class="reference-field" aria-labelledby="reference-field-title">
+          <p class="record-title" id="reference-field-title">Reference Field</p>
+          $reference_field
+          <figcaption class="record-text">A map of the $reference_node_count canonical documents, drawn in the Field grammar. It is not part of the demonstration system. Each of the $reference_edge_count links exists because one document names the other's source file (DEC-025). The same documents and their explicit references are listed in reading order in the reference layer.</figcaption>
+        </figure>
     $reference_list
     <p class="reference-index-link"><a href="reference/">Reference index</a></p>
   </section>

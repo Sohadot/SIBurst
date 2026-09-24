@@ -425,6 +425,109 @@ class SiteValidator:
         if first_view > FIRST_VIEW_BUDGET:
             self.fail("budget.first_view", "first view", "%d compressed bytes exceeds %d" % (first_view, FIRST_VIEW_BUDGET))
 
+    # -- S5 identity placement ---------------------------------------------------
+
+    def identity(self):
+        raw = read_bytes(os.path.join(self.docs, "index.html")).decode("utf-8")
+        if 'class="display-name"' in raw:
+            self.fail("identity.placement", "index.html", "the S5 display name must not sit in the stage text column")
+        name = '<p class="boundary-name" aria-hidden="true">SIBurst</p>'
+        panel = re.search(r'<div class="panel" id="demonstration".*?</div>\s*<p class="scope">', raw, re.S)
+        if not panel or not re.search(r'<div class="figure-area"[^>]*>\s*<svg class="system"[^>]*></svg>\s*' + re.escape(name), panel.group(0)):
+            self.fail("identity.placement", "#demonstration", "boundary name must follow the system SVG inside the panel's figure area")
+        total = raw.count('class="boundary-name"')
+        s5 = re.search(r'<section class="stage" id="s5".*?</section>', raw, re.S)
+        s5_figure = re.search(r'<figure class="stage-figure">.*?</figure>', s5.group(0), re.S) if s5 else None
+        attached = re.findall(r'<svg class="system"[^>]*data-stage="S5"[^>]*>.*?</svg>' + re.escape(name), s5_figure.group(0), re.S) if s5_figure else []
+        if len(attached) != 2:
+            self.fail("identity.placement", "S5 static figure", "boundary name must follow the S5 figure in both orientations")
+        if total != 3:
+            self.fail("identity.placement", "index.html", "boundary name must appear only in the panel and the S5 figure (found %d)" % total)
+        if re.search(r'<svg[^>]*>(?:(?!</svg>).)*boundary-name', raw, re.S):
+            self.fail("identity.placement", "index.html", "boundary name must not be inside the SVG (it is not a node)")
+
+    # -- Reference Field (DEC-025) ---------------------------------------------------
+
+    @staticmethod
+    def explicit_reference(text, filename):
+        body = re.sub(r"^(```|~~~).*?^\1[^\n]*$", "", text, flags=re.S | re.M)
+        return re.search(r"(?<![A-Za-z0-9_])%s(?![A-Za-z0-9_])" % re.escape(filename), body) is not None
+
+    def reference_field(self):
+        raw = read_bytes(os.path.join(self.docs, "index.html")).decode("utf-8")
+        names = build_site.REFERENCE_FILES
+        texts = {n: read_bytes(os.path.join(REPO_ROOT, n)).decode("utf-8") for n in names}
+        titles = {n: re.search(r"^# (.+)$", texts[n], re.M).group(1).strip() for n in names}
+        expected = set()
+        for a in names:
+            for b in names:
+                if a != b and (self.explicit_reference(texts[a], b) or self.explicit_reference(texts[b], a)):
+                    expected.add(frozenset((a, b)))
+        maps = re.findall(r'<svg class="reference-field-map" viewBox="0 0 (\d+) (\d+)" data-layout="(\w+)"[^>]*>(.*?)</svg>', raw, re.S)
+        if len(maps) != 2:
+            self.fail("reference.map", "index.html", "Reference Field must exist in landscape and portrait")
+        if re.search(r'<div class="panel" id="demonstration".*reference-field-map.*?</div>\s*<p class="scope">', raw, re.S):
+            self.fail("reference.separation", "index.html", "Reference Field must not be part of the demonstration panel")
+        for width, height, layout, body in maps:
+            subject = "reference field (%s)" % layout
+            if re.search(r"\bN(0[1-9]|1\d|2[0-4])\b|data-node-id|data-relationship-id", body):
+                self.fail("reference.separation", subject, "demonstration identifiers or primitives in the Reference Field")
+            nodes = {d: (float(x), float(y)) for d, x, y in re.findall(
+                r'<g class="reference-node" data-document="([A-Z_]+\.md)"><circle cx="([\d.]+)" cy="([\d.]+)"', body)}
+            if sorted(nodes) != sorted(names):
+                self.fail("reference.nodes", subject, "nodes must be exactly the %d reference documents" % len(names))
+            for d, label in re.findall(r'data-document="([A-Z_]+\.md)">.*?data-label="([^"]+)"', body):
+                if d in titles and label != titles[d]:
+                    self.fail("reference.labels", subject, "%s labelled %r, expected its title %r" % (d, label, titles[d]))
+            links = re.findall(r'<path class="reference-link" data-source="([A-Z_]+\.md)" data-target="([A-Z_]+\.md)" d="([^"]+)"/>', body)
+            if len(links) != body.count('class="reference-link"'):
+                self.fail("reference.direct_link", subject, "unparseable reference link")
+            seen = set()
+            for a, b, d in links:
+                pair = frozenset((a, b))
+                if a == b:
+                    self.fail("reference.self_edge", subject, a)
+                    continue
+                if pair in seen:
+                    self.fail("reference.duplicate_edge", subject, "%s - %s drawn more than once" % (a, b))
+                seen.add(pair)
+                if pair not in expected:
+                    self.fail("reference.ungrounded_edge", subject, "%s - %s has no explicit reference in either source" % (a, b))
+                m = re.fullmatch(r"M([\d.]+) ([\d.]+) L([\d.]+) ([\d.]+)", d)
+                if not m:
+                    self.fail("reference.direct_link", subject, "%s - %s is not a single direct segment" % (a, b))
+                elif a in nodes and b in nodes:
+                    ends = ((float(m.group(1)), float(m.group(2))), (float(m.group(3)), float(m.group(4))))
+                    if ends != (nodes[a], nodes[b]):
+                        self.fail("reference.direct_link", subject, "%s - %s does not join its two documents" % (a, b))
+            for pair in sorted(expected - seen, key=sorted):
+                self.fail("reference.missing_edge", subject, "explicit reference %s not drawn" % " - ".join(sorted(pair)))
+            if layout == "landscape" and len(nodes) == len(names):
+                w, h = float(width), float(height)
+                pairs = [(names[i], names[j]) for i in range(len(names)) for j in range(i + 1, len(names))]
+
+                def dist(p):
+                    (x1, y1), (x2, y2) = nodes[p[0]], nodes[p[1]]
+                    return (((x1 - x2) / w) ** 2 + ((y1 - y2) / h) ** 2) ** 0.5
+                linked = [dist(p) for p in pairs if frozenset(p) in expected]
+                unlinked = [dist(p) for p in pairs if frozenset(p) not in expected]
+                self.report["reference_graph"] = (len(names), len(expected), len(links))
+                if linked and unlinked:
+                    lm, um = sum(linked) / len(linked), sum(unlinked) / len(unlinked)
+                    self.report["reference_distances"] = (lm, um, lm / um)
+                    if not lm < um:
+                        self.fail("reference.geometry", subject, "linked documents are not closer on average (%.3f vs %.3f)" % (lm, um))
+        for page, prefix in (("index.html", "reference/"), ("reference/index.html", "")):
+            text = read_bytes(os.path.join(self.docs, page)).decode("utf-8")
+            for n in names:
+                if 'href="%s%s"' % (prefix, build_site.slug_for(n)) not in text:
+                    self.fail("reference.list", page, "%s missing from the reading-order list" % n)
+            for n, related in re.findall(r'>([A-Z_]+\.md)</a><span class="role">[^<]*</span><span class="related">Explicit references: ([^<]*)</span>', text):
+                listed = set() if related == "none" else set(related.split(", "))
+                truth = {m for m in names if frozenset((n, m)) in expected}
+                if listed != truth:
+                    self.fail("reference.list", page, "%s explicit references listed as %s" % (n, sorted(listed)))
+
     def public_safety(self):
         targets = [os.path.join(self.docs, "index.html"), os.path.join(self.docs, "assets", "system.js"),
                    os.path.join(self.docs, "assets", "system.css")]
@@ -445,6 +548,8 @@ class SiteValidator:
         self.structure()
         self.claims()
         self.fixture_integration()
+        self.identity()
+        self.reference_field()
         self.contrast()
         self.budgets()
         self.public_safety()
@@ -472,6 +577,10 @@ def main(argv):
     for name, (raw, compressed) in v.report["sizes"].items():
         print("%-34s %7d bytes  %6d gzip" % (name, raw, compressed))
     print("first view (gzip): %d bytes of %d budget" % (v.report["first_view_gzip"], FIRST_VIEW_BUDGET))
+    nodes, edges, drawn = v.report["reference_graph"]
+    lm, um, ratio = v.report["reference_distances"]
+    print("reference field: %d documents, %d source-derived edges (%d drawn); mean linked %.4f, unlinked %.4f, ratio %.3f" % (
+        nodes, edges, drawn, lm, um, ratio))
     for role, (value, ratio, minimum, use) in v.report["contrast"].items():
         print("%-26s %s  %5.2f:1 (min %.1f, %s)" % (role, value, ratio, minimum, use))
     return 0

@@ -379,6 +379,7 @@ function paint(scene, f, labelSize) {
 function init() {
   const root = document.documentElement;
   const panel = document.getElementById("demonstration");
+  const area = panel && panel.querySelector(".figure-area");
   const svg = panel && panel.querySelector("svg.system");
   const readout = document.getElementById("readout");
   const live = document.getElementById("stage-announcer");
@@ -402,6 +403,7 @@ function init() {
 
       const layoutNow = () => {
         g = geometry(model, portraitQuery.matches ? LAYOUTS.portrait : LAYOUTS.landscape);
+        if (area) area.setAttribute("data-layout", g.name);
         scene = buildScene(svg, model, g);
         lastKey = "";
       };
@@ -428,6 +430,7 @@ function init() {
         if (f.stage !== lastStage) {
           lastStage = f.stage;
           readout.textContent = `DEMONSTRATION STATE · ${f.stageId} / ${model.labels[f.stage]}`;
+          panel.setAttribute("data-stage", f.stageId);
           sections.forEach((s, i) => s.classList.toggle("is-current", i === f.stage));
           document.querySelectorAll("[data-stage-link]").forEach((a) => {
             if (a.getAttribute("data-stage-link") === f.stageId) a.setAttribute("aria-current", "step");

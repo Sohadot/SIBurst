@@ -368,10 +368,224 @@ def svg_figure(model, layout_name, stage, field, label_size=16, node_r=7, css_cl
     return "".join(out)
 
 
-def stage_figure(model, stage, field):
-    return ('<div class="orientation landscape">%s</div><div class="orientation portrait">%s</div>' % (
-        svg_figure(model, "landscape", stage, field),
-        svg_figure(model, "portrait", stage, field, label_size=22, node_r=9)))
+BOUNDARY_NAME = '<p class="boundary-name" aria-hidden="true">SIBurst</p>'
+
+
+def stage_figure(model, stage, field, boundary_name=False):
+    """Static figure in both orientations. At S5 the display name is attached
+    to the demonstration boundary (INTERFACE_CONTRACT.md section 4.2)."""
+    name = BOUNDARY_NAME if boundary_name else ""
+    return ('<div class="orientation landscape" data-layout="landscape">%s%s</div>'
+            '<div class="orientation portrait" data-layout="portrait">%s%s</div>' % (
+                svg_figure(model, "landscape", stage, field), name,
+                svg_figure(model, "portrait", stage, field, label_size=22, node_r=9), name))
+
+
+# --- Reference Field (DEC-025) ------------------------------------------------
+#
+# A map of the canonical documents, separate from the demonstration fixture.
+# An edge exists only where one canonical source names the other's exact file
+# name outside fenced code blocks. Positions come from a deterministic stress
+# majorization over shortest-path distances, using only IEEE arithmetic
+# (+, -, *, /, sqrt) so every platform produces the same coordinates.
+
+REFERENCE_FIELD_ITERATIONS = 400
+REFERENCE_FIELD_LAYOUTS = {
+    "landscape": {"width": 960, "height": 600, "pad": 90},
+    "portrait": {"width": 440, "height": 760, "pad": 70},
+}
+FENCE = re.compile(r"^(```|~~~).*?^\1[^\n]*$", re.S | re.M)
+
+
+def strip_fenced_code(text):
+    return FENCE.sub("", text)
+
+
+def names_reference(text, filename):
+    return re.search(r"(?<![A-Za-z0-9_])%s(?![A-Za-z0-9_])" % re.escape(filename), text) is not None
+
+
+def derive_reference_graph(texts):
+    """texts: {filename: markdown}. Returns (directed references, undirected edges)."""
+    names = [n for n in REFERENCE_FILES if n in texts]
+    directed = []
+    for source in names:
+        body = strip_fenced_code(texts[source])
+        for target in names:
+            if target != source and names_reference(body, target):
+                directed.append((source, target))
+    order = {n: i for i, n in enumerate(names)}
+    edges = sorted({tuple(sorted(pair, key=order.get)) for pair in directed}, key=lambda e: (order[e[0]], order[e[1]]))
+    return directed, edges
+
+
+def components(nodes, edges):
+    adjacency = {n: [] for n in nodes}
+    for a, b in edges:
+        adjacency[a].append(b)
+        adjacency[b].append(a)
+    seen, groups = set(), []
+    for n in nodes:
+        if n in seen:
+            continue
+        group, queue = [], [n]
+        seen.add(n)
+        while queue:
+            current = queue.pop(0)
+            group.append(current)
+            for m in adjacency[current]:
+                if m not in seen:
+                    seen.add(m)
+                    queue.append(m)
+        groups.append([x for x in nodes if x in group])
+    return groups, adjacency
+
+
+def stress_layout(nodes, adjacency):
+    """Stress majorization on hop distances for one connected component."""
+    count = len(nodes)
+    if count == 1:
+        return {nodes[0]: (0.0, 0.0)}
+    index = {n: i for i, n in enumerate(nodes)}
+    dist = [[0] * count for _ in range(count)]
+    for i, n in enumerate(nodes):
+        hops, queue = {n: 0}, [n]
+        while queue:
+            current = queue.pop(0)
+            for m in adjacency[current]:
+                if m not in hops:
+                    hops[m] = hops[current] + 1
+                    queue.append(m)
+        for m, h in hops.items():
+            dist[i][index[m]] = h
+    columns = 4
+    pos = [[float(i % columns), float(i // columns)] for i in range(count)]
+    for _ in range(REFERENCE_FIELD_ITERATIONS):
+        new = []
+        for i in range(count):
+            sx = sy = sw = 0.0
+            for j in range(count):
+                if i == j:
+                    continue
+                dx, dy = pos[i][0] - pos[j][0], pos[i][1] - pos[j][1]
+                d = math.sqrt(dx * dx + dy * dy) or 1e-9
+                w = 1.0 / (dist[i][j] * dist[i][j])
+                sx += w * (pos[j][0] + dist[i][j] * dx / d)
+                sy += w * (pos[j][1] + dist[i][j] * dy / d)
+                sw += w
+            new.append([sx / sw, sy / sw])
+        pos = new
+    return {n: (pos[i][0], pos[i][1]) for i, n in enumerate(nodes)}
+
+
+def reference_field_layout(nodes, edges):
+    """Normalized coordinates in [0.08, 0.92]. Components sit side by side and are
+    never joined; isolated documents keep their own slot."""
+    groups, adjacency = components(nodes, edges)
+    placed = {}
+    slot = 1.0 / len(groups)
+    for k, group in enumerate(groups):
+        local = stress_layout(group, adjacency)
+        xs = [p[0] for p in local.values()]
+        ys = [p[1] for p in local.values()]
+        span = max(max(xs) - min(xs), max(ys) - min(ys)) or 1.0
+        cx, cy = (max(xs) + min(xs)) / 2, (max(ys) + min(ys)) / 2
+        for n, (x, y) in local.items():
+            placed[n] = ((k + 0.5) * slot + (x - cx) / span * 0.84 * slot, 0.5 + (y - cy) / span * 0.84)
+    return {n: (round3(placed[n][0]), round3(placed[n][1])) for n in nodes}, groups
+
+
+def round3(v):
+    return math.floor(v * 1000 + 0.5) / 1000
+
+
+def label_lines(title):
+    """A title on one line, or split at the word boundary nearest its middle."""
+    words = title.split()
+    if len(words) < 2:
+        return [[title]]
+    best = min(range(1, len(words)), key=lambda k: (abs(len(" ".join(words[:k])) - len(" ".join(words[k:]))), k))
+    return [[title], [" ".join(words[:best]), " ".join(words[best:])]]
+
+
+def place_labels(points, titles, label_size, width, height):
+    """Deterministic label placement. Each label, in document order, takes the
+    first candidate (single line, then two lines) whose box stays inside the
+    boundary and overlaps no placed label and no node; otherwise the candidate
+    with the least overlap."""
+    char_w = label_size * 0.56
+    line_h = label_size * 1.15
+    boxes, placed = [], {}
+    node_boxes = {k: (x - 7, y - 7, x + 7, y + 7) for k, (x, y) in points.items()}
+
+    def overlap(a, b):
+        w = min(a[2], b[2]) - max(a[0], b[0])
+        h = min(a[3], b[3]) - max(a[1], b[1])
+        return w * h if w > 0 and h > 0 else 0.0
+
+    for name, (x, y) in points.items():
+        best = None
+        for lines in label_lines(titles[name]):
+            w = max(len(line) for line in lines) * char_w
+            h = line_h * len(lines)
+            candidates = [
+                ("start", x + 10, y - h / 2), ("end", x - 10, y - h / 2),
+                ("middle", x, y - 10 - h), ("middle", x, y + 10),
+                ("start", x + 8, y - 8 - h), ("start", x + 8, y + 8),
+                ("end", x - 8, y - 8 - h), ("end", x - 8, y + 8),
+            ]
+            for anchor, tx, top in candidates:
+                left = tx if anchor == "start" else tx - w if anchor == "end" else tx - w / 2
+                box = (left, top, left + w, top + h)
+                inside = box[0] >= 24 and box[2] <= width - 24 and box[1] >= 24 and box[3] <= height - 24
+                cost = sum(overlap(box, b) for b in boxes)
+                cost += sum(overlap(box, nb) for k, nb in node_boxes.items() if k != name)
+                cost += 0 if inside else 1e6
+                if best is None or cost < best[0]:
+                    best = (cost, anchor, tx, top, lines, box)
+                if cost == 0:
+                    break
+            if best[0] == 0:
+                break
+        boxes.append(best[5])
+        placed[name] = best[1:5]
+    return placed
+
+
+def reference_field_svg(nodes, edges, coords, titles, layout_name, label_size):
+    layout = REFERENCE_FIELD_LAYOUTS[layout_name]
+    w, h, pad = layout["width"], layout["height"], layout["pad"]
+    iw, ih = w - 2 * pad, h - 2 * pad
+    points = {n: (round2(pad + coords[n][0] * iw), round2(pad + coords[n][1] * ih)) for n in nodes}
+    labels = place_labels(points, titles, label_size, w, h)
+    out = ['<svg class="reference-field-map" viewBox="0 0 %d %d" data-layout="%s" aria-hidden="true" focusable="false">' % (w, h, layout_name)]
+    out.append('<rect class="boundary" x="20" y="20" width="%d" height="%d"/>' % (w - 40, h - 40))
+    out.append('<g class="reference-links">')
+    for a, b in edges:
+        (x1, y1), (x2, y2) = points[a], points[b]
+        out.append('<path class="reference-link" data-source="%s" data-target="%s" d="M%s %s L%s %s"/>' % (
+            a, b, fmt(x1), fmt(y1), fmt(x2), fmt(y2)))
+    out.append('</g><g class="reference-nodes">')
+    for n in nodes:
+        x, y = points[n]
+        anchor, tx, top, lines = labels[n]
+        spans = "".join('<tspan x="%s" y="%s">%s</tspan>' % (
+            fmt(tx), fmt(top + label_size * 0.9 + i * label_size * 1.15), esc(line)) for i, line in enumerate(lines))
+        out.append('<g class="reference-node" data-document="%s"><circle cx="%s" cy="%s" r="6"/>'
+                   '<text font-size="%d" text-anchor="%s" data-label="%s">%s</text></g>' % (
+                       n, fmt(x), fmt(y), label_size, anchor, esc(titles[n]), spans))
+    out.append("</g></svg>")
+    return "".join(out)
+
+
+def reference_field(titles):
+    texts = {name: read_text(os.path.join(REPO_ROOT, name)) for name in REFERENCE_FILES}
+    directed, edges = derive_reference_graph(texts)
+    coords, groups = reference_field_layout(REFERENCE_FILES, edges)
+    figure = ('<div class="orientation landscape">%s</div><div class="orientation portrait">%s</div>' % (
+        reference_field_svg(REFERENCE_FILES, edges, coords, titles, "landscape", 15),
+        reference_field_svg(REFERENCE_FILES, edges, coords, titles, "portrait", 15)))
+    return figure, edges, groups
 
 
 # --- Page assembly -----------------------------------------------------------
@@ -380,15 +594,22 @@ def stage_readout(stage_id):
     return "DEMONSTRATION STATE · %s / %s" % (stage_id, STAGE_NAMES[stage_id][1])
 
 
-def reference_list(roles, prefix):
+def reference_list(roles, prefix, edges):
+    related = {name: [] for name in REFERENCE_FILES}
+    for a, b in edges:
+        related[a].append(b)
+        related[b].append(a)
     groups = []
     for group in ("Conceptual foundation", "Implementation doctrine"):
         items = []
         for g, name in REFERENCE_DOCS:
             if g != group:
                 continue
-            items.append('<li><a href="%s%s">%s</a><span class="role">%s</span></li>' % (
-                prefix, slug_for(name), esc(name), esc(strip_md(roles[name]))))
+            linked = [n for n in REFERENCE_FILES if n in related[name]]
+            items.append('<li><a href="%s%s">%s</a><span class="role">%s</span>'
+                         '<span class="related">Explicit references: %s</span></li>' % (
+                             prefix, slug_for(name), esc(name), esc(strip_md(roles[name])),
+                             esc(", ".join(linked)) if linked else "none"))
         groups.append('<section class="reference-group" aria-labelledby="%s"><h3 id="%s">%s</h3><ul class="reference-list">%s</ul></section>' % (
             heading_slug(prefix + group), heading_slug(prefix + group), esc(group), "".join(items)))
     return "".join(groups)
@@ -426,8 +647,14 @@ def fixture_facts(model):
     return facts
 
 
-def build_index(model, roles, target):
+def reference_titles():
+    md = markdown_renderer()
+    return {name: render_markdown(md, read_text(os.path.join(REPO_ROOT, name)))[0] for name in REFERENCE_FILES}
+
+
+def build_index(model, roles, target, titles):
     captions, scope = extract_contract_copy()
+    field_figure, edges, groups = reference_field(titles)
     values = dict(fixture_facts(model))
     values.update({
         "tagline": esc(extract_tagline()),
@@ -436,7 +663,10 @@ def build_index(model, roles, target):
         "claim_boundary": esc(extract_claim_boundary()),
         "scope": esc(scope),
         "anchors": esc(anchors_text(model)),
-        "reference_list": reference_list(roles, "reference/"),
+        "reference_list": reference_list(roles, "reference/", edges),
+        "reference_field": field_figure,
+        "reference_edge_count": str(len(edges)),
+        "reference_node_count": str(len(REFERENCE_FILES)),
     })
     for s in STAGES:
         key = s.lower()
@@ -449,7 +679,7 @@ def build_index(model, roles, target):
     values["figure_s3"] = stage_figure(model, 3, False)
     values["figure_s4_before"] = stage_figure(model, 4, False)
     values["figure_s4_after"] = stage_figure(model, 4, True)
-    values["figure_s5"] = stage_figure(model, 5, True)
+    values["figure_s5"] = stage_figure(model, 5, True, boundary_name=True)
     values["figure_s6"] = stage_figure(model, 6, True)
     values["record_lattice"] = svg_figure(model, "landscape", 3, False, label_size=28, node_r=9, css_class="record")
     values["record_field"] = svg_figure(model, "landscape", 5, True, label_size=28, node_r=9, css_class="record")
@@ -457,7 +687,7 @@ def build_index(model, roles, target):
     write_text(os.path.join(target, "index.html"), template.substitute(values))
 
 
-def build_reference(roles, target):
+def build_reference(roles, target, titles):
     md = markdown_renderer()
     template = Template(read_text(os.path.join(SRC, "reference.template.html")))
     for group, name in REFERENCE_DOCS:
@@ -476,7 +706,7 @@ def build_reference(roles, target):
     index_template = Template(read_text(os.path.join(SRC, "reference-index.template.html")))
     write_text(os.path.join(target, "reference", "index.html"), index_template.substitute({
         "canonical": SITE_URL + "reference/",
-        "reference_list": reference_list(roles, ""),
+        "reference_list": reference_list(roles, "", reference_field(titles)[1]),
         "claim_boundary": esc(extract_claim_boundary()),
     }))
 
@@ -490,8 +720,9 @@ def build(target):
     for asset in ("system.css", "system.js"):
         copy_bytes(os.path.join(SRC, "assets", asset), os.path.join(target, "assets", asset))
     copy_bytes(FIXTURE, os.path.join(target, "data", "demonstration-fixture.json"))
-    build_index(model, roles, target)
-    build_reference(roles, target)
+    titles = reference_titles()
+    build_index(model, roles, target, titles)
+    build_reference(roles, target, titles)
 
 
 def tree_files(root):

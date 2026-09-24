@@ -352,6 +352,24 @@ perception). Those require governance and visual review.</li>
 the executable interface passes governance and visual review and a separate
 launch sprint is authorized.</li>
 </ul>
+<h2 id="dec-025-reference-field-relationships-are-source-derived">DEC-025 — Reference Field relationships are source-derived</h2>
+<ul>
+<li><strong>Status:</strong> Accepted</li>
+<li><strong>Decision:</strong> The S6 Reference Field may show only relationships derived
+mechanically from explicit canonical-document references in the Markdown
+sources. Documents A and B are linked only when one names the other's exact
+file name outside fenced code blocks. No semantic or aesthetic relationship
+may be invented by the renderer.</li>
+<li><strong>Rationale:</strong> <code>INTERFACE_CONTRACT.md</code> §7.2 requires links that show real
+relationships between documents. The implementation must not manufacture
+conceptual relationships merely to create a graph.</li>
+<li><strong>Consequences:</strong> The build derives the graph and its layout
+deterministically (<code>SITE_BUILD.md</code> §8). The reading-order list remains the
+accessible representation. The reference topology changes only when canonical
+documents change their explicit references, and the build check fails until
+the site is regenerated. The Reference Field is separate from the
+demonstration fixture and never alters it.</li>
+</ul>
   </article>
   <p class="source-link">Generated from the canonical source <a href="https://github.com/Sohadot/SIBurst/blob/main/DECISION_LOG.md">DECISION_LOG.md</a>. The Markdown file is authoritative; this page is a derived rendering (DEC-017).</p>
   <p class="back-link"><a href="./">Back to the reference index</a></p>

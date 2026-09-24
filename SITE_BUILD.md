@@ -231,7 +231,54 @@ Easing is monotonic smoothstep, with no overshoot.
   in between.
 - The S5 transition record is always present.
 
-## 8. Progressive enhancement (DEC-023)
+**S5 identity.** The display name "SIBurst" is attached to the demonstration
+boundary (`INTERFACE_CONTRACT.md` §4.2):
+- It is an HTML element placed on the boundary's top-left edge, like a legend
+  set into a frame, never on a node or a relationship and never inside the SVG.
+- It appears only at S5, in the persistent panel and in the static S5 figure,
+  with identical placement in reduced motion.
+- At S6 it is withdrawn so the reading voice leads.
+- It has no animation.
+
+## 8. Reference Field (DEC-025)
+
+S6 opens onto the reference layer, which contains a **Reference Field**: a map
+of the 15 canonical documents drawn in the post-transition grammar. It has a
+shared space, direct links, and relationship-based placement, with no rails.
+It is not part of the demonstration system and uses none of its identifiers.
+
+**Edge law.** Documents A and B are linked if and only if the canonical
+Markdown of A names B's exact file name, or B names A's, outside fenced code
+blocks. The name may appear as a link target, in inline code, or in text. The
+match must not be part of a longer identifier. Reciprocal references collapse
+into one undirected edge, and self-references are ignored. No edge comes from
+similarity, titles, inference, or layout convenience.
+
+**Layout.** A deterministic stress majorization, computed at build time:
+- Shortest-path hop distances within each connected component.
+- Weights of 1/d².
+- 400 iterations from a fixed grid start (four columns, in document order).
+- The arithmetic uses only `+ − × ÷` and square root, so results are identical
+  on every platform.
+- Components are placed side by side and never joined. An isolated document
+  keeps its own slot.
+- Coordinates are normalized into the unit square and rounded to three decimals.
+
+**Labels.** Placement is deterministic. Each label, in document order, takes
+the first of eight candidate positions (single line, then two lines) that stays
+inside the boundary and overlaps no placed label and no node.
+
+**Accessibility.** The map is `aria-hidden` and contains no links. The
+reading-order lists on the main page and on `reference/index.html` name every
+document and its explicit references in text, so the map adds no second
+keyboard sequence.
+
+`tools/validate_site.py` re-derives the edges independently from the Markdown.
+It fails on any ungrounded, missing, duplicated, or self edge, a missing node,
+a non-direct link, or a list that disagrees with the map. It also reports the
+mean distance between linked and unlinked documents.
+
+## 9. Progressive enhancement (DEC-023)
 
 The HTML document is complete without JavaScript. It contains, in order, all
 seven stages, each with:
@@ -252,7 +299,7 @@ When the viewport is shorter than about 30rem (including 400% zoom), the
 persistent panel yields to the per-stage figures, so every entity and anchor
 stays visible without leaving too little room to read.
 
-## 9. Colour and budgets
+## 10. Colour and budgets
 
 The colour roles from `VISUAL_SYSTEM.md` §2, on background `#F3F2EE`. Contrast
 is measured by `tools/validate_site.py`.
@@ -274,20 +321,20 @@ Budgets (`INTERFACE_CONTRACT.md` §8):
 
 `tools/validate_site.py` measures both and fails if either is exceeded.
 
-## 10. Validation
+## 11. Validation
 
 | Command | What it proves |
 |---|---|
 | `python tools/validate_fixture.py` | Gate 0: the fixture passes every law. |
 | `python tools/build_site.py --check` | `docs/` is exactly the build output. |
-| `python tools/validate_site.py` | Generation integrity, runtime surface, CSP, structure and links, claim boundary, fixture integration, static fallback, contrast, budgets, and public safety. |
+| `python tools/validate_site.py` | Generation integrity, runtime surface, CSP, structure and links, claim boundary, fixture integration, static fallback, S5 identity placement, Reference Field grounding, contrast, budgets, and public safety. |
 | `python -m unittest discover -s tests` | Fixture and site mutation tests. |
 | `node --test tests/site-state.test.mjs` | State, geometry, and interpolation logic, and agreement between static figures and runtime geometry. |
 
 `.github/workflows/site-validation.yml` runs all of these with read-only
 permissions. It never deploys.
 
-## 11. Not performed
+## 12. Not performed
 
 Sprint 3 does not publish. It adds no GitHub Pages configuration, DNS, or
 deployment workflow, and it does not launch the site. Those are a separate

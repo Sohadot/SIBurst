@@ -299,12 +299,75 @@ main {
   }
 }
 
-.display-name {
-  margin: var(--space-4) 0 var(--space-3);
-  font-size: clamp(2.5rem, 8vw, 5rem);
+/* The S5 name belongs to the demonstration boundary (INTERFACE_CONTRACT.md
+   section 4.2): it sits on the boundary line's top-left edge, like a legend on
+   a frame, never on a node. Offsets are the boundary's position in the SVG
+   viewBox: 20/640 and 20/440 in landscape, 20/440 and 20/640 in portrait. */
+.figure-area,
+.orientation {
+  position: relative;
+}
+
+.boundary-name {
+  display: none;
+  position: absolute;
+  inset-inline-start: 3.125%;
+  inset-block-start: 4.545%;
+  transform: translateY(-50%);
+  margin: 0;
+  padding-inline: 0.3em;
+  background: var(--color-background);
+  color: var(--color-primary);
+  font-size: clamp(1.75rem, 4.5vw, 3.25rem);
   font-weight: 600;
   line-height: 1;
   letter-spacing: -0.01em;
+  pointer-events: none;
+}
+
+.orientation.portrait .boundary-name,
+.figure-area[data-layout="portrait"] .boundary-name {
+  inset-inline-start: 4.545%;
+  inset-block-start: 3.125%;
+}
+
+.stage-figure .boundary-name,
+.panel[data-stage="S5"] .boundary-name {
+  display: block;
+}
+
+.reference-field {
+  margin: var(--space-4) 0 var(--space-4);
+  max-inline-size: 64rem;
+}
+
+svg.reference-field-map {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+}
+
+.reference-link {
+  fill: none;
+  stroke: var(--color-post-transition);
+  stroke-width: 1;
+}
+
+.reference-node circle {
+  fill: var(--color-post-transition);
+}
+
+.reference-node text {
+  fill: var(--color-primary);
+  font-family: var(--font-reading);
+  paint-order: stroke;
+  stroke: var(--color-background);
+  stroke-width: 4;
+}
+
+.reference-list .related {
+  color: var(--color-secondary);
+  font-size: 0.875rem;
 }
 
 .transition-record {
@@ -496,8 +559,16 @@ svg[data-regime="after"] .relationship .link {
     border-block-end: var(--rule);
   }
 
+  .js-ready .panel .figure-area {
+    inline-size: fit-content;
+    max-inline-size: 100%;
+    margin-inline: auto;
+  }
+
   .js-ready .panel svg.system {
-    max-block-size: 48vh;
+    inline-size: auto;
+    block-size: 48vh;
+    max-inline-size: 100%;
   }
 
   html.js-ready {
@@ -564,7 +635,11 @@ svg[data-regime="after"] .relationship .link {
 @media (min-width: 768px) {
   .reference-list li {
     grid-template-columns: 18rem 1fr;
-    gap: var(--space-3);
+    gap: var(--space-1) var(--space-3);
+  }
+
+  .reference-list .related {
+    grid-column: 2;
   }
 }
 

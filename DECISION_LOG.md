@@ -325,3 +325,21 @@ Status values: **Accepted**, **Superseded**, **Proposed**.
 - **Consequences:** GitHub Pages, DNS, and public launch remain disabled until
   the executable interface passes governance and visual review and a separate
   launch sprint is authorized.
+
+## DEC-025 — Reference Field relationships are source-derived
+
+- **Status:** Accepted
+- **Decision:** The S6 Reference Field may show only relationships derived
+  mechanically from explicit canonical-document references in the Markdown
+  sources. Documents A and B are linked only when one names the other's exact
+  file name outside fenced code blocks. No semantic or aesthetic relationship
+  may be invented by the renderer.
+- **Rationale:** `INTERFACE_CONTRACT.md` §7.2 requires links that show real
+  relationships between documents. The implementation must not manufacture
+  conceptual relationships merely to create a graph.
+- **Consequences:** The build derives the graph and its layout
+  deterministically (`SITE_BUILD.md` §8). The reading-order list remains the
+  accessible representation. The reference topology changes only when canonical
+  documents change their explicit references, and the build check fails until
+  the site is regenerated. The Reference Field is separate from the
+  demonstration fixture and never alters it.

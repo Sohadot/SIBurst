@@ -252,5 +252,144 @@ class ClaimAndFallbackTests(SiteTestCase):
         self.assertRejected(docs, "safety.private_term")
 
 
+class IdentityPlacementTests(SiteTestCase):
+    NAME = '<p class="boundary-name" aria-hidden="true">SIBurst</p>'
+
+    def test_name_back_in_stage_copy_fails(self):
+        docs = self.copy()
+        self.edit(docs, "index.html", '<p class="caption">SIBurst names this crossing',
+                  '<p class="display-name">SIBurst</p><p class="caption">SIBurst names this crossing')
+        self.assertRejected(docs, "identity.placement")
+
+    def test_name_removed_from_panel_fails(self):
+        docs = self.copy()
+        self.edit(docs, "index.html", '</svg>\n        ' + self.NAME, "</svg>")
+        self.assertRejected(docs, "identity.placement")
+
+    def test_name_on_another_stage_fails(self):
+        docs = self.copy()
+        path = os.path.join(docs, "index.html")
+        text = read(path)
+        s3 = re.search(r'<section class="stage" id="s3".*?</section>', text, re.S).group(0)
+        write(path, text.replace(s3, s3.replace('</svg></div>', '</svg>' + self.NAME + '</div>', 1)))
+        self.assertRejected(docs, "identity.placement")
+
+    def test_name_inside_svg_fails(self):
+        docs = self.copy()
+        path = os.path.join(docs, "index.html")
+        text = read(path)
+        s5 = re.search(r'<section class="stage" id="s5".*?</section>', text, re.S).group(0)
+        moved = s5.replace('</g></svg>' + self.NAME, '<g><foreignObject class="boundary-name"/></g></g></svg>', 1)
+        write(path, text.replace(s5, moved))
+        self.assertRejected(docs, "identity.placement")
+
+
+class ReferenceFieldTests(SiteTestCase):
+    def reference_map(self, docs, layout="landscape"):
+        path = os.path.join(docs, "index.html")
+        text = read(path)
+        match = re.search(r'<svg class="reference-field-map"[^>]*data-layout="%s".*?</svg>' % layout, text, re.S)
+        return path, text, match.group(0)
+
+    def mutate_map(self, docs, change):
+        path, text, svg = self.reference_map(docs)
+        write(path, text.replace(svg, change(svg)))
+
+    def test_ungrounded_edge_fails(self):
+        docs = self.copy()
+        # GLOSSARY.md and SITE_BUILD.md do not name each other.
+        self.assertFalse(validate_site.SiteValidator.explicit_reference(read(os.path.join(REPO_ROOT, "GLOSSARY.md")), "SITE_BUILD.md"))
+        self.assertFalse(validate_site.SiteValidator.explicit_reference(read(os.path.join(REPO_ROOT, "SITE_BUILD.md")), "GLOSSARY.md"))
+        self.mutate_map(docs, lambda svg: svg.replace('<g class="reference-links">',
+            '<g class="reference-links"><path class="reference-link" data-source="GLOSSARY.md" data-target="SITE_BUILD.md" d="M1 1 L2 2"/>', 1))
+        self.assertRejected(docs, "reference.ungrounded_edge")
+
+    def test_self_edge_fails(self):
+        docs = self.copy()
+        self.mutate_map(docs, lambda svg: svg.replace('<g class="reference-links">',
+            '<g class="reference-links"><path class="reference-link" data-source="GLOSSARY.md" data-target="GLOSSARY.md" d="M1 1 L1 1"/>', 1))
+        self.assertRejected(docs, "reference.self_edge")
+
+    def test_reciprocal_duplicate_fails(self):
+        docs = self.copy()
+
+        def duplicate(svg):
+            a, b, d = re.search(r'data-source="([A-Z_]+\.md)" data-target="([A-Z_]+\.md)" d="([^"]+)"', svg).groups()
+            return svg.replace('<g class="reference-links">', '<g class="reference-links"><path class="reference-link" '
+                               'data-source="%s" data-target="%s" d="%s"/>' % (b, a, d), 1)
+        self.mutate_map(docs, duplicate)
+        self.assertRejected(docs, "reference.duplicate_edge")
+
+    def test_missing_edge_fails(self):
+        docs = self.copy()
+        self.mutate_map(docs, lambda svg: re.sub(r'<path class="reference-link"[^>]*/>', "", svg, count=1))
+        self.assertRejected(docs, "reference.missing_edge")
+
+    def test_dropped_node_fails(self):
+        docs = self.copy()
+        self.mutate_map(docs, lambda svg: re.sub(r'<g class="reference-node" data-document="GLOSSARY.md">.*?</g>', "", svg, count=1, flags=re.S))
+        self.assertRejected(docs, "reference.nodes")
+
+    def test_curved_link_fails(self):
+        docs = self.copy()
+        self.mutate_map(docs, lambda svg: re.sub(r'(<path class="reference-link"[^>]*d="M[\d.]+ [\d.]+) L', r"\1 Q10 10 ", svg, count=1))
+        self.assertRejected(docs, "reference.direct_link")
+
+    def test_demonstration_ids_in_reference_field_fail(self):
+        docs = self.copy()
+        self.mutate_map(docs, lambda svg: svg.replace("</svg>", "<text>N05</text></svg>"))
+        self.assertRejected(docs, "reference.separation")
+
+    def test_reading_order_list_must_match_edges(self):
+        docs = self.copy()
+        path = os.path.join(docs, "reference", "index.html")
+        text = read(path)
+        write(path, re.sub(r"Explicit references: [^<]*", "Explicit references: none", text, count=1))
+        self.assertRejected(docs, "reference.list")
+
+    def test_derivation_ignores_fenced_code_and_partial_names(self):
+        texts = {
+            "FOUNDATION_THESIS.md": "# A\n\nSee `GLOSSARY.md` and [x](NAME_ARCHITECTURE.md).\n",
+            "GLOSSARY.md": "# B\n\n```\nFOUNDATION_THESIS.md\n```\nXSITE_BUILD.md is not a name.\n",
+            "NAME_ARCHITECTURE.md": "# C\n\nFOUNDATION_THESIS.md\n",
+            "SITE_BUILD.md": "# D\n",
+        }
+        directed, edges = build_site.derive_reference_graph(texts)
+        self.assertIn(("FOUNDATION_THESIS.md", "GLOSSARY.md"), directed)
+        self.assertNotIn(("GLOSSARY.md", "FOUNDATION_THESIS.md"), directed)
+        self.assertNotIn(("GLOSSARY.md", "SITE_BUILD.md"), directed)
+        self.assertEqual(edges, [("FOUNDATION_THESIS.md", "NAME_ARCHITECTURE.md"), ("FOUNDATION_THESIS.md", "GLOSSARY.md")])
+
+    def test_layout_is_deterministic_and_keeps_components_apart(self):
+        nodes = ["FOUNDATION_THESIS.md", "NAME_ARCHITECTURE.md", "GLOSSARY.md", "SITE_BUILD.md", "DECISION_LOG.md"]
+        edges = [("FOUNDATION_THESIS.md", "NAME_ARCHITECTURE.md"), ("GLOSSARY.md", "DECISION_LOG.md")]
+        first, groups = build_site.reference_field_layout(nodes, edges)
+        second, _ = build_site.reference_field_layout(nodes, edges)
+        self.assertEqual(first, second)
+        self.assertEqual(len(groups), 3)
+        self.assertIn(["SITE_BUILD.md"], groups)
+        self.assertEqual(sorted(first), sorted(nodes))
+        self.assertTrue(all(0 <= x <= 1 and 0 <= y <= 1 for x, y in first.values()))
+
+    def test_changed_reference_changes_topology_and_drifts(self):
+        original = build_site.read_text
+
+        def patched(path):
+            text = original(path)
+            if path.endswith("GLOSSARY.md"):
+                text += "\nSee SITE_BUILD.md.\n"
+            return text
+        build_site.read_text = patched
+        try:
+            texts = {n: build_site.read_text(os.path.join(REPO_ROOT, n)) for n in build_site.REFERENCE_FILES}
+            _, edges = build_site.derive_reference_graph(texts)
+            changed = os.path.join(self.tmp, "changed")
+            build_site.build(changed)
+        finally:
+            build_site.read_text = original
+        self.assertIn(("GLOSSARY.md", "SITE_BUILD.md"), edges)
+        self.assertIn("differs from build output: index.html", build_site.compare_trees(changed, build_site.OUT))
+
+
 if __name__ == "__main__":
     unittest.main()
