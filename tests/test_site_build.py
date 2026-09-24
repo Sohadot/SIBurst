@@ -406,6 +406,11 @@ class PublicationTests(SiteTestCase):
         write(os.path.join(docs, "CNAME"), "www.siburst.com")
         self.assertRejected(docs, "publication.cname")
 
+    def test_root_level_cname_fails(self):
+        docs = self.copy()
+        write(os.path.join(os.path.dirname(docs), "CNAME"), "siburst.com")
+        self.assertRejected(docs, "publication.cname")
+
     def test_missing_cname_fails(self):
         docs = self.copy()
         os.remove(os.path.join(docs, "CNAME"))

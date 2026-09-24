@@ -547,6 +547,9 @@ class SiteValidator:
         cname = os.path.join(self.docs, "CNAME")
         if not os.path.exists(cname) or read_bytes(cname) != build_site.SITE_DOMAIN.encode("ascii"):
             self.fail("publication.cname", "CNAME", "must contain exactly %r" % build_site.SITE_DOMAIN)
+        stray = os.path.join(os.path.dirname(os.path.abspath(self.docs)), "CNAME")
+        if os.path.exists(stray):
+            self.fail("publication.cname", "CNAME", "only docs/CNAME may define the custom domain; remove the root-level CNAME")
         nojekyll = os.path.join(self.docs, ".nojekyll")
         if not os.path.exists(nojekyll) or read_bytes(nojekyll):
             self.fail("publication.nojekyll", ".nojekyll", "must exist and be empty so Pages serves the artifact unprocessed")
