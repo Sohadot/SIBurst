@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'none'; style-src 'self'; img-src 'self'; font-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="light">
+<title>Decision Log · SIBurst reference</title>
+<meta name="description" content="Durable record of decisions and their consequences.">
+<link rel="canonical" href="https://siburst.com/reference/decision-log.html">
+<link rel="stylesheet" href="../assets/system.css">
+</head>
+<body class="reference-page">
+<a class="skip-link" href="#document">Skip to document</a>
+<header class="site-header">
+  <p class="identity"><a href="../">SIBurst</a></p>
+  <nav class="reference-nav" aria-label="Reference">
+    <ol>
+      <li><a href="./">Reference index</a></li>
+      <li><a href="../#s0">Demonstration</a></li>
+    </ol>
+  </nav>
+</header>
+<main id="document">
+  <p class="reference-group-label">Conceptual foundation</p>
+  <article class="doctrine">
+<h1 id="decision-log">Decision Log</h1>
+<p>A durable public record of foundational decisions. Entries are not deleted.
+A decision that changes is marked <strong>Superseded</strong> and linked to the entry that
+replaces it.</p>
+<p>Status values: <strong>Accepted</strong>, <strong>Superseded</strong>, <strong>Proposed</strong>.</p>
+<hr />
+<h2 id="dec-001-siburst-names-a-transition-not-a-product-class">DEC-001 — SIBurst names a transition, not a product class</h2>
+<ul>
+<li><strong>Status:</strong> Accepted</li>
+<li><strong>Decision:</strong> SIBurst names the transition from incremental capability growth
+into a materially different operating regime. It does not name a model, tool,
+interface, or single product category.</li>
+<li><strong>Rationale:</strong> Most AI names describe what a system is. A name for the
+transition itself describes something many different systems relate to, and
+remains meaningful as individual products change.</li>
+<li><strong>Consequences:</strong> Every use of the name must relate to the transition
+(<code>CATEGORY_BOUNDARY.md</code>). Definitions of SIBurst in all documents must match
+<code>NAME_ARCHITECTURE.md</code>.</li>
+</ul>
+<h2 id="dec-002-burst-denotes-discontinuity-not-a-temporary-spike">DEC-002 — &quot;Burst&quot; denotes discontinuity, not a temporary spike</h2>
+<ul>
+<li><strong>Status:</strong> Accepted</li>
+<li><strong>Decision:</strong> &quot;Burst&quot; denotes discontinuity, threshold crossing, or qualitative
+regime change after accumulated capability. It does not denote a temporary
+performance spike, benchmark burst, speed, or explosion.</li>
+<li><strong>Rationale:</strong> A spike returns to baseline; a regime change does not. Reading
+&quot;burst&quot; as a spike would reduce the name to a performance claim.</li>
+<li><strong>Consequences:</strong> Copy, interface, and imagery must avoid spike, speed, and
+explosion framings. The interface expresses the burst as a change of rules
+(<code>SITE_ARCHITECTURE.md</code>).</li>
+</ul>
+<h2 id="dec-003-si-denotes-superintelligence-within-the-naming-architecture">DEC-003 — &quot;SI&quot; denotes Superintelligence within the naming architecture</h2>
+<ul>
+<li><strong>Status:</strong> Accepted</li>
+<li><strong>Decision:</strong> Within SIBurst, &quot;SI&quot; denotes superintelligence. The project does
+not claim that &quot;SI&quot; is the exclusive, universal, or canonical abbreviation.</li>
+<li><strong>Rationale:</strong> The meaning is a deliberate choice inside this identity. Claiming
+exclusivity would be inaccurate, since the letters have other established uses.</li>
+<li><strong>Consequences:</strong> Documents describe SI as meaning superintelligence &quot;within
+the SIBurst naming architecture&quot; and make no broader claim.</li>
+</ul>
+<h2 id="dec-004-no-claim-that-superintelligence-currently-exists">DEC-004 — No claim that superintelligence currently exists</h2>
+<ul>
+<li><strong>Status:</strong> Accepted</li>
+<li><strong>Decision:</strong> The project makes no claim that superintelligence currently
+exists, and no claim that any named system is superintelligent.</li>
+<li><strong>Rationale:</strong> The framework concerns a transition as a concept. Its
+credibility depends on not asserting what it has not shown.</li>
+<li><strong>Consequences:</strong> Such a claim could only enter public materials as an
+OBSERVATION meeting the standard in <code>PUBLIC_CLAIM_POLICY.md</code>.</li>
+</ul>
+<h2 id="dec-005-no-unsupported-dates-scores-or-singularity-rhetoric">DEC-005 — No unsupported dates, scores, or singularity rhetoric</h2>
+<ul>
+<li><strong>Status:</strong> Accepted</li>
+<li><strong>Decision:</strong> No unsupported prediction dates, intelligence scores,
+multipliers, or singularity rhetoric are permitted.</li>
+<li><strong>Rationale:</strong> These are the most common ways writing about advanced AI
+overstates its evidence. Excluding them is cheaper than correcting them.</li>
+<li><strong>Consequences:</strong> Enforced through the prohibited-claims list in
+<code>PUBLIC_CLAIM_POLICY.md</code> and the category exclusions in <code>CATEGORY_BOUNDARY.md</code>.</li>
+</ul>
+<h2 id="dec-006-phase-change-is-a-framework-not-a-law">DEC-006 — &quot;Phase change&quot; is a framework, not a law</h2>
+<ul>
+<li><strong>Status:</strong> Accepted</li>
+<li><strong>Decision:</strong> &quot;Phase change&quot; is the conceptual framework of SIBurst. It is not
+asserted as a universal scientific law of AI development.</li>
+<li><strong>Rationale:</strong> The term is borrowed as a structural metaphor from physical
+systems. The borrowing clarifies the idea; it is not evidence for it.</li>
+<li><strong>Consequences:</strong> Documents classify &quot;phase change&quot; as METAPHOR or DEFINITION,
+never OBSERVATION. The thesis states explicitly that not every capability
+trajectory must contain a threshold.</li>
+</ul>
+<h2 id="dec-007-the-interface-represents-the-thesis-not-generic-ai-themes">DEC-007 — The interface represents the thesis, not generic AI themes</h2>
+<ul>
+<li><strong>Status:</strong> Accepted</li>
+<li><strong>Decision:</strong> The interface must represent accumulation, threshold, and regime
+change, rather than decorate generic AI themes.</li>
+<li><strong>Rationale:</strong> A site built from generic AI imagery would make SIBurst
+indistinguishable from any other AI project. An interface that enacts the
+transition demonstrates the concept.</li>
+<li><strong>Consequences:</strong> <code>SITE_ARCHITECTURE.md</code> defines the progression, interface
+states, motion rule, and visual prohibitions that future work is reviewed
+against.</li>
+</ul>
+<h2 id="dec-008-commercial-territories-are-natural-areas-not-limits">DEC-008 — Commercial territories are natural areas, not limits</h2>
+<ul>
+<li><strong>Status:</strong> Accepted</li>
+<li><strong>Decision:</strong> The territories in <code>COMMERCIAL_TERRITORY.md</code> and
+<code>CATEGORY_BOUNDARY.md</code> describe natural application areas, not limits on the
+identity.</li>
+<li><strong>Rationale:</strong> The transition SIBurst names may matter to kinds of work that do
+not yet exist. Fixing the territory now would narrow the name prematurely.</li>
+<li><strong>Consequences:</strong> New uses are judged by the boundary test, not by membership
+in a list.</li>
+</ul>
+<h2 id="dec-009-the-repository-remains-public-safe">DEC-009 — The repository remains public-safe</h2>
+<ul>
+<li><strong>Status:</strong> Accepted</li>
+<li><strong>Decision:</strong> All repository content must be safe for unrestricted public
+inspection. Pricing, buyers, negotiation, outreach, valuation, and private
+Sohadot strategy are prohibited from this repository.</li>
+<li><strong>Rationale:</strong> The repository is public. It exists to define the concept, not
+to record commercial intentions.</li>
+<li><strong>Consequences:</strong> Every change is reviewed against this rule before it is
+committed. Information that is not public-safe is never added, even
+temporarily.</li>
+</ul>
+<h2 id="dec-010-no-landing-page-before-the-foundation-passes-review">DEC-010 — No landing page before the foundation passes review</h2>
+<ul>
+<li><strong>Status:</strong> Accepted</li>
+<li><strong>Decision:</strong> No landing page, site code, or visual production asset is
+produced until the conceptual foundation passes review.</li>
+<li><strong>Rationale:</strong> An interface built before the concept is settled would fix
+unsettled ideas in visible form.</li>
+<li><strong>Consequences:</strong> Sprint 0 contains only the nine foundation documents. No
+<code>index.html</code> and no site publishing configuration exist.</li>
+</ul>
+<h2 id="dec-011-phase-change-is-represented-by-a-rule-change">DEC-011 — Phase change is represented by a rule change</h2>
+<ul>
+<li><strong>Status:</strong> Accepted</li>
+<li><strong>Decision:</strong> The visual transition must alter geometry, topology, hierarchy,
+or another structural rule. Increased intensity alone is not enough. The chosen
+rule change is grid → relational field: before S4, position is assigned by
+index within lanes and cells; after S4, position is derived from relationships.</li>
+<li><strong>Rationale:</strong> The thesis separates &quot;more capability&quot; from &quot;a different
+operating regime&quot;. An interface that shows the transition only as more
+density, brightness, or speed would show more of the same, which is the
+opposite of the thesis.</li>
+<li><strong>Consequences:</strong> <code>INTERFACE_CONTRACT.md</code> §2 defines the Lattice and Field
+rules. Acceptance Tests 1 and 2 fail any implementation whose S4 differs from
+S1 only in intensity or quantity.</li>
+</ul>
+<h2 id="dec-012-identity-persists-across-the-transition">DEC-012 — Identity persists across the transition</h2>
+<ul>
+<li><strong>Status:</strong> Accepted</li>
+<li><strong>Decision:</strong> The interface represents one system crossing regimes, not one
+scene being replaced by another. The entity set is frozen at the end of S3;
+entities, anchors, relationships, and the boundary all persist through S4.</li>
+<li><strong>Rationale:</strong> The transition SIBurst names happens to a system. If the system
+were replaced, the interface would show substitution, not transition.</li>
+<li><strong>Consequences:</strong> Cross-fading between independent compositions is prohibited.
+Anchors carry permanent identifiers. Acceptance Test 3 enforces the invariant.</li>
+</ul>
+<h2 id="dec-013-interface-states-are-scoped-to-the-demonstration">DEC-013 — Interface states are scoped to the demonstration</h2>
+<ul>
+<li><strong>Status:</strong> Accepted</li>
+<li><strong>Decision:</strong> Labels such as <code>TRANSITION DETECTED</code> describe the on-screen model
+state and must not imply real-world AI telemetry. Every state label carries a
+scope prefix and stage index, the boundary identifies the system as a
+demonstration, and telemetry vocabulary and devices are prohibited.</li>
+<li><strong>Rationale:</strong> An interface that looked like a live instrument would make an
+implicit claim that a real transition is being observed, which
+<code>PUBLIC_CLAIM_POLICY.md</code> forbids.</li>
+<li><strong>Consequences:</strong> <code>INTERFACE_CONTRACT.md</code> §5 defines the labels, framing rule,
+and prohibited vocabulary. The progress variable <code>p</code> is never displayed as a
+number. Acceptance Tests 5 and 15 enforce the boundary. This resolves the
+Sprint 0 open question on interface-state framing.</li>
+</ul>
+<h2 id="dec-014-motion-must-carry-semantic-information">DEC-014 — Motion must carry semantic information</h2>
+<ul>
+<li><strong>Status:</strong> Accepted</li>
+<li><strong>Decision:</strong> Every animation must correspond to a defined state or
+relationship change, within the six motion classes in <code>MOTION_SEMANTICS.md</code>.
+Demonstration motion is driven by progress, and the system is still when the
+visitor is idle.</li>
+<li><strong>Rationale:</strong> Ornamental motion is the most common route to generic AI imagery,
+and it competes with the one change that matters.</li>
+<li><strong>Consequences:</strong> Ambient, looping, and decorative motion are prohibited.
+Acceptance Test 9 fails any animation that cannot be mapped to a class and stage.</li>
+</ul>
+<h2 id="dec-015-accessibility-preserves-the-thesis">DEC-015 — Accessibility preserves the thesis</h2>
+<ul>
+<li><strong>Status:</strong> Accepted</li>
+<li><strong>Decision:</strong> Reduced-motion, keyboard, mobile, zoomed, and assistive-technology
+experiences must preserve the distinction between accumulation and regime
+change. The target is WCAG 2.2 AA.</li>
+<li><strong>Rationale:</strong> A thesis that survives only under ideal viewing conditions is an
+effect, not a concept. Every visitor should be able to see the difference
+between more and different.</li>
+<li><strong>Consequences:</strong> <code>MOTION_SEMANTICS.md</code> §4 and <code>RESPONSIVE_ACCESSIBILITY.md</code>
+define equivalent paths. Instability is confined to the demonstration.
+Acceptance Tests 6, 7, 8, 13, and 17 enforce the requirement.</li>
+</ul>
+<h2 id="dec-016-implementation-remains-static-first-and-dependency-minimal">DEC-016 — Implementation remains static-first and dependency-minimal</h2>
+<ul>
+<li><strong>Status:</strong> Accepted</li>
+<li><strong>Decision:</strong> The future site should prefer semantic HTML, CSS, SVG, and
+minimal vanilla JavaScript. Frameworks, external script or font sources,
+analytics, and heavy rendering need explicit justification through a recorded
+decision.</li>
+<li><strong>Rationale:</strong> The concept should be understandable on modest hardware and
+without scripting. Every dependency is a liability for durability,
+performance, and accessibility.</li>
+<li><strong>Consequences:</strong> <code>INTERFACE_CONTRACT.md</code> §8 defines the constraints, budgets,
+and progressive-enhancement baseline. Acceptance Tests 11 and 18 enforce them.</li>
+</ul>
+<h2 id="dec-017-reference-html-is-generated-from-canonical-markdown">DEC-017 — Reference HTML is generated from canonical Markdown</h2>
+<ul>
+<li><strong>Status:</strong> Accepted</li>
+<li><strong>Decision:</strong> Canonical Markdown remains the single source of truth. Public
+HTML reference pages are generated derivatives and are never edited as
+independent content.
+<ul>
+<li>The canonical <code>.md</code> documents in this repository remain authoritative.</li>
+<li>Reference HTML may be generated for the public site. It is not a second
+editorial source and is never edited by hand.</li>
+<li>Generation is one-way, from Markdown to HTML, and is deterministic.</li>
+<li>Validation fails whenever committed or published reference output does not
+match what the canonical Markdown regenerates.</li>
+<li>The public site presents the documents inside its own reference layer.
+GitHub-rendered Markdown may remain an auxiliary source link, not the
+primary reading experience.</li>
+<li>Generation introduces no runtime dependency into the public site.</li>
+<li>Renderer and tool selection is an implementation detail for a later sprint.
+Once selected, the tooling is pinned and reproducible.</li>
+</ul>
+</li>
+<li><strong>Rationale:</strong> The doctrine must be readable on the site without creating a
+second version of it. A single canonical source, with derivatives that are
+checked mechanically, keeps what the site says identical to what the
+repository governs.</li>
+<li><strong>Consequences:</strong> <code>INTERFACE_CONTRACT.md</code> §7.4 defines the invariants.
+Acceptance Test 12 fails any reference content that diverges from the
+canonical Markdown. No renderer or dependency is introduced in Sprint 1.</li>
+</ul>
+<h2 id="dec-018-the-demonstration-uses-one-canonical-fixture">DEC-018 — The demonstration uses one canonical fixture</h2>
+<ul>
+<li><strong>Status:</strong> Accepted</li>
+<li><strong>Decision:</strong> The graph, entities, anchors, arrival order, Lattice geometry, S3
+offsets, and Field coordinates are governed data in
+<code>data/demonstration-fixture.json</code>, not implementation-local choices. The
+fixture is validated by <code>tools/validate_fixture.py</code> and explained in
+<code>DEMONSTRATION_FIXTURE.md</code>.</li>
+<li><strong>Rationale:</strong> DEC-011 and DEC-012 are only testable if the system that
+crosses the transition is fixed and inspectable. A graph invented inside
+rendering code could drift from the doctrine without anyone noticing.</li>
+<li><strong>Consequences:</strong> Future browser code consumes this fixture, or is compiled
+from it mechanically, and may not invent an independent graph. Every viewport
+uses the same fixture. Gate 0 in <code>INTERFACE_ACCEPTANCE.md</code> requires the
+validator to pass before interface testing.</li>
+</ul>
+<h2 id="dec-019-the-canonical-lattice-contains-24-logical-cells">DEC-019 — The canonical Lattice contains 24 logical cells</h2>
+<ul>
+<li><strong>Status:</strong> Accepted</li>
+<li><strong>Decision:</strong> The demonstration uses 24 entities (<code>N01</code>–<code>N24</code>) in a 4 × 6
+logical Lattice, with the arrival schedule 3 / 15 / 22 / 24 entities at
+S0 / S1 / S2 / S3.</li>
+<li><strong>Rationale:</strong> One fixed 24-entity system serves every viewport, so no
+viewport-specific fixture variant exists. 24 fills the 4 × 6 Lattice exactly,
+which gives exact sparse, scale, near-capacity, and full-capacity states
+(3 / 15 / 22 / 24). <strong>24 has no scientific meaning.</strong> It is an implementation
+choice.</li>
+<li><strong>Consequences:</strong> Viewports may transform the logical coordinates but may not
+add or remove entities or anchors. The node-count adaptations previously
+allowed in <code>RESPONSIVE_ACCESSIBILITY.md</code> and <code>VISUAL_SYSTEM.md</code> are replaced
+by this fixed set. Occupancy values are layout facts, never public readouts.</li>
+</ul>
+<h2 id="dec-020-lattice-routability-is-deterministic">DEC-020 — Lattice routability is deterministic</h2>
+<ul>
+<li><strong>Status:</strong> Accepted</li>
+<li><strong>Decision:</strong> A relationship is Lattice-routable only when its endpoints are
+in the same lane with a cell distance of at most 2, or in adjacent lanes with
+a cell distance of at most 1. Everything else is unroutable, and an active
+unroutable relationship is shown as a stub until S4.</li>
+<li><strong>Rationale:</strong> Sprint 1 left the bounded routing distance to the
+implementation. Fixing it makes S1 purity, S2 strain, and S3 growth provable
+rather than a matter of judgement.</li>
+<li><strong>Consequences:</strong> Routability is always computed from this law, never
+declared. The validator requires no stubs at S0 and S1, at least four at S2,
+and more at S3 than at S2.</li>
+</ul>
+<h2 id="dec-021-field-geometry-is-precomputed-governed-data">DEC-021 — Field geometry is precomputed governed data</h2>
+<ul>
+<li><strong>Status:</strong> Accepted</li>
+<li><strong>Decision:</strong> Field coordinates ship as part of the canonical fixture. No
+runtime randomized, force-directed, or physics-based layout is allowed.
+Relationships govern the authored geometry, and validation proves it.</li>
+<li><strong>Rationale:</strong> A layout computed in the browser could differ between loads and
+devices, and could lose the relationship structure it is meant to reveal.
+Fixed coordinates make Tests 2, 3, and 14 checkable and reproducible.</li>
+<li><strong>Consequences:</strong> The validator requires linked pairs to be closer than
+unlinked pairs (at most 0.80 of the mean unlinked distance), intra-cluster
+pairs to be closer than inter-cluster pairs, legible and distinct clusters,
+and the anchor separation and convergence proofs, at 1:1, 16:9, and 9:16.
+Changing the coordinates is a fixture change and is subject to the same
+validation.</li>
+</ul>
+<h2 id="dec-022-the-public-interface-is-a-generated-static-artifact">DEC-022 — The public interface is a generated static artifact</h2>
+<ul>
+<li><strong>Status:</strong> Accepted</li>
+<li><strong>Decision:</strong> <code>docs/</code> is generated deterministically by <code>tools/build_site.py</code>
+from governed source templates in <code>src/site/</code>, canonical Markdown, and the
+canonical demonstration fixture.</li>
+<li><strong>Rationale:</strong> DEC-017 and DEC-018 keep doctrine and demonstration data in
+single canonical sources. The public site must derive from them, not become a
+second editorial copy.</li>
+<li><strong>Consequences:</strong> Generated public HTML is never edited independently.
+<code>python tools/build_site.py --check</code> and <code>tools/validate_site.py</code> fail on any
+drift, including a public fixture that is not byte-identical to the canonical
+one.</li>
+</ul>
+<h2 id="dec-023-javascript-progressively-enhances-a-complete-static-document">DEC-023 — JavaScript progressively enhances a complete static document</h2>
+<ul>
+<li><strong>Status:</strong> Accepted</li>
+<li><strong>Decision:</strong> The no-JavaScript experience remains semantically complete: all
+seven stages, their labels, captions, and state descriptions, static figures
+generated from the fixture, the S5 transition record, and the reference
+layer. JavaScript upgrades it into the persistent continuous system only
+after the fixture has loaded and the scene has been built.</li>
+<li><strong>Rationale:</strong> The thesis and the claim boundary must not depend on a script
+running successfully (<code>INTERFACE_CONTRACT.md</code> §8.1).</li>
+<li><strong>Consequences:</strong> A runtime failure cannot erase the thesis or reference
+access. Enhanced-only content is never introduced; acceptance Test 11 is
+checked against the static document.</li>
+</ul>
+<h2 id="dec-024-publishing-is-a-separate-gate">DEC-024 — Publishing is a separate gate</h2>
+<ul>
+<li><strong>Status:</strong> Accepted</li>
+<li><strong>Decision:</strong> Producing a technically complete site does not authorize public
+deployment.</li>
+<li><strong>Rationale:</strong> Machine gates cannot judge the visual and perceptual acceptance
+tests (for example More vs Different, generic AI appearance, and claim
+perception). Those require governance and visual review.</li>
+<li><strong>Consequences:</strong> GitHub Pages, DNS, and public launch remain disabled until
+the executable interface passes governance and visual review and a separate
+launch sprint is authorized.</li>
+</ul>
+<h2 id="dec-025-reference-field-relationships-are-source-derived">DEC-025 — Reference Field relationships are source-derived</h2>
+<ul>
+<li><strong>Status:</strong> Accepted</li>
+<li><strong>Decision:</strong> The S6 Reference Field may show only relationships derived
+mechanically from explicit canonical-document references in the Markdown
+sources. Documents A and B are linked only when one names the other's exact
+file name outside fenced code blocks. No semantic or aesthetic relationship
+may be invented by the renderer.</li>
+<li><strong>Rationale:</strong> <code>INTERFACE_CONTRACT.md</code> §7.2 requires links that show real
+relationships between documents. The implementation must not manufacture
+conceptual relationships merely to create a graph.</li>
+<li><strong>Consequences:</strong> The build derives the graph and its layout
+deterministically (<code>SITE_BUILD.md</code> §8). The reading-order list remains the
+accessible representation. The reference topology changes only when canonical
+documents change their explicit references, and the build check fails until
+the site is regenerated. The Reference Field is separate from the
+demonstration fixture and never alters it.</li>
+</ul>
+  </article>
+  <p class="source-link">Generated from the canonical source <a href="https://github.com/Sohadot/SIBurst/blob/main/DECISION_LOG.md">DECISION_LOG.md</a>. The Markdown file is authoritative; this page is a derived rendering (DEC-017).</p>
+  <p class="back-link"><a href="./">Back to the reference index</a></p>
+</main>
+</body>
+</html>

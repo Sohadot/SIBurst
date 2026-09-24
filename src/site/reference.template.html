@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'none'; style-src 'self'; img-src 'self'; font-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="light">
+<title>$page_title</title>
+<meta name="description" content="$description">
+<link rel="canonical" href="$canonical">
+<link rel="stylesheet" href="${root}assets/system.css">
+</head>
+<body class="reference-page">
+<a class="skip-link" href="#document">Skip to document</a>
+<header class="site-header">
+  <p class="identity"><a href="${root}">SIBurst</a></p>
+  <nav class="reference-nav" aria-label="Reference">
+    <ol>
+      <li><a href="./">Reference index</a></li>
+      <li><a href="${root}#s0">Demonstration</a></li>
+    </ol>
+  </nav>
+</header>
+<main id="document">
+  <p class="reference-group-label">$group</p>
+  <article class="doctrine">
+$body
+  </article>
+  <p class="source-link">Generated from the canonical source <a href="$source_url">$source_name</a>. The Markdown file is authoritative; this page is a derived rendering (DEC-017).</p>
+  <p class="back-link"><a href="./">Back to the reference index</a></p>
+</main>
+</body>
+</html>

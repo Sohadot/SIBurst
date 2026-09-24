@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; font-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="light">
+<title>SIBurst — $tagline</title>
+<meta name="description" content="$thesis">
+<link rel="canonical" href="$site_url">
+<meta property="og:type" content="website">
+<meta property="og:title" content="SIBurst — $tagline">
+<meta property="og:description" content="$thesis">
+<meta property="og:url" content="$site_url">
+<link rel="stylesheet" href="assets/system.css">
+<script type="module" src="assets/system.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#reference">Skip to reference</a>
+<header class="site-header">
+  <p class="identity"><a href="./">SIBurst</a></p>
+  <nav class="stage-nav" aria-label="Demonstration stages">
+    <ol>
+      <li><a href="#s0" data-stage-link="S0"><span class="stage-index">S0</span> <span class="stage-name">$name_s0</span></a></li>
+      <li><a href="#s1" data-stage-link="S1"><span class="stage-index">S1</span> <span class="stage-name">$name_s1</span></a></li>
+      <li><a href="#s2" data-stage-link="S2"><span class="stage-index">S2</span> <span class="stage-name">$name_s2</span></a></li>
+      <li><a href="#s3" data-stage-link="S3"><span class="stage-index">S3</span> <span class="stage-name">$name_s3</span></a></li>
+      <li><a href="#s4" data-stage-link="S4"><span class="stage-index">S4</span> <span class="stage-name">$name_s4</span></a></li>
+      <li><a href="#s5" data-stage-link="S5"><span class="stage-index">S5</span> <span class="stage-name">$name_s5</span></a></li>
+      <li><a href="#s6" data-stage-link="S6"><span class="stage-index">S6</span> <span class="stage-name">$name_s6</span></a></li>
+    </ol>
+    <p class="reference-link"><a href="#reference">Reference</a></p>
+  </nav>
+</header>
+
+<main id="main">
+  <section class="intro" aria-labelledby="intro-title">
+    <h1 id="intro-title"><span class="identity-mark">SIBurst</span> <span class="tagline">$tagline</span></h1>
+    <p class="thesis">$thesis</p>
+    <p class="boundary-statement">$claim_boundary</p>
+    <p class="scope-statement">$scope</p>
+  </section>
+
+  <div class="system-layout">
+    <div class="panel" id="demonstration" hidden>
+      <p class="readout" id="readout">$readout_s0</p>
+      <div class="figure-area" data-layout="landscape">
+        <svg class="system" aria-hidden="true" focusable="false"></svg>
+        <p class="boundary-name" aria-hidden="true">SIBurst</p>
+      </div>
+      <p class="scope">$scope</p>
+    </div>
+    <p class="visually-hidden" id="stage-announcer" aria-live="polite"></p>
+
+    <div class="track">
+      <section class="stage" id="s0" data-stage="S0" aria-labelledby="s0-title">
+        <h2 id="s0-title"><span class="stage-index">S0</span> $name_s0</h2>
+        <p class="readout">$readout_s0</p>
+        <figure class="stage-figure">$figure_s0<figcaption class="scope">$scope</figcaption></figure>
+        <p class="caption">$caption_s0</p>
+        <p class="description" id="s0-description">Demonstration stage 1 of 7: accumulating. $entities_s0 entities sit in a lattice of $lanes lanes and $cells cells per lane. Position follows arrival order, and each of the $relationships_s0 relationships is drawn along the rails.</p>
+      </section>
+
+      <section class="stage" id="s1" data-stage="S1" aria-labelledby="s1-title">
+        <h2 id="s1-title"><span class="stage-index">S1</span> $name_s1</h2>
+        <p class="readout">$readout_s1</p>
+        <figure class="stage-figure">$figure_s1<figcaption class="scope">$scope</figcaption></figure>
+        <p class="caption">$caption_s1</p>
+        <p class="description" id="s1-description">Demonstration stage 2 of 7: density rising. $entities_s1 entities and $relationships_s1 relationships occupy the same lattice under the same rules. Every relationship can still be routed along the rails.</p>
+      </section>
+
+      <section class="stage" id="s2" data-stage="S2" aria-labelledby="s2-title">
+        <h2 id="s2-title"><span class="stage-index">S2</span> $name_s2</h2>
+        <p class="readout">$readout_s2</p>
+        <figure class="stage-figure">$figure_s2<figcaption class="scope">$scope</figcaption></figure>
+        <p class="caption">$caption_s2</p>
+        <p class="description" id="s2-description">Demonstration stage 3 of 7: threshold approaching. $entities_s2 entities nearly fill the lattice. $stubs_s2 of the $relationships_s2 relationships cannot be routed; each is shown as a stub that stops at the edge of its cell with a short cross mark. Every entity is still centred in its cell.</p>
+      </section>
+
+      <section class="stage" id="s3" data-stage="S3" aria-labelledby="s3-title">
+        <h2 id="s3-title"><span class="stage-index">S3</span> $name_s3</h2>
+        <p class="readout">$readout_s3</p>
+        <figure class="stage-figure">$figure_s3<figcaption class="scope">$scope</figcaption></figure>
+        <p class="caption">$caption_s3</p>
+        <p class="description" id="s3-description">Demonstration stage 4 of 7: regime unstable. All $entities_s3 entities are present. $stubs_s3 of the $relationships_s3 relationships cannot be routed, and entities with unrouted relationships have slipped from the centres of their cells toward them. The rails are unchanged and the lattice rules still apply.</p>
+      </section>
+
+      <section class="stage" id="s4" data-stage="S4" aria-labelledby="s4-title">
+        <h2 id="s4-title"><span class="stage-index">S4</span> $name_s4</h2>
+        <p class="readout">$readout_s4</p>
+        <div class="stage-figure transition-frames">
+          <figure>$figure_s4_before<figcaption>Rules in force: the lattice at the end of S3.</figcaption></figure>
+          <figure>$figure_s4_after<figcaption>Rules changed: the same entities, placed by their relationships.</figcaption></figure>
+          <p class="scope">$scope</p>
+        </div>
+        <p class="caption">$caption_s4</p>
+        <p class="description" id="s4-description">Demonstration stage 5 of 7: transition detected. The rails retire. The same $entities_s4 entities move from lattice positions to positions set by their relationships, and every stub resolves into its full relationship. No entity or relationship is added or removed. Anchors $sep_a and $sep_b, neighbours in the lattice, separate; anchors $con_a and $con_b, at opposite corners of the lattice, come together.</p>
+      </section>
+
+      <section class="stage" id="s5" data-stage="S5" aria-labelledby="s5-title">
+        <h2 id="s5-title"><span class="stage-index">S5</span> $name_s5</h2>
+        <p class="readout">$readout_s5</p>
+        <figure class="stage-figure">$figure_s5<figcaption class="scope">$scope</figcaption></figure>
+        <p class="caption">$caption_s5</p>
+        <p class="description" id="s5-description">Demonstration stage 6 of 7: SIBurst. The field is stable. The transition record compares the end of the lattice with the field: the same $entities_s5 entities and the same anchors, organized by different rules.</p>
+        <figure class="transition-record" aria-labelledby="record-title">
+          <p class="record-title" id="record-title">Transition record</p>
+          <div class="record-pair">
+            <div class="record-side"><p class="record-label">Lattice · end of S3</p>$record_lattice</div>
+            <div class="record-side"><p class="record-label">Field · S5</p>$record_field</div>
+          </div>
+          <figcaption class="record-text">Left: the lattice at the end of S3, with $entities_s3 entities placed by arrival order and $stubs_s3 relationships it cannot route. Right: the field, with the same $entities_s5 entities placed by their relationships and all $relationships_s5 relationships drawn. Anchors $sep_a and $sep_b are neighbours in the lattice and separate in the field. Anchors $con_a and $con_b are at opposite corners of the lattice and come together in the field. Anchors: $anchors.</figcaption>
+        </figure>
+      </section>
+
+      <section class="stage" id="s6" data-stage="S6" aria-labelledby="s6-title">
+        <h2 id="s6-title"><span class="stage-index">S6</span> $name_s6</h2>
+        <p class="readout">$readout_s6</p>
+        <figure class="stage-figure">$figure_s6<figcaption class="scope">$scope</figcaption></figure>
+        <p class="caption">$caption_s6</p>
+        <p class="description" id="s6-description">Demonstration stage 7 of 7: new operating regime. The field recedes and the reference layer opens. The demonstration ends here and does not restart.</p>
+        <p class="enter-reference"><a href="#reference">Enter the reference layer</a></p>
+      </section>
+    </div>
+  </div>
+
+  <section class="reference" id="reference" aria-labelledby="reference-title">
+    <h2 id="reference-title">Reference</h2>
+    <p>The governed doctrine behind the demonstration. Each page is generated from its canonical Markdown source.</p>
+    <figure class="reference-field" aria-labelledby="reference-field-title">
+          <p class="record-title" id="reference-field-title">Reference Field</p>
+          $reference_field
+          <figcaption class="record-text">A map of the $reference_node_count canonical documents, drawn in the Field grammar. It is not part of the demonstration system. Each of the $reference_edge_count links exists because one document names the other's source file (DEC-025). The same documents and their explicit references are listed in reading order in the reference layer.</figcaption>
+        </figure>
+    $reference_list
+    <p class="reference-index-link"><a href="reference/">Reference index</a></p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p>$claim_boundary</p>
+  <p><a href="https://github.com/Sohadot/SIBurst">Canonical sources on GitHub</a></p>
+</footer>
+</body>
+</html>

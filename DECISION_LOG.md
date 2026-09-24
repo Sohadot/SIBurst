@@ -285,3 +285,61 @@ Status values: **Accepted**, **Superseded**, **Proposed**.
   and the anchor separation and convergence proofs, at 1:1, 16:9, and 9:16.
   Changing the coordinates is a fixture change and is subject to the same
   validation.
+
+## DEC-022 — The public interface is a generated static artifact
+
+- **Status:** Accepted
+- **Decision:** `docs/` is generated deterministically by `tools/build_site.py`
+  from governed source templates in `src/site/`, canonical Markdown, and the
+  canonical demonstration fixture.
+- **Rationale:** DEC-017 and DEC-018 keep doctrine and demonstration data in
+  single canonical sources. The public site must derive from them, not become a
+  second editorial copy.
+- **Consequences:** Generated public HTML is never edited independently.
+  `python tools/build_site.py --check` and `tools/validate_site.py` fail on any
+  drift, including a public fixture that is not byte-identical to the canonical
+  one.
+
+## DEC-023 — JavaScript progressively enhances a complete static document
+
+- **Status:** Accepted
+- **Decision:** The no-JavaScript experience remains semantically complete: all
+  seven stages, their labels, captions, and state descriptions, static figures
+  generated from the fixture, the S5 transition record, and the reference
+  layer. JavaScript upgrades it into the persistent continuous system only
+  after the fixture has loaded and the scene has been built.
+- **Rationale:** The thesis and the claim boundary must not depend on a script
+  running successfully (`INTERFACE_CONTRACT.md` §8.1).
+- **Consequences:** A runtime failure cannot erase the thesis or reference
+  access. Enhanced-only content is never introduced; acceptance Test 11 is
+  checked against the static document.
+
+## DEC-024 — Publishing is a separate gate
+
+- **Status:** Accepted
+- **Decision:** Producing a technically complete site does not authorize public
+  deployment.
+- **Rationale:** Machine gates cannot judge the visual and perceptual acceptance
+  tests (for example More vs Different, generic AI appearance, and claim
+  perception). Those require governance and visual review.
+- **Consequences:** GitHub Pages, DNS, and public launch remain disabled until
+  the executable interface passes governance and visual review and a separate
+  launch sprint is authorized.
+
+## DEC-025 — Reference Field relationships are source-derived
+
+- **Status:** Accepted
+- **Decision:** The S6 Reference Field may show only relationships derived
+  mechanically from explicit canonical-document references in the Markdown
+  sources. Documents A and B are linked only when one names the other's exact
+  file name outside fenced code blocks. No semantic or aesthetic relationship
+  may be invented by the renderer.
+- **Rationale:** `INTERFACE_CONTRACT.md` §7.2 requires links that show real
+  relationships between documents. The implementation must not manufacture
+  conceptual relationships merely to create a graph.
+- **Consequences:** The build derives the graph and its layout
+  deterministically (`SITE_BUILD.md` §8). The reading-order list remains the
+  accessible representation. The reference topology changes only when canonical
+  documents change their explicit references, and the build check fails until
+  the site is regenerated. The Reference Field is separate from the
+  demonstration fixture and never alters it.

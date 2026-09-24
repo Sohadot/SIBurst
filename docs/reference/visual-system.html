@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'none'; style-src 'self'; img-src 'self'; font-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="light">
+<title>Visual System · SIBurst reference</title>
+<meta name="description" content="Spatial character, semantic color and typography roles, and density progression.">
+<link rel="canonical" href="https://siburst.com/reference/visual-system.html">
+<link rel="stylesheet" href="../assets/system.css">
+</head>
+<body class="reference-page">
+<a class="skip-link" href="#document">Skip to document</a>
+<header class="site-header">
+  <p class="identity"><a href="../">SIBurst</a></p>
+  <nav class="reference-nav" aria-label="Reference">
+    <ol>
+      <li><a href="./">Reference index</a></li>
+      <li><a href="../#s0">Demonstration</a></li>
+    </ol>
+  </nav>
+</header>
+<main id="document">
+  <p class="reference-group-label">Implementation doctrine</p>
+  <article class="doctrine">
+<h1 id="visual-system">Visual System</h1>
+<p>The visual language for the SIBurst interface. This document defines
+principles and roles, not assets. It creates no colors, fonts, images, or
+mockups. It is governed by <code>INTERFACE_CONTRACT.md</code>, whose primitives, stages,
+and geometry grammar it styles.</p>
+<h2 id="1-spatial-character">1. Spatial character</h2>
+<p>The system should read as:</p>
+<ul>
+<li><strong>precise:</strong> alignments are exact while the Lattice governs, so their later
+failure in S3 is visible;</li>
+<li><strong>infrastructural:</strong> the demonstration resembles a structure or a schematic,
+not an illustration or a scene;</li>
+<li><strong>controlled:</strong> nothing moves or appears without a state reason;</li>
+<li><strong>sparse at entry:</strong> S0 leaves most of the boundary empty;</li>
+<li><strong>increasingly dense before threshold:</strong> S1–S2 fill the Lattice toward capacity;</li>
+<li><strong>structurally altered after transition:</strong> S5–S6 are visibly organized by a
+different rule, not a different decoration.</li>
+</ul>
+<p>It must not read as generic &quot;AI futurism&quot;. The visual prohibitions in
+<code>SITE_ARCHITECTURE.md</code> apply in full. In addition:</p>
+<ul>
+<li>no glow, bloom, or light-trail effects on nodes or links;</li>
+<li>no depth effects (perspective, parallax, 3D rotation) in the demonstration;</li>
+<li>no decorative textures, noise, or scan lines;</li>
+<li>no gradients, except where a later decision gives one a semantic role.</li>
+</ul>
+<h2 id="2-color-roles">2. Color roles</h2>
+<p>Color is assigned by <strong>role</strong>, never by mood. This document defines the roles;
+it deliberately assigns no values. No color is claimed to carry scientific or
+universal meaning.</p>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Used for</th>
+<th>Stages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Background</strong></td>
+<td>The page and the interior of the boundary.</td>
+<td>All</td>
+</tr>
+<tr>
+<td><strong>Primary information</strong></td>
+<td>Captions, reference text, the SIBurst name, anchor identifiers.</td>
+<td>All</td>
+</tr>
+<tr>
+<td><strong>Secondary information</strong></td>
+<td>Scope prefixes, stage index, supporting labels, the boundary caption.</td>
+<td>All</td>
+</tr>
+<tr>
+<td><strong>Structure</strong></td>
+<td>Rails and the boundary.</td>
+<td>Rails S0–S4; boundary all</td>
+</tr>
+<tr>
+<td><strong>Dormant signal</strong></td>
+<td>Nodes and links that exist but are not currently changing.</td>
+<td>All</td>
+</tr>
+<tr>
+<td><strong>Active signal</strong></td>
+<td>Nodes and links appearing or changing in the current stage.</td>
+<td>S0–S4</td>
+</tr>
+<tr>
+<td><strong>Threshold warning</strong></td>
+<td>Unrouted stubs, slipped nodes, crowded rail segments, the state readout in S2–S3.</td>
+<td>S2–S3 only</td>
+</tr>
+<tr>
+<td><strong>Post-transition distinction</strong></td>
+<td>Links and emphasis that exist only under the Field's rules.</td>
+<td>S4–S6 only</td>
+</tr>
+</tbody>
+</table>
+<p>Rules:</p>
+<ul>
+<li>
+<p><strong>Stage-bound roles.</strong> Threshold warning never appears outside S2–S3.
+Post-transition distinction never appears before S4. Seeing either role
+therefore tells the visitor which regime they are in.</p>
+</li>
+<li>
+<p><strong>Never color alone.</strong> Every color role that carries meaning is paired with a
+non-color cue:</p>
+<table>
+<thead>
+<tr>
+<th>Meaning</th>
+<th>Non-color cue</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unrouted relationship</td>
+<td>Open-ended stub with a terminal tick mark</td>
+</tr>
+<tr>
+<td>Slipped node</td>
+<td>Visible offset from its cell center</td>
+</tr>
+<tr>
+<td>Active vs dormant</td>
+<td>Stroke weight or fill state (filled vs outlined)</td>
+</tr>
+<tr>
+<td>Post-transition link</td>
+<td>Direct path with no right angles, where every Lattice link had them</td>
+</tr>
+<tr>
+<td>Structure</td>
+<td>Thin continuous rule, distinct from link weight</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p><strong>Contrast.</strong> Every shipped color scheme meets WCAG 2.2 AA:</p>
+<ul>
+<li>text: at least 4.5:1 against its background, or 3:1 for large text;</li>
+<li>graphical elements needed to understand a state (nodes, links, stubs,
+rails, boundary, focus indicators): at least 3:1 against adjacent colors.</li>
+</ul>
+</li>
+<li>
+<p><strong>Schemes.</strong> An implementation may ship a light scheme, a dark scheme, or
+both. Every shipped scheme meets the contrast rules and keeps every role
+distinct.</p>
+</li>
+<li>
+<p><strong>Restraint.</strong> No more than these eight roles. A ninth role requires a recorded
+decision.</p>
+</li>
+</ul>
+<h2 id="3-typography-roles">3. Typography roles</h2>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Used for</th>
+<th>Character</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Display voice</strong></td>
+<td>The SIBurst name (S5), stage names.</td>
+<td>Used rarely. It must never appear inside the demonstration system except for the name at S5.</td>
+</tr>
+<tr>
+<td><strong>Reading voice</strong></td>
+<td>Captions, state descriptions, reference documents.</td>
+<td>Optimized for long-form legibility.</td>
+</tr>
+<tr>
+<td><strong>System labels</strong></td>
+<td>Scope prefixes, state labels, the boundary caption.</td>
+<td>Uppercase, generously tracked, small but at least the minimum readable size.</td>
+</tr>
+<tr>
+<td><strong>Numeric/index labels</strong></td>
+<td>Stage index (S0–S6, 00–06), anchor identifiers.</td>
+<td>Tabular figures, so labels do not shift width.</td>
+</tr>
+<tr>
+<td><strong>Code/state labels</strong></td>
+<td>File names and the stage index in the reference layer.</td>
+<td>Monospace.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="31-font-strategy">3.1 Font strategy</h3>
+<ul>
+<li><strong>System-first.</strong> Every role is set with system font stacks, for example a
+system sans-serif stack for display, reading, and labels, and a system
+monospace stack (<code>ui-monospace</code> and equivalents) for code and index labels.</li>
+<li><strong>No external font services.</strong> No font CDN is loaded.</li>
+<li>A self-hosted typeface may be introduced later only by a recorded decision.
+It must still fall back to the system stack without loss of meaning.</li>
+</ul>
+<h3 id="32-typography-obeys-the-rule-change">3.2 Typography obeys the rule change</h3>
+<p>Before S4, labels inside the demonstration are <strong>coordinate-bound</strong>: aligned to
+the rail rhythm and positioned by the grid. From S4 onward, labels are
+<strong>entity-bound</strong>: attached to their node and positioned relative to it. Text
+outside the demonstration system (navigation, captions, reference) never
+changes behavior between stages.</p>
+<h3 id="33-minimum-sizes">3.3 Minimum sizes</h3>
+<ul>
+<li>Reading text is never smaller than the user agent's default size, and captions
+are no smaller than reading text.</li>
+<li>System labels and identifiers are never rendered below a legible minimum
+(about 12 CSS px at 100% zoom), and they scale with user font settings.</li>
+<li>If a viewport cannot fit identifiers at the minimum size, the demonstration
+takes more space. Labels are not shrunk, and anchors are never dropped: the
+four anchors in the canonical fixture appear on every viewport.</li>
+</ul>
+<h2 id="4-density-progression">4. Density progression</h2>
+<p>Density is how full the system is. It prepares the transition but never
+constitutes it.</p>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Density principle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S0</td>
+<td>Sparse. Most of the Lattice is empty. Few links.</td>
+</tr>
+<tr>
+<td>S1</td>
+<td>Entity count and link count rise. The Lattice fills, but everything still fits.</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>The system approaches the Lattice's representational capacity. Stubs appear.</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>The Lattice is full. Local failures of representation appear: slipped nodes, detours, overlaps, more stubs.</td>
+</tr>
+<tr>
+<td>S4</td>
+<td>The representation system changes. Entity count is constant.</td>
+</tr>
+<tr>
+<td>S5</td>
+<td>The Field grammar stabilizes. Clusters read clearly at the same entity count.</td>
+</tr>
+<tr>
+<td>S6</td>
+<td>The demonstration recedes in contrast. Readable, navigable access to the doctrine takes priority.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Density alone must never represent the SIBurst event.</strong> Increased density,
+brightness, contrast, or count may accompany S1–S3. None of them may be the
+signal of S4. The signal of S4 is the change of rule defined in
+<code>INTERFACE_CONTRACT.md</code> §2.3.</p>
+<h2 id="5-composition">5. Composition</h2>
+<ul>
+<li>The boundary is the only frame. There are no cards, panels, or containers
+around parts of the demonstration.</li>
+<li>The stage navigation and state readout sit outside the boundary, in stable
+positions that do not change between stages.</li>
+<li>Captions sit outside the boundary and never overlap nodes or links.</li>
+<li>In S5, the transition record (a smaller-scale Lattice beside the Field) uses
+the same primitives and all 24 entities at a smaller scale. It introduces no
+new visual elements.</li>
+</ul>
+  </article>
+  <p class="source-link">Generated from the canonical source <a href="https://github.com/Sohadot/SIBurst/blob/main/VISUAL_SYSTEM.md">VISUAL_SYSTEM.md</a>. The Markdown file is authoritative; this page is a derived rendering (DEC-017).</p>
+  <p class="back-link"><a href="./">Back to the reference index</a></p>
+</main>
+</body>
+</html>

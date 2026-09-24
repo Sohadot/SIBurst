@@ -1,0 +1,926 @@
+{
+  "schema_version": "1.0.0",
+  "fixture_id": "siburst-demonstration-fixture",
+  "description": "The canonical demonstration system for the SIBurst interface: one fixed graph of 24 abstract entities shown first under the Lattice (position by arrival order) and then under the Field (position by relationships). Governed by DEMONSTRATION_FIXTURE.md.",
+  "scope": "Demonstration data only. Entities, clusters, relationships and coordinates are authored for the on-screen model. They do not represent real AI systems, capabilities, measurements or forecasts.",
+  "lattice": {
+    "lanes": 4,
+    "cells_per_lane": 6,
+    "placement": "lane = floor(arrival_index / 6); cell = arrival_index mod 6",
+    "same_lane_max_cell_distance": 2,
+    "adjacent_lane_max_cell_distance": 1,
+    "s3_offset_step": 0.1,
+    "s3_offset_cap": 0.4,
+    "offset_units": "logical cells"
+  },
+  "stages": [
+    {
+      "id": "S0",
+      "name": "QUIET ACCUMULATION",
+      "state_label": "ACCUMULATING"
+    },
+    {
+      "id": "S1",
+      "name": "SCALE",
+      "state_label": "DENSITY RISING"
+    },
+    {
+      "id": "S2",
+      "name": "THRESHOLD",
+      "state_label": "THRESHOLD APPROACHING"
+    },
+    {
+      "id": "S3",
+      "name": "INSTABILITY",
+      "state_label": "REGIME UNSTABLE"
+    },
+    {
+      "id": "S4",
+      "name": "PHASE CHANGE",
+      "state_label": "TRANSITION DETECTED"
+    },
+    {
+      "id": "S5",
+      "name": "SIBURST",
+      "state_label": "SIBURST"
+    },
+    {
+      "id": "S6",
+      "name": "THE AFTER",
+      "state_label": "NEW OPERATING REGIME"
+    }
+  ],
+  "clusters": [
+    {
+      "id": "C1",
+      "members": [
+        "N01",
+        "N02",
+        "N07",
+        "N08",
+        "N17",
+        "N23"
+      ]
+    },
+    {
+      "id": "C2",
+      "members": [
+        "N03",
+        "N04",
+        "N09",
+        "N16",
+        "N21",
+        "N22"
+      ]
+    },
+    {
+      "id": "C3",
+      "members": [
+        "N05",
+        "N06",
+        "N11",
+        "N12",
+        "N19",
+        "N20"
+      ]
+    },
+    {
+      "id": "C4",
+      "members": [
+        "N10",
+        "N13",
+        "N14",
+        "N15",
+        "N18",
+        "N24"
+      ]
+    }
+  ],
+  "entities": [
+    {
+      "id": "N01",
+      "arrival_index": 0,
+      "arrival_stage": "S0",
+      "cluster_id": "C1",
+      "anchor": false,
+      "lattice": {
+        "lane": 0,
+        "cell": 0
+      },
+      "s3": {
+        "pressure": 1,
+        "offset_cell": 0.08,
+        "offset_lane": 0.06
+      },
+      "field": {
+        "x": 0.411,
+        "y": 0.189
+      }
+    },
+    {
+      "id": "N02",
+      "arrival_index": 1,
+      "arrival_stage": "S0",
+      "cluster_id": "C1",
+      "anchor": false,
+      "lattice": {
+        "lane": 0,
+        "cell": 1
+      },
+      "s3": {
+        "pressure": 1,
+        "offset_cell": 0.0832,
+        "offset_lane": 0.0554
+      },
+      "field": {
+        "x": 0.234,
+        "y": 0.285
+      }
+    },
+    {
+      "id": "N03",
+      "arrival_index": 2,
+      "arrival_stage": "S0",
+      "cluster_id": "C2",
+      "anchor": false,
+      "lattice": {
+        "lane": 0,
+        "cell": 2
+      },
+      "s3": {
+        "pressure": 1,
+        "offset_cell": 0.0,
+        "offset_lane": 0.1
+      },
+      "field": {
+        "x": 0.581,
+        "y": 0.294
+      }
+    },
+    {
+      "id": "N04",
+      "arrival_index": 3,
+      "arrival_stage": "S1",
+      "cluster_id": "C2",
+      "anchor": false,
+      "lattice": {
+        "lane": 0,
+        "cell": 3
+      },
+      "s3": {
+        "pressure": 1,
+        "offset_cell": 0.0,
+        "offset_lane": 0.1
+      },
+      "field": {
+        "x": 0.77,
+        "y": 0.424
+      }
+    },
+    {
+      "id": "N05",
+      "arrival_index": 4,
+      "arrival_stage": "S1",
+      "cluster_id": "C3",
+      "anchor": true,
+      "lattice": {
+        "lane": 0,
+        "cell": 4
+      },
+      "s3": {
+        "pressure": 1,
+        "offset_cell": -0.08,
+        "offset_lane": 0.06
+      },
+      "field": {
+        "x": 0.823,
+        "y": 0.599
+      }
+    },
+    {
+      "id": "N06",
+      "arrival_index": 5,
+      "arrival_stage": "S1",
+      "cluster_id": "C3",
+      "anchor": false,
+      "lattice": {
+        "lane": 0,
+        "cell": 5
+      },
+      "s3": {
+        "pressure": 1,
+        "offset_cell": -0.0857,
+        "offset_lane": 0.0514
+      },
+      "field": {
+        "x": 0.769,
+        "y": 0.736
+      }
+    },
+    {
+      "id": "N07",
+      "arrival_index": 6,
+      "arrival_stage": "S1",
+      "cluster_id": "C1",
+      "anchor": false,
+      "lattice": {
+        "lane": 1,
+        "cell": 0
+      },
+      "s3": {
+        "pressure": 1,
+        "offset_cell": 0.0894,
+        "offset_lane": 0.0447
+      },
+      "field": {
+        "x": 0.278,
+        "y": 0.232
+      }
+    },
+    {
+      "id": "N08",
+      "arrival_index": 7,
+      "arrival_stage": "S1",
+      "cluster_id": "C1",
+      "anchor": true,
+      "lattice": {
+        "lane": 1,
+        "cell": 1
+      },
+      "s3": {
+        "pressure": 1,
+        "offset_cell": 0.0948,
+        "offset_lane": 0.0316
+      },
+      "field": {
+        "x": 0.179,
+        "y": 0.408
+      }
+    },
+    {
+      "id": "N09",
+      "arrival_index": 8,
+      "arrival_stage": "S1",
+      "cluster_id": "C2",
+      "anchor": true,
+      "lattice": {
+        "lane": 1,
+        "cell": 2
+      },
+      "s3": {
+        "pressure": 1,
+        "offset_cell": 0.0447,
+        "offset_lane": 0.0894
+      },
+      "field": {
+        "x": 0.767,
+        "y": 0.261
+      }
+    },
+    {
+      "id": "N10",
+      "arrival_index": 9,
+      "arrival_stage": "S1",
+      "cluster_id": "C4",
+      "anchor": false,
+      "lattice": {
+        "lane": 1,
+        "cell": 3
+      },
+      "s3": {
+        "pressure": 1,
+        "offset_cell": 0.0894,
+        "offset_lane": 0.0447
+      },
+      "field": {
+        "x": 0.169,
+        "y": 0.836
+      }
+    },
+    {
+      "id": "N11",
+      "arrival_index": 10,
+      "arrival_stage": "S1",
+      "cluster_id": "C3",
+      "anchor": false,
+      "lattice": {
+        "lane": 1,
+        "cell": 4
+      },
+      "s3": {
+        "pressure": 1,
+        "offset_cell": -0.0832,
+        "offset_lane": 0.0554
+      },
+      "field": {
+        "x": 0.704,
+        "y": 0.756
+      }
+    },
+    {
+      "id": "N12",
+      "arrival_index": 11,
+      "arrival_stage": "S1",
+      "cluster_id": "C3",
+      "anchor": false,
+      "lattice": {
+        "lane": 1,
+        "cell": 5
+      },
+      "s3": {
+        "pressure": 2,
+        "offset_cell": -0.1414,
+        "offset_lane": 0.1414
+      },
+      "field": {
+        "x": 0.587,
+        "y": 0.829
+      }
+    },
+    {
+      "id": "N13",
+      "arrival_index": 12,
+      "arrival_stage": "S1",
+      "cluster_id": "C4",
+      "anchor": false,
+      "lattice": {
+        "lane": 2,
+        "cell": 0
+      },
+      "s3": {
+        "pressure": 2,
+        "offset_cell": 0.1979,
+        "offset_lane": 0.0282
+      },
+      "field": {
+        "x": 0.398,
+        "y": 0.546
+      }
+    },
+    {
+      "id": "N14",
+      "arrival_index": 13,
+      "arrival_stage": "S1",
+      "cluster_id": "C4",
+      "anchor": false,
+      "lattice": {
+        "lane": 2,
+        "cell": 1
+      },
+      "s3": {
+        "pressure": 1,
+        "offset_cell": 0.097,
+        "offset_lane": 0.0242
+      },
+      "field": {
+        "x": 0.27,
+        "y": 0.579
+      }
+    },
+    {
+      "id": "N15",
+      "arrival_index": 14,
+      "arrival_stage": "S1",
+      "cluster_id": "C4",
+      "anchor": false,
+      "lattice": {
+        "lane": 2,
+        "cell": 2
+      },
+      "s3": {
+        "pressure": 1,
+        "offset_cell": 0.1,
+        "offset_lane": 0.0
+      },
+      "field": {
+        "x": 0.138,
+        "y": 0.692
+      }
+    },
+    {
+      "id": "N16",
+      "arrival_index": 15,
+      "arrival_stage": "S2",
+      "cluster_id": "C2",
+      "anchor": false,
+      "lattice": {
+        "lane": 2,
+        "cell": 3
+      },
+      "s3": {
+        "pressure": 0,
+        "offset_cell": 0.0,
+        "offset_lane": 0.0
+      },
+      "field": {
+        "x": 0.649,
+        "y": 0.22
+      }
+    },
+    {
+      "id": "N17",
+      "arrival_index": 16,
+      "arrival_stage": "S2",
+      "cluster_id": "C1",
+      "anchor": false,
+      "lattice": {
+        "lane": 2,
+        "cell": 4
+      },
+      "s3": {
+        "pressure": 2,
+        "offset_cell": -0.1788,
+        "offset_lane": -0.0894
+      },
+      "field": {
+        "x": 0.102,
+        "y": 0.246
+      }
+    },
+    {
+      "id": "N18",
+      "arrival_index": 17,
+      "arrival_stage": "S2",
+      "cluster_id": "C4",
+      "anchor": false,
+      "lattice": {
+        "lane": 2,
+        "cell": 5
+      },
+      "s3": {
+        "pressure": 3,
+        "offset_cell": -0.2985,
+        "offset_lane": -0.0298
+      },
+      "field": {
+        "x": 0.299,
+        "y": 0.73
+      }
+    },
+    {
+      "id": "N19",
+      "arrival_index": 18,
+      "arrival_stage": "S2",
+      "cluster_id": "C3",
+      "anchor": true,
+      "lattice": {
+        "lane": 3,
+        "cell": 0
+      },
+      "s3": {
+        "pressure": 2,
+        "offset_cell": 0.1664,
+        "offset_lane": -0.1109
+      },
+      "field": {
+        "x": 0.898,
+        "y": 0.758
+      }
+    },
+    {
+      "id": "N20",
+      "arrival_index": 19,
+      "arrival_stage": "S2",
+      "cluster_id": "C3",
+      "anchor": false,
+      "lattice": {
+        "lane": 3,
+        "cell": 1
+      },
+      "s3": {
+        "pressure": 2,
+        "offset_cell": 0.1736,
+        "offset_lane": -0.0992
+      },
+      "field": {
+        "x": 0.745,
+        "y": 0.9
+      }
+    },
+    {
+      "id": "N21",
+      "arrival_index": 20,
+      "arrival_stage": "S2",
+      "cluster_id": "C2",
+      "anchor": false,
+      "lattice": {
+        "lane": 3,
+        "cell": 2
+      },
+      "s3": {
+        "pressure": 2,
+        "offset_cell": -0.0894,
+        "offset_lane": -0.1788
+      },
+      "field": {
+        "x": 0.527,
+        "y": 0.405
+      }
+    },
+    {
+      "id": "N22",
+      "arrival_index": 21,
+      "arrival_stage": "S2",
+      "cluster_id": "C2",
+      "anchor": false,
+      "lattice": {
+        "lane": 3,
+        "cell": 3
+      },
+      "s3": {
+        "pressure": 2,
+        "offset_cell": -0.0392,
+        "offset_lane": -0.1961
+      },
+      "field": {
+        "x": 0.692,
+        "y": 0.364
+      }
+    },
+    {
+      "id": "N23",
+      "arrival_index": 22,
+      "arrival_stage": "S3",
+      "cluster_id": "C1",
+      "anchor": false,
+      "lattice": {
+        "lane": 3,
+        "cell": 4
+      },
+      "s3": {
+        "pressure": 2,
+        "offset_cell": -0.1695,
+        "offset_lane": -0.1059
+      },
+      "field": {
+        "x": 0.255,
+        "y": 0.1
+      }
+    },
+    {
+      "id": "N24",
+      "arrival_index": 23,
+      "arrival_stage": "S3",
+      "cluster_id": "C4",
+      "anchor": false,
+      "lattice": {
+        "lane": 3,
+        "cell": 5
+      },
+      "s3": {
+        "pressure": 2,
+        "offset_cell": -0.16,
+        "offset_lane": -0.12
+      },
+      "field": {
+        "x": 0.418,
+        "y": 0.748
+      }
+    }
+  ],
+  "relationships": [
+    {
+      "id": "R01",
+      "source": "N01",
+      "target": "N02",
+      "activation_stage": "S0"
+    },
+    {
+      "id": "R02",
+      "source": "N01",
+      "target": "N03",
+      "activation_stage": "S0"
+    },
+    {
+      "id": "R03",
+      "source": "N01",
+      "target": "N07",
+      "activation_stage": "S1"
+    },
+    {
+      "id": "R04",
+      "source": "N02",
+      "target": "N08",
+      "activation_stage": "S1"
+    },
+    {
+      "id": "R05",
+      "source": "N03",
+      "target": "N04",
+      "activation_stage": "S1"
+    },
+    {
+      "id": "R06",
+      "source": "N03",
+      "target": "N09",
+      "activation_stage": "S1"
+    },
+    {
+      "id": "R07",
+      "source": "N04",
+      "target": "N05",
+      "activation_stage": "S1"
+    },
+    {
+      "id": "R08",
+      "source": "N04",
+      "target": "N09",
+      "activation_stage": "S1"
+    },
+    {
+      "id": "R09",
+      "source": "N05",
+      "target": "N06",
+      "activation_stage": "S1"
+    },
+    {
+      "id": "R10",
+      "source": "N05",
+      "target": "N11",
+      "activation_stage": "S1"
+    },
+    {
+      "id": "R11",
+      "source": "N06",
+      "target": "N12",
+      "activation_stage": "S1"
+    },
+    {
+      "id": "R12",
+      "source": "N07",
+      "target": "N08",
+      "activation_stage": "S1"
+    },
+    {
+      "id": "R13",
+      "source": "N08",
+      "target": "N14",
+      "activation_stage": "S1"
+    },
+    {
+      "id": "R14",
+      "source": "N10",
+      "target": "N15",
+      "activation_stage": "S1"
+    },
+    {
+      "id": "R15",
+      "source": "N11",
+      "target": "N12",
+      "activation_stage": "S1"
+    },
+    {
+      "id": "R16",
+      "source": "N13",
+      "target": "N14",
+      "activation_stage": "S1"
+    },
+    {
+      "id": "R17",
+      "source": "N14",
+      "target": "N15",
+      "activation_stage": "S1"
+    },
+    {
+      "id": "R18",
+      "source": "N02",
+      "target": "N17",
+      "activation_stage": "S2"
+    },
+    {
+      "id": "R19",
+      "source": "N04",
+      "target": "N22",
+      "activation_stage": "S2"
+    },
+    {
+      "id": "R20",
+      "source": "N05",
+      "target": "N19",
+      "activation_stage": "S2"
+    },
+    {
+      "id": "R21",
+      "source": "N08",
+      "target": "N17",
+      "activation_stage": "S2"
+    },
+    {
+      "id": "R22",
+      "source": "N09",
+      "target": "N16",
+      "activation_stage": "S2"
+    },
+    {
+      "id": "R23",
+      "source": "N10",
+      "target": "N18",
+      "activation_stage": "S2"
+    },
+    {
+      "id": "R24",
+      "source": "N11",
+      "target": "N20",
+      "activation_stage": "S2"
+    },
+    {
+      "id": "R25",
+      "source": "N15",
+      "target": "N18",
+      "activation_stage": "S2"
+    },
+    {
+      "id": "R26",
+      "source": "N16",
+      "target": "N21",
+      "activation_stage": "S2"
+    },
+    {
+      "id": "R27",
+      "source": "N16",
+      "target": "N22",
+      "activation_stage": "S2"
+    },
+    {
+      "id": "R28",
+      "source": "N19",
+      "target": "N20",
+      "activation_stage": "S2"
+    },
+    {
+      "id": "R29",
+      "source": "N21",
+      "target": "N22",
+      "activation_stage": "S2"
+    },
+    {
+      "id": "R30",
+      "source": "N01",
+      "target": "N23",
+      "activation_stage": "S3"
+    },
+    {
+      "id": "R31",
+      "source": "N03",
+      "target": "N21",
+      "activation_stage": "S3"
+    },
+    {
+      "id": "R32",
+      "source": "N06",
+      "target": "N19",
+      "activation_stage": "S3"
+    },
+    {
+      "id": "R33",
+      "source": "N07",
+      "target": "N23",
+      "activation_stage": "S3"
+    },
+    {
+      "id": "R34",
+      "source": "N09",
+      "target": "N22",
+      "activation_stage": "S3"
+    },
+    {
+      "id": "R35",
+      "source": "N12",
+      "target": "N20",
+      "activation_stage": "S3"
+    },
+    {
+      "id": "R36",
+      "source": "N12",
+      "target": "N24",
+      "activation_stage": "S3"
+    },
+    {
+      "id": "R37",
+      "source": "N13",
+      "target": "N18",
+      "activation_stage": "S3"
+    },
+    {
+      "id": "R38",
+      "source": "N13",
+      "target": "N21",
+      "activation_stage": "S3"
+    },
+    {
+      "id": "R39",
+      "source": "N14",
+      "target": "N24",
+      "activation_stage": "S3"
+    },
+    {
+      "id": "R40",
+      "source": "N17",
+      "target": "N23",
+      "activation_stage": "S3"
+    },
+    {
+      "id": "R41",
+      "source": "N18",
+      "target": "N24",
+      "activation_stage": "S3"
+    }
+  ],
+  "field": {
+    "coordinate_space": "normalized unit square; x to the right, y downward; origin at the top-left of the demonstration boundary",
+    "method": "Authored offline by stress majorization over graph hop distances from a fixed cluster-ring start, then scaled into [0.1, 0.9] and rounded to three decimals. The committed coordinates are canonical; nothing recomputes them."
+  },
+  "anchors": {
+    "ids": [
+      "N05",
+      "N08",
+      "N09",
+      "N19"
+    ],
+    "separation_pair": [
+      "N08",
+      "N09"
+    ],
+    "convergence_pair": [
+      "N05",
+      "N19"
+    ]
+  },
+  "derived": [
+    {
+      "stage": "S0",
+      "regime": "lattice",
+      "entity_count": 3,
+      "active_relationship_count": 2,
+      "stub_relationship_ids": []
+    },
+    {
+      "stage": "S1",
+      "regime": "lattice",
+      "entity_count": 15,
+      "active_relationship_count": 17,
+      "stub_relationship_ids": []
+    },
+    {
+      "stage": "S2",
+      "regime": "lattice",
+      "entity_count": 22,
+      "active_relationship_count": 29,
+      "stub_relationship_ids": [
+        "R18",
+        "R19",
+        "R20",
+        "R21",
+        "R23",
+        "R24",
+        "R25"
+      ]
+    },
+    {
+      "stage": "S3",
+      "regime": "lattice",
+      "entity_count": 24,
+      "active_relationship_count": 41,
+      "stub_relationship_ids": [
+        "R18",
+        "R19",
+        "R20",
+        "R21",
+        "R23",
+        "R24",
+        "R25",
+        "R30",
+        "R31",
+        "R32",
+        "R33",
+        "R34",
+        "R35",
+        "R36",
+        "R37",
+        "R38",
+        "R39"
+      ]
+    },
+    {
+      "stage": "S4",
+      "regime": "field",
+      "entity_count": 24,
+      "active_relationship_count": 41,
+      "stub_relationship_ids": []
+    },
+    {
+      "stage": "S5",
+      "regime": "field",
+      "entity_count": 24,
+      "active_relationship_count": 41,
+      "stub_relationship_ids": []
+    },
+    {
+      "stage": "S6",
+      "regime": "field",
+      "entity_count": 24,
+      "active_relationship_count": 41,
+      "stub_relationship_ids": []
+    }
+  ]
+}

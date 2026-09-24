@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'none'; style-src 'self'; img-src 'self'; font-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="light">
+<title>Site Architecture · SIBurst reference</title>
+<meta name="description" content="Conceptual design of the future interface: the seven-stage experience and its prohibitions.">
+<link rel="canonical" href="https://siburst.com/reference/site-architecture.html">
+<link rel="stylesheet" href="../assets/system.css">
+</head>
+<body class="reference-page">
+<a class="skip-link" href="#document">Skip to document</a>
+<header class="site-header">
+  <p class="identity"><a href="../">SIBurst</a></p>
+  <nav class="reference-nav" aria-label="Reference">
+    <ol>
+      <li><a href="./">Reference index</a></li>
+      <li><a href="../#s0">Demonstration</a></li>
+    </ol>
+  </nav>
+</header>
+<main id="document">
+  <p class="reference-group-label">Conceptual foundation</p>
+  <article class="doctrine">
+<h1 id="site-architecture">Site Architecture</h1>
+<p>The conceptual design of the future SIBurst interface. This document contains
+no code and no visual production assets. It defines what the interface must
+<em>mean</em>, so that any later implementation can be judged against it.</p>
+<h2 id="principle">Principle</h2>
+<p>The interface must embody the thesis, not illustrate it.</p>
+<p>The eventual site is <strong>one continuous system</strong>, not a sequence of conventional
+page sections. The visitor does not scroll past panels about a phase change;
+the visitor moves a single system through one.</p>
+<p>The experience must make this distinction visible:</p>
+<pre><code>MORE OF THE SAME
+        ↓
+     THRESHOLD
+        ↓
+A DIFFERENT OPERATING REGIME
+</code></pre>
+<h2 id="visual-thesis">Visual thesis</h2>
+<p>A system begins inside a stable geometry.</p>
+<p>Capability accumulates.</p>
+<p>At first, more capability produces more of the same: elements multiply,
+connections strengthen, but the rules of the space are unchanged.</p>
+<p>As the visitor progresses, signals increase, relationships densify, and the
+system approaches a boundary.</p>
+<p>At THRESHOLD, the interface must visibly show that continuity is becoming
+insufficient to describe the state: the existing geometry strains to contain
+what is inside it.</p>
+<p>At PHASE CHANGE, there is <strong>no explosion</strong>. Instead, the interface changes its
+geometry, its rules, its topology, its spatial relationships, or its
+information architecture itself. What the visitor sees after the transition
+cannot be produced by continuing what they saw before.</p>
+<h2 id="canonical-progression">Canonical progression</h2>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Name</th>
+<th>What changes</th>
+<th>What must not change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>00</strong></td>
+<td>QUIET ACCUMULATION</td>
+<td>A sparse, stable system. Small additions, each unremarkable.</td>
+<td>The rules of the space.</td>
+</tr>
+<tr>
+<td><strong>01</strong></td>
+<td>SCALE</td>
+<td>Elements and connections increase. The system is visibly larger and busier.</td>
+<td>The kind of thing the system is. This is &quot;more of the same&quot; made explicit.</td>
+</tr>
+<tr>
+<td><strong>02</strong></td>
+<td>THRESHOLD</td>
+<td>Density reaches the limits of the geometry. Relationships begin to exceed the structure built to hold them.</td>
+<td>Nothing breaks yet. The strain is the signal.</td>
+</tr>
+<tr>
+<td><strong>03</strong></td>
+<td>INSTABILITY</td>
+<td>The old description visibly fails in places: alignments slip, the layout can no longer represent every relationship faithfully.</td>
+<td>The visitor's orientation. Instability is shown, not inflicted on usability.</td>
+</tr>
+<tr>
+<td><strong>04</strong></td>
+<td>PHASE CHANGE</td>
+<td>The rules change: a new geometry, topology, or organizing principle takes over. The same elements are now related differently.</td>
+<td>Continuity of identity. The same system has crossed; it has not been replaced.</td>
+</tr>
+<tr>
+<td><strong>05</strong></td>
+<td>SIBURST</td>
+<td>The transition is named. The interface identifies the crossing itself as the subject of the site.</td>
+<td>The claim boundary. Naming the transition in the interface is not a claim that it has occurred in the world.</td>
+</tr>
+<tr>
+<td><strong>06</strong></td>
+<td>THE AFTER</td>
+<td>The system operates in its new regime. Navigation, structure, and information follow the new rules, and the foundation documents are reachable from here.</td>
+<td>Honesty about the after: it is a design state, not a forecast.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="interface-states">Interface states</h2>
+<p>Preliminary state labels for use in the interface:</p>
+<ul>
+<li><code>ACCUMULATING</code></li>
+<li><code>DENSITY RISING</code></li>
+<li><code>THRESHOLD APPROACHING</code></li>
+<li><code>REGIME UNSTABLE</code></li>
+<li><code>TRANSITION DETECTED</code></li>
+<li><code>NEW OPERATING REGIME</code></li>
+</ul>
+<p>These are <strong>interface language</strong>, describing the state of the on-screen system.
+They are not factual claims about current real-world AI and must never be wired
+to, or presented as, live measurements of real systems (see
+<code>PUBLIC_CLAIM_POLICY.md</code>).</p>
+<h2 id="motion-rule">Motion rule</h2>
+<p>Every animation must correspond to a conceptual state change.</p>
+<p>If an animation can be removed without losing information about accumulation,
+threshold, or regime, it should not exist.</p>
+<h2 id="visual-prohibitions">Visual prohibitions</h2>
+<ul>
+<li>AI brains</li>
+<li>humanoid robots</li>
+<li>glowing human heads</li>
+<li>generic neural-network imagery</li>
+<li>explosions</li>
+<li>singularity vortex clichés</li>
+<li>cyberpunk decoration</li>
+<li>floating SaaS cards</li>
+<li>stock dashboards</li>
+<li>gratuitous gradients</li>
+<li>animation without semantic meaning</li>
+</ul>
+<h2 id="acceptance-questions-for-any-future-implementation">Acceptance questions for any future implementation</h2>
+<ol>
+<li>Can a visitor tell the difference between stage 01 (more) and stage 04
+(different) without reading any text?</li>
+<li>Does the phase change alter the rules of the space, rather than its intensity?</li>
+<li>Would any prohibited image or pattern be recognized in a screenshot?</li>
+<li>Does every animation map to a stage in the progression?</li>
+<li>Is any interface state readable as a claim about real-world AI? If so, it
+fails.</li>
+</ol>
+<h2 id="implementation-contracts">Implementation contracts</h2>
+<p>Sprint 1 turns this conceptual architecture into implementation contracts:</p>
+<table>
+<thead>
+<tr>
+<th>Document</th>
+<th>Governs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>INTERFACE_CONTRACT.md</code></td>
+<td>The state machine (S0–S6 = stages 00–06), the geometry grammar and rule change, the semantic primitives, final interface-state language and framing, progress, content architecture, and implementation constraints.</td>
+</tr>
+<tr>
+<td><code>VISUAL_SYSTEM.md</code></td>
+<td>Spatial character, color roles, typography roles, and density progression.</td>
+</tr>
+<tr>
+<td><code>MOTION_SEMANTICS.md</code></td>
+<td>The motion taxonomy and reduced-motion behavior.</td>
+</tr>
+<tr>
+<td><code>RESPONSIVE_ACCESSIBILITY.md</code></td>
+<td>Viewport behavior, keyboard, zoom, and assistive-technology requirements.</td>
+</tr>
+<tr>
+<td><code>INTERFACE_ACCEPTANCE.md</code></td>
+<td>The pass/fail tests every implementation must meet.</td>
+</tr>
+</tbody>
+</table>
+<p>The preliminary interface states listed above are finalized, with their
+framing rule, in <code>INTERFACE_CONTRACT.md</code> §5.</p>
+<p><strong>Authority.</strong> This document defines the conceptual experience. The Sprint 1
+contracts define how that concept may be implemented. If an implementation
+contract contradicts this document, the implementation contract is defective.</p>
+<h2 id="scope">Scope</h2>
+<p>No HTML, site code, or visual production assets are part of Sprint 0 or
+Sprint 1. This document and the implementation contracts are the specification
+against which that later work will be reviewed.</p>
+  </article>
+  <p class="source-link">Generated from the canonical source <a href="https://github.com/Sohadot/SIBurst/blob/main/SITE_ARCHITECTURE.md">SITE_ARCHITECTURE.md</a>. The Markdown file is authoritative; this page is a derived rendering (DEC-017).</p>
+  <p class="back-link"><a href="./">Back to the reference index</a></p>
+</main>
+</body>
+</html>

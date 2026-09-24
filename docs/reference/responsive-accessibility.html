@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'none'; style-src 'self'; img-src 'self'; font-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="light">
+<title>Responsive and Accessibility Contract · SIBurst reference</title>
+<meta name="description" content="Behavior across viewports and input methods, and WCAG 2.2 AA requirements.">
+<link rel="canonical" href="https://siburst.com/reference/responsive-accessibility.html">
+<link rel="stylesheet" href="../assets/system.css">
+</head>
+<body class="reference-page">
+<a class="skip-link" href="#document">Skip to document</a>
+<header class="site-header">
+  <p class="identity"><a href="../">SIBurst</a></p>
+  <nav class="reference-nav" aria-label="Reference">
+    <ol>
+      <li><a href="./">Reference index</a></li>
+      <li><a href="../#s0">Demonstration</a></li>
+    </ol>
+  </nav>
+</header>
+<main id="document">
+  <p class="reference-group-label">Implementation doctrine</p>
+  <article class="doctrine">
+<h1 id="responsive-and-accessibility-contract">Responsive and Accessibility Contract</h1>
+<p>How the SIBurst interface preserves the thesis across viewports, input methods,
+and assistive technology. It is governed by <code>INTERFACE_CONTRACT.md</code>. Motion
+reduction is specified in <code>MOTION_SEMANTICS.md</code> §4 and is not repeated here.</p>
+<p>Target: <strong>WCAG 2.2 Level AA.</strong></p>
+<h2 id="1-the-invariant">1. The invariant</h2>
+<p>On every viewport and with every input method, the visitor experiences the same
+seven-stage state machine, the same rule change (Lattice → Field), and the same
+continuity of identity. Geometry, proportions, orientation, and layout may
+adapt. The entity set and anchor set may not: all 24 canonical entities and all
+four anchors of <code>data/demonstration-fixture.json</code> appear on every viewport and
+at every zoom level. Viewport adaptation changes representation, never fixture
+membership. The semantics may not change.</p>
+<h2 id="2-viewports">2. Viewports</h2>
+<p>The widths below are indicative. The behavior is normative.</p>
+<table>
+<thead>
+<tr>
+<th>Viewport</th>
+<th>Indicative width</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Wide desktop</strong></td>
+<td>1440 CSS px and above</td>
+<td>The demonstration stays in view on one side; captions and stage navigation sit beside it. All 24 fixture entities.</td>
+</tr>
+<tr>
+<td><strong>Laptop</strong></td>
+<td>1024–1439</td>
+<td>As wide desktop, with proportions reduced.</td>
+</tr>
+<tr>
+<td><strong>Tablet</strong></td>
+<td>768–1023</td>
+<td>The demonstration stays in view in the upper part of the viewport; captions sit below it. Lanes run along the longer axis of the demonstration area.</td>
+</tr>
+<tr>
+<td><strong>Mobile</strong></td>
+<td>360–767</td>
+<td>The demonstration stays in view and fills the width. Lanes run along the long axis of the viewport. Captions sit in a stable band that does not overlap the system. All 24 fixture entities.</td>
+</tr>
+<tr>
+<td><strong>Very narrow</strong></td>
+<td>below 360</td>
+<td>As mobile, with all 24 fixture entities and all four anchors. The state readout may wrap onto two lines but keeps its scope prefix.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="21-mobile-rule">2.1 Mobile rule</h3>
+<p>Mobile must not become a simplified marketing landing page. It keeps:</p>
+<ul>
+<li>all seven stages, in order;</li>
+<li>the Lattice with visible rails before S4 and the Field after it;</li>
+<li>stubs in S2–S3 and slipped nodes in S3;</li>
+<li>anchors with identifiers across S4;</li>
+<li>the scoped state readout and the S5 transition record.</li>
+</ul>
+<p>What may adapt: the orientation of lanes, the scale and aspect of the
+demonstration (within the range validated in <code>DEMONSTRATION_FIXTURE.md</code> §13),
+and the position of captions. The entities, relationships, and anchors are the
+same canonical fixture on every viewport (DEC-018, DEC-019), so saturation
+happens in S2 everywhere.</p>
+<p>A mobile implementation that shows the stages as ordinary stacked content blocks
+(heading, text, image) instead of one persistent system fails. The only
+exception is the no-JavaScript fallback in <code>INTERFACE_CONTRACT.md</code> §8.1, where
+the stacked figures all show the same system.</p>
+<h3 id="22-orientation-rule">2.2 Orientation rule</h3>
+<p>S3 INSTABILITY must never make the interface genuinely unusable.
+Representational instability is confined to the inside of the demonstration
+boundary. Throughout every stage:</p>
+<ul>
+<li>navigation stays in the same place and works the same way;</li>
+<li>focus order is unchanged;</li>
+<li>captions and reference text never move, distort, or misalign;</li>
+<li>controls stay discoverable and visible.</li>
+</ul>
+<p>&quot;The system becomes unstable&quot; must never mean &quot;the website becomes inaccessible.&quot;</p>
+<h2 id="3-accessibility-requirements">3. Accessibility requirements</h2>
+<h3 id="31-semantic-structure">3.1 Semantic structure</h3>
+<p>The future build uses semantic HTML:</p>
+<ul>
+<li>landmarks for the header, the stage navigation, the main content, and the
+reference layer;</li>
+<li>one heading per stage, in order, and a logical heading hierarchy overall;</li>
+<li>the stage navigation is a list of ordinary links to stage fragments;</li>
+<li>the reference index is a list of ordinary links;</li>
+<li>a &quot;skip to reference&quot; link is the first focusable element.</li>
+</ul>
+<h3 id="32-keyboard-equivalence">3.2 Keyboard equivalence</h3>
+<ul>
+<li>The whole sequence can be traversed using only the keyboard: through the stage
+navigation, through ordinary page scrolling keys, and through fragment links.</li>
+<li>No keyboard trap anywhere.</li>
+<li>Native keyboard scrolling is not overridden.</li>
+<li>Moving to a stage by keyboard produces the same system state as scrolling to it.</li>
+</ul>
+<h3 id="33-visible-focus">3.3 Visible focus</h3>
+<ul>
+<li>Every focusable element has a clearly visible focus indicator meeting WCAG 2.2
+focus-appearance guidance, with at least 3:1 contrast.</li>
+<li>Focused elements are never hidden behind the demonstration system or the
+caption band.</li>
+</ul>
+<h3 id="34-no-color-only-distinction">3.4 No color-only distinction</h3>
+<p>Every meaning carried by color is also carried by shape, weight, position, or
+text, as specified in <code>VISUAL_SYSTEM.md</code> §2.</p>
+<h3 id="35-readable-text-and-zoom">3.5 Readable text and zoom</h3>
+<ul>
+<li>Reading text is never smaller than the user agent's default size.</li>
+<li>Text resizes to 200% without loss of content or function.</li>
+<li>At 400% zoom (a 320 CSS px wide viewport), text content reflows into a single
+column with no two-dimensional scrolling. The demonstration may reflow, scale,
+change orientation, or occupy more vertical space. It keeps all 24 entities
+and all four anchors: no entity or anchor is dropped. Accessibility is
+achieved through layout, never by removing parts of the system.</li>
+<li>Line length in the reference layer stays readable at all widths.</li>
+</ul>
+<h3 id="36-descriptive-state-text">3.6 Descriptive state text</h3>
+<p>The demonstration's meaning is available as text:</p>
+<ul>
+<li>Each stage has a <strong>state description</strong> in the document: one or two
+sentences describing what the demonstration system shows at that stage, for
+example: &quot;Demonstration stage 3 of 7: regime unstable. The lattice can no
+longer route every relationship; several nodes have slipped from their cells.&quot;</li>
+<li>When the stage changes, the new state label and description are announced
+once through a polite live region. They are announced only on stage change,
+never continuously.</li>
+<li>Every announced state includes the word &quot;demonstration&quot;.</li>
+</ul>
+<h3 id="37-decorative-geometry">3.7 Decorative geometry</h3>
+<ul>
+<li>The demonstration system's graphics are hidden from assistive technology
+(<code>aria-hidden=&quot;true&quot;</code>). Its meaning is carried by the state descriptions,
+which are not hidden.</li>
+<li>Anchor identifiers are graphics and are hidden with the system. Descriptions
+refer to anchors by identifier where it helps, for example &quot;nodes 03 and 11,
+once in the same lane, now sit in different clusters.&quot;</li>
+<li>The S5 transition record has a text equivalent describing the before and
+after layouts.</li>
+</ul>
+<h3 id="38-motion-and-flashing">3.8 Motion and flashing</h3>
+<ul>
+<li>The reduced-motion preference is honored as specified in
+<code>MOTION_SEMANTICS.md</code> §4.</li>
+<li>Nothing flashes more than three times per second, at any stage.</li>
+<li>No content moves, blinks, or scrolls automatically.</li>
+</ul>
+<h3 id="39-screen-readers">3.9 Screen readers</h3>
+<p>With a screen reader, the visitor meets, in order: the scope statement that
+this is a demonstration, seven stages with headings, labels, captions, and
+state descriptions, and then the reference layer. The rule change is stated in
+the S4 and S5 descriptions. The sequence is complete without any visual access.</p>
+<h2 id="4-without-javascript">4. Without JavaScript</h2>
+<p>The no-JavaScript document described in <code>INTERFACE_CONTRACT.md</code> §8.1 must itself
+meet these requirements. It is the baseline the enhanced experience is built on,
+not a degraded afterthought.</p>
+  </article>
+  <p class="source-link">Generated from the canonical source <a href="https://github.com/Sohadot/SIBurst/blob/main/RESPONSIVE_ACCESSIBILITY.md">RESPONSIVE_ACCESSIBILITY.md</a>. The Markdown file is authoritative; this page is a derived rendering (DEC-017).</p>
+  <p class="back-link"><a href="./">Back to the reference index</a></p>
+</main>
+</body>
+</html>

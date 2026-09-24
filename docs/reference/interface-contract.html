@@ -1,0 +1,868 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'none'; style-src 'self'; img-src 'self'; font-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="light">
+<title>Interface Contract · SIBurst reference</title>
+<meta name="description" content="The implementation contract: seven-stage state machine, Lattice-to-Field rule change, semantic primitives, scoped state language, progress, content and reference architecture, and implementation constraints.">
+<link rel="canonical" href="https://siburst.com/reference/interface-contract.html">
+<link rel="stylesheet" href="../assets/system.css">
+</head>
+<body class="reference-page">
+<a class="skip-link" href="#document">Skip to document</a>
+<header class="site-header">
+  <p class="identity"><a href="../">SIBurst</a></p>
+  <nav class="reference-nav" aria-label="Reference">
+    <ol>
+      <li><a href="./">Reference index</a></li>
+      <li><a href="../#s0">Demonstration</a></li>
+    </ol>
+  </nav>
+</header>
+<main id="document">
+  <p class="reference-group-label">Implementation doctrine</p>
+  <article class="doctrine">
+<h1 id="interface-contract">Interface Contract</h1>
+<p>The highest-level implementation contract for the SIBurst interface.</p>
+<p><code>SITE_ARCHITECTURE.md</code> defines what the interface must mean. This document
+defines how that meaning may be implemented: as an explicit state machine,
+over a governed geometry grammar, using a fixed set of semantic primitives.
+It contains no code and no assets.</p>
+<p>The governing rule is unchanged:</p>
+<blockquote>
+<p>The interface must embody the thesis, not illustrate it.</p>
+</blockquote>
+<p>The defining implementation distinction:</p>
+<blockquote>
+<p>Before the transition, quantity changes while rules remain stable.
+At the transition, the rules themselves change.</p>
+</blockquote>
+<p>A conforming implementation makes the difference between <strong>MORE</strong> and
+<strong>DIFFERENT</strong> visible without depending on explanatory copy.</p>
+<hr />
+<h2 id="1-the-demonstration-system">1. The demonstration system</h2>
+<p>The interface contains one <strong>demonstration system</strong>: a bounded, on-screen
+model made of entities and relationships. It is the only thing that crosses
+the transition. Everything else on the page — navigation, captions, reference
+content — stays outside it and remains stable.</p>
+<p>The demonstration system is a model of the SIBurst concept. It is not a
+representation of any real AI system, dataset, or measurement.</p>
+<p>Its threshold is a property of the model: the point at which the Lattice can no
+longer represent the model's own relationships. It does not operationalize the
+candidate threshold conditions in <code>FOUNDATION_THESIS.md</code>, which remain
+illustrative, and it is not a method for detecting thresholds in real systems.</p>
+<h3 id="11-the-relationship-graph">1.1 The relationship graph</h3>
+<p>The system is defined by a fixed, authored graph:</p>
+<ul>
+<li>a set of <strong>entities</strong> (nodes), each with a permanent identifier;</li>
+<li>a set of <strong>relationships</strong> (links) between pairs of entities, each with the
+stage at which it comes into existence.</li>
+</ul>
+<p>The graph is authored in advance and ships with the page. It is not generated
+randomly at runtime. The canonical graph is defined in
+<code>data/demonstration-fixture.json</code> (§8.2). Its construction must satisfy three conditions:</p>
+<ol>
+<li><strong>Arrival order is not relationship order.</strong> Entities are placed in the
+pre-transition geometry by the order in which they appear. Relationships are
+authored so that strongly related entities are frequently placed far apart
+by that order.</li>
+<li><strong>Non-local relationships grow.</strong> The share of relationships connecting
+entities that are not adjacent in the pre-transition geometry rises through
+S1–S3.</li>
+<li><strong>Latent structure exists.</strong> The relationships form identifiable clusters
+that the pre-transition geometry cannot show, and that the post-transition
+geometry does show.</li>
+</ol>
+<p>These conditions give the transition its meaning: <strong>the new regime is
+organized by the relationships the old regime could not represent.</strong></p>
+<h3 id="12-entity-conservation">1.2 Entity conservation</h3>
+<p>The set of entities is <strong>frozen at the end of S3</strong>. From S4 onward no entity is
+added, removed, merged, or split. Relationships that exist at the end of S3
+all persist after S4. Relationships that could not be drawn under the old
+rules (see §2.2) are completed, not invented.</p>
+<hr />
+<h2 id="2-geometry-grammar">2. Geometry grammar</h2>
+<h3 id="21-pre-transition-law-the-lattice-s0s3">2.1 Pre-transition law: the Lattice (S0–S3)</h3>
+<p>Before S4, the system obeys one spatial law, called <strong>the Lattice</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>Statement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>L1 — Lanes</strong></td>
+<td>Space is divided into parallel, bounded <strong>lanes</strong>. Every entity belongs to exactly one lane.</td>
+</tr>
+<tr>
+<td><strong>L2 — Cells</strong></td>
+<td>Each lane is divided into equal <strong>cells</strong>. Every entity occupies exactly one cell, centered on it.</td>
+</tr>
+<tr>
+<td><strong>L3 — Position by index</strong></td>
+<td>An entity's position is determined by its arrival index: lanes fill in order, cells fill in order. Position carries no information about relationships.</td>
+</tr>
+<tr>
+<td><strong>L4 — Orthogonal routing</strong></td>
+<td>Relationships are drawn only along the rails between cells, with right-angled turns.</td>
+</tr>
+<tr>
+<td><strong>L5 — Adjacency limit</strong></td>
+<td>A relationship can be routed only between entities in the same lane or in adjacent lanes, within a bounded routing distance.</td>
+</tr>
+<tr>
+<td><strong>L6 — Hierarchy</strong></td>
+<td>Lanes contain cells; cells contain entities. Containment is the organizing hierarchy.</td>
+</tr>
+</tbody>
+</table>
+<p>A relationship that the Lattice cannot route under L4–L5 is still real in the
+graph. Before S4 it is shown as an <strong>unrouted stub</strong>: a short segment leaving
+the entity and ending at the edge of its cell, with a terminal mark. Stubs are
+the visible record of relationships the structure cannot hold.</p>
+<h3 id="22-post-transition-law-the-field-s4s6">2.2 Post-transition law: the Field (S4–S6)</h3>
+<p>At S4, the Lattice is replaced by one new spatial law, called <strong>the Field</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>Statement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>F1 — No lanes</strong></td>
+<td>Lanes and cells are retired. There is one shared space inside the boundary.</td>
+</tr>
+<tr>
+<td><strong>F2 — Position by relationship</strong></td>
+<td>An entity's position is determined by the relationship graph: entities that share more relationships are placed closer together; clusters become visible as spatial groupings.</td>
+</tr>
+<tr>
+<td><strong>F3 — Direct routing</strong></td>
+<td>Relationships are drawn as direct paths between the two entities, regardless of distance.</td>
+</tr>
+<tr>
+<td><strong>F4 — No adjacency limit</strong></td>
+<td>Any relationship in the graph can be drawn. Every stub from S2–S3 is completed into a full relationship.</td>
+</tr>
+<tr>
+<td><strong>F5 — Network adjacency</strong></td>
+<td>Containment no longer organizes the system. The relationship graph does.</td>
+</tr>
+</tbody>
+</table>
+<p>Field positions are <strong>precomputed</strong> from the authored graph and ship with the
+page. They are not produced by a live, randomly seeded simulation, so every
+visitor and every reviewer sees the same layout.</p>
+<h3 id="23-the-rule-change">2.3 The rule change</h3>
+<p>The transformation chosen for SIBurst is:</p>
+<blockquote>
+<p><strong>Grid → relational field.</strong> Position stops being assigned by index and
+starts being derived from relationships.</p>
+</blockquote>
+<p>Stated as a testable change:</p>
+<ul>
+<li><strong>Before S4</strong>, knowing an entity's arrival index is enough to predict where
+it is. Its lane predicts its band of space. Its relationships predict nothing
+about its position.</li>
+<li><strong>After S4</strong>, an entity's arrival index and former lane predict nothing about
+its position. Its relationships predict it.</li>
+</ul>
+<p>The secondary changes follow from the primary one: orthogonal routing becomes
+direct routing, the adjacency limit is lifted, and containment gives way to
+network adjacency.</p>
+<h3 id="24-prohibited-transition-devices">2.4 Prohibited transition devices</h3>
+<p>The rule change must not be conveyed or accompanied by: explosion, particle
+blast, screen shake, flash, speed ramp, random scattering, generic glitch
+effects, vortex or spiral motion, or singularity imagery. The phase change
+occurs through rule transformation, not spectacle.</p>
+<hr />
+<h2 id="3-semantic-primitives">3. Semantic primitives</h2>
+<p>The system uses exactly six primitives. No other visual element may appear
+inside the demonstration system. Every element has a semantic role.</p>
+<table>
+<thead>
+<tr>
+<th>Primitive</th>
+<th>Meaning</th>
+<th>Appears</th>
+<th>Survives S4?</th>
+<th>May change</th>
+<th>Must remain invariant</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Node</strong></td>
+<td>An entity: a unit of accumulated capability in the model.</td>
+<td>S0, growing in number through S3.</td>
+<td>Yes.</td>
+<td>Position; routing of its links; post-transition emphasis.</td>
+<td>Its existence, its identifier, its basic mark shape. Count is frozen from the end of S3.</td>
+</tr>
+<tr>
+<td><strong>Link</strong></td>
+<td>A relationship between two nodes.</td>
+<td>When its relationship comes into existence (S0–S3); stubs from S2.</td>
+<td>Yes.</td>
+<td>Route (orthogonal → direct); stubs become complete links.</td>
+<td>Which two nodes it connects. No link is created or removed at S4.</td>
+</tr>
+<tr>
+<td><strong>Rail</strong></td>
+<td>The Lattice itself: lane boundaries and cell divisions. It <em>is</em> the pre-transition spatial law made visible.</td>
+<td>S0.</td>
+<td><strong>No.</strong> Retired during S4.</td>
+<td>Visibility during S4 only, as it retires.</td>
+<td>Straight and regular while it exists. It never bends, breaks, or shatters; the rule is lifted, not destroyed.</td>
+</tr>
+<tr>
+<td><strong>Boundary</strong></td>
+<td>The outer edge of the demonstration system. It scopes the model and carries the demonstration label (§5).</td>
+<td>S0.</td>
+<td>Yes.</td>
+<td>Proportions, to suit the viewport.</td>
+<td>Always present around the whole system. Never removed, never broken.</td>
+</tr>
+<tr>
+<td><strong>Identifier</strong></td>
+<td>A permanent label for an <strong>anchor</strong> node (for example <code>07</code>).</td>
+<td>S0 onward, on a small fixed subset of nodes.</td>
+<td>Yes.</td>
+<td>Position, which follows its node.</td>
+<td>Text, and the node it belongs to.</td>
+</tr>
+<tr>
+<td><strong>State readout</strong></td>
+<td>The current interface state, scoped to the demonstration.</td>
+<td>S0 onward.</td>
+<td>Yes.</td>
+<td>The stage it reports.</td>
+<td>Its scope prefix and position relative to the boundary.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="31-anchors">3.1 Anchors</h3>
+<p>A small, fixed subset of nodes (at least three, at most seven) are <strong>anchors</strong>.
+They carry visible identifiers throughout. Anchors are chosen so that:</p>
+<ul>
+<li>at least two anchors sit in the <strong>same lane</strong> in the Lattice but in
+<strong>different clusters</strong> in the Field;</li>
+<li>at least two anchors sit in <strong>different lanes</strong> in the Lattice but in the
+<strong>same cluster</strong> in the Field.</li>
+</ul>
+<p>Anchors are how the visitor sees continuity of identity. They make the rule
+change legible: things that were side by side separate, and things that were
+apart come together.</p>
+<hr />
+<h2 id="4-the-state-machine">4. The state machine</h2>
+<h3 id="41-stages">4.1 Stages</h3>
+<p>The seven canonical stages correspond one-to-one to the stages in
+<code>SITE_ARCHITECTURE.md</code> (S0 = 00, … S6 = 06).</p>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Name</th>
+<th>Regime</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S0</td>
+<td>QUIET ACCUMULATION</td>
+<td>Lattice</td>
+</tr>
+<tr>
+<td>S1</td>
+<td>SCALE</td>
+<td>Lattice</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>THRESHOLD</td>
+<td>Lattice, saturated</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>INSTABILITY</td>
+<td>Lattice, failing locally</td>
+</tr>
+<tr>
+<td>S4</td>
+<td>PHASE CHANGE</td>
+<td>Lattice → Field</td>
+</tr>
+<tr>
+<td>S5</td>
+<td>SIBURST</td>
+<td>Field</td>
+</tr>
+<tr>
+<td>S6</td>
+<td>THE AFTER</td>
+<td>Field</td>
+</tr>
+</tbody>
+</table>
+<p>The stage is a pure function of progress: <code>stage = f(p)</code> (see §6). There are
+no hidden timers, no random events, and no state that depends on how the
+visitor arrived. The same <code>p</code> always produces the same system state.</p>
+<h3 id="42-stage-specifications">4.2 Stage specifications</h3>
+<p>Occupancy means the share of Lattice cells holding a node.</p>
+<h4 id="s0-quiet-accumulation">S0 — QUIET ACCUMULATION</h4>
+<ul>
+<li><strong>Semantic purpose:</strong> establish a stable system and its rules before anything
+happens.</li>
+<li><strong>Visual condition:</strong> a sparse Lattice inside its boundary; a few nodes,
+fewer links.</li>
+<li><strong>Geometry:</strong> Lattice, rules L1–L6 fully visible through the rails.</li>
+<li><strong>Density:</strong> low; occupancy at most about 15%.</li>
+<li><strong>Relationship behavior:</strong> few links, all routable, all between near neighbors.</li>
+<li><strong>Navigation behavior:</strong> stage navigation and the reference link are visible
+and usable from the first view.</li>
+<li><strong>Typography behavior:</strong> state readout and identifiers are aligned to the
+rail rhythm, as grid-bound labels.</li>
+<li><strong>Permitted motion:</strong> appearance of nodes and links as <code>p</code> advances (M1, M2 in
+<code>MOTION_SEMANTICS.md</code>).</li>
+<li><strong>Prohibited motion:</strong> anything on load without progress; ambient drift,
+pulsing, breathing.</li>
+<li><strong>Orientation requirement:</strong> the visitor can see the whole system and the
+stage index.</li>
+<li><strong>Exit condition:</strong> <code>p</code> reaches the S1 boundary. By then the Lattice's rules
+must have been legible: lanes, cells, index order.</li>
+</ul>
+<h4 id="s1-scale">S1 — SCALE</h4>
+<ul>
+<li><strong>Semantic purpose:</strong> show &quot;more of the same&quot; explicitly.</li>
+<li><strong>Visual condition:</strong> the same Lattice, visibly fuller and busier.</li>
+<li><strong>Geometry:</strong> unchanged Lattice.</li>
+<li><strong>Density:</strong> occupancy rises to roughly 60–75%.</li>
+<li><strong>Relationship behavior:</strong> links multiply; all remain routable under L4–L5.</li>
+<li><strong>Navigation behavior:</strong> unchanged.</li>
+<li><strong>Typography behavior:</strong> unchanged; labels stay grid-bound.</li>
+<li><strong>Permitted motion:</strong> M1, M2.</li>
+<li><strong>Prohibited motion:</strong> any change of layout rule; acceleration used as meaning.</li>
+<li><strong>Orientation requirement:</strong> anchors remain visible and in their cells.</li>
+<li><strong>Exit condition:</strong> <code>p</code> reaches the S2 boundary. At exit, every relationship
+is still routable. S1 must end looking like S0 with more in it.</li>
+</ul>
+<h4 id="s2-threshold">S2 — THRESHOLD</h4>
+<ul>
+<li><strong>Semantic purpose:</strong> show the structure approaching the limit of what it can
+represent.</li>
+<li><strong>Visual condition:</strong> the Lattice is nearly full; relationships appear that
+it cannot route.</li>
+<li><strong>Geometry:</strong> unchanged Lattice, at capacity.</li>
+<li><strong>Density:</strong> occupancy 90% or more.</li>
+<li><strong>Relationship behavior:</strong> unrouted stubs appear and accumulate; routed links
+crowd shared rail segments.</li>
+<li><strong>Navigation behavior:</strong> unchanged.</li>
+<li><strong>Typography behavior:</strong> unchanged. The state readout adopts the threshold
+role (see <code>VISUAL_SYSTEM.md</code>).</li>
+<li><strong>Permitted motion:</strong> M1, M2, M3 (constraint pressure).</li>
+<li><strong>Prohibited motion:</strong> anything breaking the Lattice; shaking, flicker,
+alarm-style flashing.</li>
+<li><strong>Orientation requirement:</strong> nothing is broken yet. Every node is still in
+its cell.</li>
+<li><strong>Exit condition:</strong> <code>p</code> reaches the S3 boundary, and stubs are clearly
+visible as a category distinct from routed links.</li>
+</ul>
+<h4 id="s3-instability">S3 — INSTABILITY</h4>
+<ul>
+<li><strong>Semantic purpose:</strong> show the old description failing locally.</li>
+<li><strong>Visual condition:</strong> the Lattice still governs, but no longer represents the
+system faithfully.</li>
+<li><strong>Geometry:</strong> Lattice rules still in force. Rails stay straight. Nodes under
+the most pressure slip off their cell centers.</li>
+<li><strong>Density:</strong> occupancy 100%; stubs keep increasing.</li>
+<li><strong>Relationship behavior:</strong> links detour and overlap; stubs outnumber newly
+routed links.</li>
+<li><strong>Navigation behavior:</strong> unchanged and fully stable. Instability is confined
+to the demonstration system.</li>
+<li><strong>Typography behavior:</strong> grid-bound labels may be pushed off alignment only
+where their node has slipped. Captions and navigation text are unaffected.</li>
+<li><strong>Permitted motion:</strong> M3, M4 (local misalignment), deterministic and bounded.
+A node's offset is at most half a cell and proportional to its count of
+unrouted relationships.</li>
+<li><strong>Prohibited motion:</strong> random jitter, global distortion, glitch effects,
+any instability outside the boundary.</li>
+<li><strong>Orientation requirement:</strong> navigation, focus order, captions, and controls
+are exactly as stable as in S0.</li>
+<li><strong>Exit condition:</strong> <code>p</code> reaches the S4 boundary. The entity set is frozen at
+this point.</li>
+</ul>
+<h4 id="s4-phase-change">S4 — PHASE CHANGE</h4>
+<ul>
+<li><strong>Semantic purpose:</strong> change the rules while keeping the system.</li>
+<li><strong>Visual condition:</strong> rails retire; nodes move from Lattice positions to Field
+positions; stubs complete; links resolve into direct paths.</li>
+<li><strong>Geometry:</strong> Lattice → Field, following §2.3.</li>
+<li><strong>Density:</strong> entity count unchanged. Occupancy stops being a meaningful measure.</li>
+<li><strong>Relationship behavior:</strong> every relationship is drawn. Clusters become visible.</li>
+<li><strong>Navigation behavior:</strong> unchanged.</li>
+<li><strong>Typography behavior:</strong> identifiers detach from the grid rhythm and travel
+with their nodes. From here on, labels are attached to entities, not to
+coordinates.</li>
+<li><strong>Permitted motion:</strong> M5 (topology reconfiguration), in this order: rails
+retire → nodes reposition → links resolve.</li>
+<li><strong>Prohibited motion:</strong> every device in §2.4; replacing the scene; fading out
+one composition and fading in another.</li>
+<li><strong>Orientation requirement:</strong> anchors are visible and trackable throughout.</li>
+<li><strong>Exit condition:</strong> <code>p</code> reaches the S5 boundary. At exit, every node is at its
+Field position and no rail remains.</li>
+</ul>
+<h4 id="s5-siburst">S5 — SIBURST</h4>
+<ul>
+<li><strong>Semantic purpose:</strong> name the crossing.</li>
+<li><strong>Visual condition:</strong> the Field is stable. The name <strong>SIBurst</strong> appears in the
+display voice, placed at the boundary, not on any node. A <strong>transition
+record</strong> shows a smaller-scale Lattice view (the end of S3, with all 24
+entities) next to the Field, with the same anchors marked in both.</li>
+<li><strong>Geometry:</strong> Field.</li>
+<li><strong>Density:</strong> unchanged.</li>
+<li><strong>Relationship behavior:</strong> static.</li>
+<li><strong>Navigation behavior:</strong> unchanged.</li>
+<li><strong>Typography behavior:</strong> display voice for the name; the caption states that
+SIBurst names the crossing just shown.</li>
+<li><strong>Permitted motion:</strong> M6 (stabilization); appearance of the name and the
+transition record.</li>
+<li><strong>Prohibited motion:</strong> celebratory effects of any kind; motion that makes
+the name appear to emerge from a burst.</li>
+<li><strong>Orientation requirement:</strong> the visitor can compare before and after
+directly.</li>
+<li><strong>Exit condition:</strong> <code>p</code> reaches the S6 boundary.</li>
+</ul>
+<h4 id="s6-the-after">S6 — THE AFTER</h4>
+<ul>
+<li><strong>Semantic purpose:</strong> operate in the new regime and open the reference layer.</li>
+<li><strong>Visual condition:</strong> the Field remains, visually quieter. The reference
+index (§7) is organized by the Field's grammar.</li>
+<li><strong>Geometry:</strong> Field.</li>
+<li><strong>Density:</strong> the demonstration recedes in contrast so that text is readable.</li>
+<li><strong>Relationship behavior:</strong> static. Links between reference items express real
+relationships between the documents.</li>
+<li><strong>Navigation behavior:</strong> the reference layer is fully available.</li>
+<li><strong>Typography behavior:</strong> reading voice dominates.</li>
+<li><strong>Permitted motion:</strong> M6 only; focus and hover feedback on reference items.</li>
+<li><strong>Prohibited motion:</strong> any return to accumulation; looping back to S0
+automatically.</li>
+<li><strong>Orientation requirement:</strong> the visitor knows the demonstration has ended
+and where the doctrine is.</li>
+<li><strong>Exit condition:</strong> none. S6 is terminal. The visitor may navigate to any
+stage or document.</li>
+</ul>
+<h3 id="43-continuity-of-identity-invariant">4.3 Continuity-of-identity invariant</h3>
+<p>The same system must persist through the transition.</p>
+<ul>
+<li>Every entity present at the end of S3 is present, identifiable, and
+unchanged in identity at S5 and S6.</li>
+<li>Every anchor keeps its identifier and is visible throughout S4.</li>
+<li>Relationships may reorganize, topology may change, hierarchy may change, and
+spatial rules change. The entity set and the relationship graph do not.</li>
+<li>The boundary persists throughout.</li>
+</ul>
+<p>The visitor must perceive <strong>&quot;same system — different regime&quot;</strong>, never
+<strong>&quot;old scene disappeared — new scene appeared.&quot;</strong> An implementation that
+cross-fades between two independent compositions violates this invariant,
+even if both compositions are individually correct.</p>
+<hr />
+<h2 id="5-interface-state-language">5. Interface-state language</h2>
+<h3 id="51-canonical-labels">5.1 Canonical labels</h3>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>State label</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S0</td>
+<td><code>ACCUMULATING</code></td>
+</tr>
+<tr>
+<td>S1</td>
+<td><code>DENSITY RISING</code></td>
+</tr>
+<tr>
+<td>S2</td>
+<td><code>THRESHOLD APPROACHING</code></td>
+</tr>
+<tr>
+<td>S3</td>
+<td><code>REGIME UNSTABLE</code></td>
+</tr>
+<tr>
+<td>S4</td>
+<td><code>TRANSITION DETECTED</code></td>
+</tr>
+<tr>
+<td>S5</td>
+<td><code>SIBURST</code></td>
+</tr>
+<tr>
+<td>S6</td>
+<td><code>NEW OPERATING REGIME</code></td>
+</tr>
+</tbody>
+</table>
+<p>This resolves the Sprint 0 open question on interface-state framing.</p>
+<h3 id="52-the-framing-rule">5.2 The framing rule</h3>
+<p><strong>Every state label is scoped to the demonstration system.</strong></p>
+<ul>
+<li>A state label is always rendered with a <strong>scope prefix</strong> and a <strong>stage
+index</strong>, in the same element, for example:
+<code>DEMONSTRATION STATE · S4 / TRANSITION DETECTED</code>.</li>
+<li>The scope prefix is never smaller than the label and is never shown without it.</li>
+<li>The boundary carries a persistent caption, visible in every stage, that
+identifies the system as a model, for example:
+<code>SYSTEM DEMONSTRATION — a model of the SIBurst concept, not a measurement.</code></li>
+<li>Every label that assistive technology announces includes the word
+&quot;demonstration&quot;.</li>
+</ul>
+<p>&quot;Detected&quot; in <code>TRANSITION DETECTED</code> refers to the model's own state change. It
+must never be paired with anything that suggests sensing of external systems.</p>
+<h3 id="53-prohibited-state-vocabulary-and-devices">5.3 Prohibited state vocabulary and devices</h3>
+<p>The following must not appear in state readouts, captions, or labels:</p>
+<ul>
+<li><code>LIVE</code>, <code>REAL-TIME</code>, <code>CURRENT</code>, <code>NOW</code> (as a status), <code>GLOBAL</code>, <code>WORLD</code>;</li>
+<li><code>AI STATUS</code>, <code>AGI STATUS</code>, <code>SI LEVEL</code>, <code>CURRENT AI STATE</code>,
+<code>GLOBAL INTELLIGENCE</code>, or any equivalent;</li>
+<li>percentages, scores, indices, levels, or continuously changing numbers
+(the stage index S0–S6 is the only number the readout shows);</li>
+<li>timestamps, dates, countdowns, or clocks;</li>
+<li>telemetry devices: blinking &quot;recording&quot; dots, status lights, feed tickers,
+signal-strength meters.</li>
+</ul>
+<h3 id="54-captions">5.4 Captions</h3>
+<p>Each stage may carry one short caption (no more than two sentences). Captions
+support orientation, assistive technology, and the no-JavaScript path. They
+are not required for Test 1 in <code>INTERFACE_ACCEPTANCE.md</code>, which must pass
+without them.</p>
+<p>Every caption must be classifiable under <code>PUBLIC_CLAIM_POLICY.md</code>. Reference
+captions:</p>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Reference caption</th>
+<th>Claim class</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S0</td>
+<td>A system accumulates inside fixed rules.</td>
+<td>METAPHOR</td>
+</tr>
+<tr>
+<td>S1</td>
+<td>More entities. More relationships. The same rules.</td>
+<td>METAPHOR</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>Relationships begin to exceed the structure built to hold them.</td>
+<td>METAPHOR</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>The old description fails in places.</td>
+<td>METAPHOR</td>
+</tr>
+<tr>
+<td>S4</td>
+<td>The rules change. The entities remain.</td>
+<td>METAPHOR</td>
+</tr>
+<tr>
+<td>S5</td>
+<td>SIBurst names this crossing: from more capability to a different operating regime.</td>
+<td>DEFINITION</td>
+</tr>
+<tr>
+<td>S6</td>
+<td>SIBurst names the transition, not the prediction.</td>
+<td>DEFINITION</td>
+</tr>
+</tbody>
+</table>
+<p>Captions describe the demonstration. They never describe current real-world AI.</p>
+<hr />
+<h2 id="6-progress-contract">6. Progress contract</h2>
+<h3 id="61-the-progress-variable">6.1 The progress variable</h3>
+<p>The experience is driven by one normalized variable:</p>
+<p><code>p ∈ [0, 1]</code></p>
+<p><code>p</code> is <strong>visitor progress through the demonstration</strong> and nothing else. It is
+not an intelligence score, a capability measure, a probability, or a time
+estimate. It must never be displayed as a percentage or as a number of any kind.
+Where progress is shown, it is shown as a stage position (for example <code>S3 / S6</code>).</p>
+<h3 id="62-stage-ranges">6.2 Stage ranges</h3>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Indicative range of <code>p</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S0</td>
+<td>0.00 – 0.12</td>
+</tr>
+<tr>
+<td>S1</td>
+<td>0.12 – 0.30</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>0.30 – 0.45</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>0.45 – 0.58</td>
+</tr>
+<tr>
+<td>S4</td>
+<td>0.58 – 0.74</td>
+</tr>
+<tr>
+<td>S5</td>
+<td>0.74 – 0.88</td>
+</tr>
+<tr>
+<td>S6</td>
+<td>0.88 – 1.00</td>
+</tr>
+</tbody>
+</table>
+<p>Implementations may move any boundary by up to ±0.03 to suit the layout,
+provided that:</p>
+<ul>
+<li>stage order is preserved;</li>
+<li>S4 occupies at least 0.12 of the range, so the transition can be followed
+rather than flashed past;</li>
+<li>S1 is at least as long as S0, so &quot;more of the same&quot; is established;</li>
+<li>the ranges in use are recorded with the implementation.</li>
+</ul>
+<h3 id="63-scroll-behavior">6.3 Scroll behavior</h3>
+<ul>
+<li>The experience may be scroll-driven. Scrolling advances <code>p</code>; it does not
+reveal a stack of unrelated sections. The demonstration system stays in view
+while <code>p</code> changes.</li>
+<li>Native scrolling is never overridden: no scroll-jacking, no altered scroll
+speed, no forced snapping between stages. Proximity snapping is permitted.</li>
+<li>Progress is reversible. Scrolling back returns the system to earlier states
+exactly, because the state is a function of <code>p</code>.</li>
+</ul>
+<h3 id="64-discrete-traversal">6.4 Discrete traversal</h3>
+<p>Visitors must be able to traverse the full sequence without precise scrolling:</p>
+<ul>
+<li>A persistent <strong>stage navigation</strong> lists S0–S6 as ordinary links, each moving
+to that stage's canonical point (the start of its range, or the midpoint of
+S4 for the transition).</li>
+<li>Each stage has a stable fragment address (for example <code>#s4</code>), which works
+with and without JavaScript.</li>
+<li>Keyboard and reduced-motion traversal reach the same seven states in the same
+order (see <code>MOTION_SEMANTICS.md</code> and <code>RESPONSIVE_ACCESSIBILITY.md</code>).</li>
+</ul>
+<hr />
+<h2 id="7-content-architecture">7. Content architecture</h2>
+<p>The page has two layers.</p>
+<h3 id="71-experiential-layer-s0s5">7.1 Experiential layer (S0–S5)</h3>
+<p>The demonstration system, the state readout, the stage navigation, and the
+captions. It carries the thesis in the smallest possible amount of text. It
+never reproduces the foundation documents.</p>
+<h3 id="72-reference-layer-s6-and-beyond">7.2 Reference layer (S6 and beyond)</h3>
+<p>The governed doctrine, reached from S6 and from the persistent reference link:</p>
+<table>
+<thead>
+<tr>
+<th>Reference item</th>
+<th>Source of truth</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Thesis</td>
+<td><code>FOUNDATION_THESIS.md</code></td>
+</tr>
+<tr>
+<td>Name architecture</td>
+<td><code>NAME_ARCHITECTURE.md</code></td>
+</tr>
+<tr>
+<td>Category boundary</td>
+<td><code>CATEGORY_BOUNDARY.md</code></td>
+</tr>
+<tr>
+<td>Commercial territory</td>
+<td><code>COMMERCIAL_TERRITORY.md</code></td>
+</tr>
+<tr>
+<td>Glossary</td>
+<td><code>GLOSSARY.md</code></td>
+</tr>
+<tr>
+<td>Claim policy</td>
+<td><code>PUBLIC_CLAIM_POLICY.md</code></td>
+</tr>
+<tr>
+<td>Decision log</td>
+<td><code>DECISION_LOG.md</code></td>
+</tr>
+<tr>
+<td>Interface doctrine</td>
+<td><code>SITE_ARCHITECTURE.md</code> and the Sprint 1 contracts</td>
+</tr>
+</tbody>
+</table>
+<p>Rules:</p>
+<ul>
+<li>The Markdown documents in this repository are the <strong>single source of truth</strong>.
+Reference pages present them; they do not paraphrase or fork them. Reference
+pages are generated from the Markdown as specified in §7.4.</li>
+<li>In S6 the reference index is laid out in the Field grammar: items are nodes,
+and links show real relationships between documents (for example, the
+thesis relates to the name architecture and the claim policy). In the page
+structure, the same index is an ordinary list of links in reading order.</li>
+<li>A <strong>reference link</strong> is visible from the first view, so a visitor can reach
+the doctrine without passing through the demonstration.</li>
+</ul>
+<h3 id="73-excluded-sections">7.3 Excluded sections</h3>
+<p>The following conventional sections are not part of the architecture: Features,
+Benefits, Testimonials, Pricing, Customers, Integrations, and filler FAQs. Any
+of them requires a recorded decision in <code>DECISION_LOG.md</code> before it can be admitted.</p>
+<hr />
+<h3 id="74-reference-generation">7.4 Reference generation</h3>
+<p>Canonical Markdown remains the single source of truth. Public HTML reference
+pages are generated derivatives and are never edited as independent content
+(DEC-017).</p>
+<p>Invariants:</p>
+<ul>
+<li><strong>One-way flow.</strong> <code>Markdown → generated reference HTML</code>. Generated HTML is
+never used as input to change the Markdown.</li>
+<li><strong>No manual edits.</strong> Generated reference HTML is never edited by hand. Any
+change to reference content is made in the canonical Markdown and regenerated.</li>
+<li><strong>Deterministic regeneration.</strong> The same Markdown and the same pinned
+generation process always produce the same reference HTML.</li>
+<li><strong>Zero unexplained drift.</strong> Validation regenerates the reference pages and
+compares them with the published or committed output. Any difference that is
+not explained by a change to the canonical Markdown fails validation.</li>
+<li><strong>Integrated reading.</strong> The reference index links to the generated pages
+inside the site's own reference layer. Visitors are not required to leave the
+site to read the doctrine.</li>
+<li><strong>Provenance links.</strong> Each generated page may link to its canonical Markdown
+file as its source. GitHub-rendered Markdown is an auxiliary source link, not
+the primary reading experience.</li>
+<li><strong>No runtime dependency.</strong> Generation happens before publication. The public
+site loads no renderer and needs no conversion at runtime.</li>
+<li><strong>Presentation, not meaning.</strong> Generation may change presentation (layout,
+navigation, typography). It never changes wording, claim class, or meaning.</li>
+</ul>
+<p>The renderer and generation tooling are selected in a later implementation
+sprint. Once selected, they are pinned to exact versions so regeneration is
+reproducible. No renderer is selected by this contract.</p>
+<h2 id="8-implementation-constraints">8. Implementation constraints</h2>
+<ul>
+<li><strong>Static-first.</strong> The page is a static document. No server runtime is required.</li>
+<li><strong>Dependency-minimal.</strong> Semantic HTML, CSS, inline SVG, and minimal vanilla
+JavaScript. No framework unless a later decision justifies one.</li>
+<li><strong>No external runtime sources.</strong> No JavaScript CDNs and no external font
+services.</li>
+<li><strong>No analytics dependency</strong> unless a later decision admits one.</li>
+<li><strong>No heavy rendering requirement.</strong> The core experience does not require
+WebGL, large canvas rendering, high-end GPU effects, video backgrounds, or
+autoplay media. SVG is the default rendering surface, so that nodes,
+identifiers, and links remain document elements.</li>
+<li><strong>Deterministic data.</strong> The graph, Lattice positions, and Field positions ship
+as static data with the page.</li>
+<li><strong>Modest hardware.</strong> The complete sequence must be understandable on an
+ordinary mid-range phone. Where motion cannot run smoothly, the
+implementation falls back to the reduced-motion path rather than degrading
+meaning.</li>
+<li><strong>Canonical entity set:</strong> the canonical demonstration contains exactly 24
+entities on every viewport. No viewport may add, remove, substitute, or
+independently regenerate entities or anchors (§8.2, DEC-018, DEC-019).</li>
+<li><strong>Indicative size budgets:</strong> JavaScript no more than about 30 KB compressed;
+the complete first view no more than about 150 KB compressed, excluding
+reference pages.</li>
+</ul>
+<h3 id="81-progressive-enhancement">8.1 Progressive enhancement</h3>
+<p>Without JavaScript, the document still presents the full sequence:</p>
+<ul>
+<li>seven stage sections in order, each with a static figure of the same
+demonstration system at that stage's canonical point, its state label with
+scope prefix, its caption, and its state description;</li>
+<li>the same entities and anchors in every stage figure, so the rule change
+and continuity of identity are visible by comparison;</li>
+<li>the stage navigation and the reference layer as ordinary links.</li>
+</ul>
+<p>JavaScript enhances this document by combining the stage figures into one
+persistent, progress-driven system. It does not create the content.</p>
+<h3 id="82-demonstration-fixture">8.2 Demonstration fixture</h3>
+<p>The <strong>deterministic demonstration fixture</strong> exists before any animation logic
+is written. It is established in <code>data/demonstration-fixture.json</code>, explained in
+<code>DEMONSTRATION_FIXTURE.md</code>, and enforced by <code>tools/validate_fixture.py</code>. It is a
+single, reviewable, static data source that governs:</p>
+<ul>
+<li>entity identifiers;</li>
+<li>arrival order;</li>
+<li>the relationship graph;</li>
+<li>the stage at which each relationship becomes active;</li>
+<li>anchors;</li>
+<li>Lattice placement (lane and cell for each entity);</li>
+<li>unroutable relationships (stubs) under rules L4–L5;</li>
+<li>Field placement;</li>
+<li>viewport variants, or deterministic rules for deriving them. There is one
+logical fixture for every viewport; only the transformations listed in
+<code>DEMONSTRATION_FIXTURE.md</code> §13 are permitted.</li>
+</ul>
+<p><code>data/demonstration-fixture.json</code> is the implementation source of truth for the
+demonstration graph and geometry (DEC-018).</p>
+<p>Rules:</p>
+<ul>
+<li>Rendering and animation code reads the fixture. It never invents, randomizes,
+or recomputes any of these values independently.</li>
+<li>Future HTML and JavaScript consume the fixture, or are compiled from it
+faithfully. Runtime interface code contains no independent duplicate of the
+graph or geometry. If fixture data is embedded in generated HTML, it is
+derived mechanically from the fixture file, in the same way DEC-017 governs
+reference pages.</li>
+<li>The fixture must pass its validator before any interface acceptance testing
+(<code>INTERFACE_ACCEPTANCE.md</code>, Gate 0).</li>
+<li>The fixture must satisfy §1.1, §1.2, and §3.1, and must allow acceptance
+Tests 2, 3, and 14 to be checked against it.</li>
+<li>The fixture is implementation data. It cannot redefine the thesis, the name,
+the stages, or the claim boundary. If a fixture conflicts with this contract,
+the fixture is defective.</li>
+</ul>
+<p>This is an implementation integrity rule derived from DEC-011, DEC-012, and
+DEC-016, not a new conceptual decision. The fixture was established in Sprint 2
+(DEC-018 to DEC-021).</p>
+<hr />
+<h2 id="9-authority">9. Authority</h2>
+<ul>
+<li><code>SITE_ARCHITECTURE.md</code> defines the conceptual experience and governs this
+contract.</li>
+<li>This contract governs <code>VISUAL_SYSTEM.md</code>, <code>MOTION_SEMANTICS.md</code>, and
+<code>RESPONSIVE_ACCESSIBILITY.md</code>.</li>
+<li><code>INTERFACE_ACCEPTANCE.md</code> turns all of them into pass/fail tests.</li>
+</ul>
+<p>If this contract contradicts the conceptual architecture, this contract is
+defective. If an acceptance test contradicts a contract, the test is defective.
+Defects are corrected and recorded in <code>DECISION_LOG.md</code>, never resolved silently
+in the implementation.</p>
+  </article>
+  <p class="source-link">Generated from the canonical source <a href="https://github.com/Sohadot/SIBurst/blob/main/INTERFACE_CONTRACT.md">INTERFACE_CONTRACT.md</a>. The Markdown file is authoritative; this page is a derived rendering (DEC-017).</p>
+  <p class="back-link"><a href="./">Back to the reference index</a></p>
+</main>
+</body>
+</html>

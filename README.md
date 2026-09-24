@@ -64,6 +64,10 @@ documents implement the foundation; they do not redefine it.
 | [`data/demonstration-fixture.json`](data/demonstration-fixture.json) | The canonical demonstration fixture: the implementation source of truth for the demonstration graph and geometry. |
 | [`schemas/demonstration-fixture.schema.json`](schemas/demonstration-fixture.schema.json) | The fixture's structural schema. |
 | [`tools/validate_fixture.py`](tools/validate_fixture.py), [`tests/`](tests/) | The fixture validator and its mutation tests (Python standard library only). |
+| [SITE_BUILD.md](SITE_BUILD.md) | How the static interface is built, checked, and validated: sources, deterministic build, reference generation, runtime constraints. |
+| [`src/site/`](src/site/) | Interface source: HTML templates, stylesheet, and the vanilla JavaScript module. |
+| [`tools/build_site.py`](tools/build_site.py), [`tools/validate_site.py`](tools/validate_site.py) | The deterministic site build and the site validator. |
+| [`docs/`](docs/) | The generated static site. Never edited by hand (DEC-022). |
 
 ## Order of authority
 
@@ -84,6 +88,8 @@ corrected, not as a second meaning.
 
 - **Sprint 0 — conceptual foundation:** closed.
 - **Sprint 1 — interface contract:** closed.
-- **Sprint 2 — canonical demonstration fixture:** defined.
+- **Sprint 2 — canonical demonstration fixture:** closed.
+- **Sprint 3 — executable static interface:** built, pending review.
 
-No public site has been built or published.
+The static interface is built in `docs/` for review. **The site has not been
+published.** Publishing is a separate gate (DEC-024).

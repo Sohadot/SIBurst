@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'none'; style-src 'self'; img-src 'self'; font-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="light">
+<title>Motion Semantics · SIBurst reference</title>
+<meta name="description" content="The permitted motion classes and the reduced-motion path.">
+<link rel="canonical" href="https://siburst.com/reference/motion-semantics.html">
+<link rel="stylesheet" href="../assets/system.css">
+</head>
+<body class="reference-page">
+<a class="skip-link" href="#document">Skip to document</a>
+<header class="site-header">
+  <p class="identity"><a href="../">SIBurst</a></p>
+  <nav class="reference-nav" aria-label="Reference">
+    <ol>
+      <li><a href="./">Reference index</a></li>
+      <li><a href="../#s0">Demonstration</a></li>
+    </ol>
+  </nav>
+</header>
+<main id="document">
+  <p class="reference-group-label">Implementation doctrine</p>
+  <article class="doctrine">
+<h1 id="motion-semantics">Motion Semantics</h1>
+<p>Every animation must carry meaning. This document defines the only kinds of
+motion the SIBurst interface may use, what each one means, and how the
+experience works when motion is reduced. It is governed by
+<code>INTERFACE_CONTRACT.md</code>.</p>
+<h2 id="1-principles">1. Principles</h2>
+<ol>
+<li><strong>Motion is state change made visible.</strong> Every movement corresponds to a
+change in the demonstration system's state or relationships, as defined in
+the contract.</li>
+<li><strong>Motion is driven by progress, not by time.</strong> Movement inside the
+demonstration is a function of <code>p</code> (see <code>INTERFACE_CONTRACT.md</code> §6). When the
+visitor stops, the system stops.</li>
+<li><strong>Stillness invariant.</strong> If the visitor does not scroll or navigate, nothing
+inside the demonstration moves. There are no idle loops, ambient drift,
+pulsing, or &quot;breathing&quot;.</li>
+<li><strong>Monotonic easing only.</strong> Interpolations may ease in or out, but they never
+overshoot, bounce, spring, or oscillate.</li>
+<li><strong>Removable test.</strong> If an animation could be removed without losing
+information about accumulation, threshold, or regime, it must not exist
+(from <code>SITE_ARCHITECTURE.md</code>).</li>
+</ol>
+<h2 id="2-motion-taxonomy">2. Motion taxonomy</h2>
+<p>Six motion classes are allowed. Any motion that does not belong to one of them
+is prohibited.</p>
+<h3 id="m1-appearance">M1 — Appearance</h3>
+<ul>
+<li><strong>Meaning:</strong> an entity or relationship now exists in the model.</li>
+<li><strong>Allowed stages:</strong> S0–S3 (nodes and links); S5 (the name and the transition
+record); S6 (reference items).</li>
+<li><strong>Form:</strong> the element enters at its final position. Opacity or a short
+stroke draw-on is acceptable.</li>
+<li><strong>Prohibited misuse:</strong> elements flying in from outside, scaling up from zero
+with overshoot, or appearing in a burst. Appearance used only to &quot;reveal&quot;
+content on scroll.</li>
+</ul>
+<h3 id="m2-relationship-formation">M2 — Relationship formation</h3>
+<ul>
+<li><strong>Meaning:</strong> a relationship between two existing entities now exists.</li>
+<li><strong>Allowed stages:</strong> S0–S3.</li>
+<li><strong>Form:</strong> the link is drawn from one entity to the other along its route.
+Before S4 the route is orthogonal. If the Lattice cannot route it, it is drawn
+as a stub.</li>
+<li><strong>Prohibited misuse:</strong> lines that travel, float, or animate continuously once
+formed; data-flow &quot;pulses&quot; moving along links; links that appear without a
+relationship in the graph.</li>
+</ul>
+<h3 id="m3-constraint-pressure">M3 — Constraint pressure</h3>
+<ul>
+<li><strong>Meaning:</strong> the structure is approaching or exceeding its capacity.</li>
+<li><strong>Allowed stages:</strong> S2–S3.</li>
+<li><strong>Form:</strong> stubs accumulate; routed links crowd shared rail segments; the
+threshold-warning role appears on affected elements. All changes are tied to
+<code>p</code>.</li>
+<li><strong>Prohibited misuse:</strong> shaking, vibration, flicker, flashing, alarm-style
+blinking, pulsing boundaries.</li>
+</ul>
+<h3 id="m4-local-misalignment">M4 — Local misalignment</h3>
+<ul>
+<li><strong>Meaning:</strong> the old description fails in specific places.</li>
+<li><strong>Allowed stages:</strong> S3 only.</li>
+<li><strong>Form:</strong> individual nodes slip off their cell centers by a deterministic
+offset of at most half a cell, proportional to their unrouted relationships.
+Links to them detour. Rails stay straight.</li>
+<li><strong>Prohibited misuse:</strong> random jitter; global warping; glitch, tearing, or
+channel-split effects; any misalignment outside the boundary.</li>
+</ul>
+<h3 id="m5-topology-reconfiguration">M5 — Topology reconfiguration</h3>
+<ul>
+<li><strong>Meaning:</strong> the rules of organization change; the same entities are now
+related differently.</li>
+<li><strong>Allowed stages:</strong> S4 only.</li>
+<li><strong>Form:</strong> in this order, all tied to <code>p</code>:
+<ol>
+<li><strong>Rails retire:</strong> they withdraw or fade as a whole. They do not break,
+shatter, or fragment.</li>
+<li><strong>Nodes reposition:</strong> each node moves along a smooth, direct path from its
+Lattice position to its Field position. Movement may be staggered by
+cluster, never by random order.</li>
+<li><strong>Links resolve:</strong> orthogonal routes straighten into direct paths; stubs
+extend to complete their relationships.</li>
+</ol>
+</li>
+<li><strong>Prohibited misuse:</strong> explosion, particle blast, screen shake, flash, speed
+ramp, random scattering, vortex or spiral paths, zooming &quot;through&quot; the
+system, cross-fading one scene into another.</li>
+</ul>
+<h3 id="m6-stabilization">M6 — Stabilization</h3>
+<ul>
+<li><strong>Meaning:</strong> the new regime holds.</li>
+<li><strong>Allowed stages:</strong> S5–S6.</li>
+<li><strong>Form:</strong> active-signal emphasis settles to dormant; the system becomes still.
+In S6, the demonstration recedes in contrast so the reference layer is readable.</li>
+<li><strong>Prohibited misuse:</strong> celebratory effects, confetti, glow-ups, or any motion
+implying achievement.</li>
+</ul>
+<h3 id="interface-feedback-outside-the-taxonomy">Interface feedback (outside the taxonomy)</h3>
+<p>Focus indicators, hover states, and pressed states on controls and links are
+interface feedback, not demonstration motion. They change immediately or with a
+very short transition, and never move the demonstration system.</p>
+<h2 id="3-allowed-and-prohibited-reference-pairs">3. Allowed and prohibited: reference pairs</h2>
+<table>
+<thead>
+<tr>
+<th>Allowed</th>
+<th>Not allowed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A line appears because a relationship now exists.</td>
+<td>A line floats continuously because it looks technological.</td>
+</tr>
+<tr>
+<td>A node changes position because its relationship topology changed.</td>
+<td>Nodes drift randomly.</td>
+</tr>
+<tr>
+<td>The interface reorganizes under a new rule.</td>
+<td>The screen shakes or explodes.</td>
+</tr>
+<tr>
+<td>A stub appears because the Lattice cannot route a relationship.</td>
+<td>A node flickers to show &quot;instability&quot;.</td>
+</tr>
+<tr>
+<td>Rails fade as their rule is lifted.</td>
+<td>Rails shatter into fragments.</td>
+</tr>
+<tr>
+<td>The system becomes still after S5.</td>
+<td>The system idles with ambient motion.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="4-reduced-motion">4. Reduced motion</h2>
+<p>When the visitor has set <code>prefers-reduced-motion: reduce</code>, the thesis must
+survive intact. <strong>No essential meaning may depend on animation alone.</strong> This is
+mandatory.</p>
+<p>In reduced-motion mode:</p>
+<ul>
+<li><strong>Discrete states.</strong> Each stage is shown as its canonical state. Changes
+happen at stage boundaries, not continuously with <code>p</code>.</li>
+<li><strong>No interpolated movement.</strong> Nodes never travel. At S4, the Lattice layout is
+replaced by the Field layout in one step. Anchors keep their identifiers, so
+continuity of identity is carried by labels, not by motion.</li>
+<li><strong>S4 as two frames.</strong> The transition is presented as two explicit states:
+<em>Lattice (rules in force)</em> and then <em>Field (rules changed)</em>. Each has its
+state label and description.</li>
+<li><strong>Transition record.</strong> The S5 side-by-side record (Lattice beside Field, anchors
+marked in both) is always shown. It carries the comparison that motion would
+otherwise carry.</li>
+<li><strong>Opacity only where appropriate.</strong> A short opacity change (about 200 ms or
+less) may soften a step change in appearance or stabilization. It is never
+used to cross-fade the whole system between regimes.</li>
+<li><strong>Explicit stage navigation.</strong> The stage navigation is the primary way through
+the sequence, and every stage is reachable in one action.</li>
+</ul>
+<p>Reduced-motion users must be able to answer the same question as everyone else:
+<em>was the change from S1 to S4 more of the same, or different?</em></p>
+<h2 id="5-motion-and-performance">5. Motion and performance</h2>
+<p>If a device cannot animate the demonstration smoothly, the implementation uses
+the reduced-motion path. Motion is always the first thing sacrificed. Meaning is
+never sacrificed.</p>
+  </article>
+  <p class="source-link">Generated from the canonical source <a href="https://github.com/Sohadot/SIBurst/blob/main/MOTION_SEMANTICS.md">MOTION_SEMANTICS.md</a>. The Markdown file is authoritative; this page is a derived rendering (DEC-017).</p>
+  <p class="back-link"><a href="./">Back to the reference index</a></p>
+</main>
+</body>
+</html>
