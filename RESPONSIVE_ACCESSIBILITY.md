@@ -19,11 +19,11 @@ The widths below are indicative. The behavior is normative.
 
 | Viewport | Indicative width | Behavior |
 |---|---|---|
-| **Wide desktop** | 1440 CSS px and above | The demonstration stays in view on one side; captions and stage navigation sit beside it. Upper end of the node budget. |
+| **Wide desktop** | 1440 CSS px and above | The demonstration stays in view on one side; captions and stage navigation sit beside it. All 24 fixture entities. |
 | **Laptop** | 1024–1439 | As wide desktop, with proportions reduced. |
 | **Tablet** | 768–1023 | The demonstration stays in view in the upper part of the viewport; captions sit below it. Lanes run along the longer axis of the demonstration area. |
-| **Mobile** | 360–767 | The demonstration stays in view and fills the width. Lanes run along the long axis of the viewport. Captions sit in a stable band that does not overlap the system. Lower end of the node budget. |
-| **Very narrow** | below 360 | As mobile, with fewer nodes (never below the narrow budget in `INTERFACE_CONTRACT.md` §8) and at least three anchors. The state readout may wrap onto two lines but keeps its scope prefix. |
+| **Mobile** | 360–767 | The demonstration stays in view and fills the width. Lanes run along the long axis of the viewport. Captions sit in a stable band that does not overlap the system. All 24 fixture entities. |
+| **Very narrow** | below 360 | As mobile, with all 24 fixture entities and all four anchors. The state readout may wrap onto two lines but keeps its scope prefix. |
 
 ### 2.1 Mobile rule
 
@@ -35,10 +35,11 @@ Mobile must not become a simplified marketing landing page. It keeps:
 - anchors with identifiers across S4;
 - the scoped state readout and the S5 transition record.
 
-What may adapt: the orientation of lanes, the number of nodes and anchors
-(within budget), the size of the demonstration, and the position of captions.
-The Lattice's capacity scales with the node count, so saturation still happens
-in S2 on every viewport.
+What may adapt: the orientation of lanes, the scale and aspect of the
+demonstration (within the range validated in `DEMONSTRATION_FIXTURE.md` §13),
+and the position of captions. The entities, relationships, and anchors are the
+same canonical fixture on every viewport (DEC-018, DEC-019), so saturation
+happens in S2 everywhere.
 
 A mobile implementation that shows the stages as ordinary stacked content blocks
 (heading, text, image) instead of one persistent system fails. The only
@@ -97,7 +98,8 @@ text, as specified in `VISUAL_SYSTEM.md` §2.
 - Text resizes to 200% without loss of content or function.
 - At 400% zoom (a 320 CSS px wide viewport), text content reflows into a single
   column with no two-dimensional scrolling. The demonstration system scales to
-  fit and may reduce its node count and anchors, within budget.
+  fit, keeping all fixture entities and anchors; if identifiers cannot fit at
+  their minimum size, the demonstration takes more vertical space.
 - Line length in the reference layer stays readable at all widths.
 
 ### 3.6 Descriptive state text

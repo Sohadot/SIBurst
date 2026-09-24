@@ -59,7 +59,11 @@ documents implement the foundation; they do not redefine it.
 | [VISUAL_SYSTEM.md](VISUAL_SYSTEM.md) | Spatial character, semantic color and typography roles, and density progression. |
 | [MOTION_SEMANTICS.md](MOTION_SEMANTICS.md) | The permitted motion classes and the reduced-motion path. |
 | [RESPONSIVE_ACCESSIBILITY.md](RESPONSIVE_ACCESSIBILITY.md) | Behavior across viewports and input methods, and WCAG 2.2 AA requirements. |
-| [INTERFACE_ACCEPTANCE.md](INTERFACE_ACCEPTANCE.md) | The pass/fail tests every implementation must meet. |
+| [INTERFACE_ACCEPTANCE.md](INTERFACE_ACCEPTANCE.md) | Gate 0 (fixture integrity) and the pass/fail tests every implementation must meet. |
+| [DEMONSTRATION_FIXTURE.md](DEMONSTRATION_FIXTURE.md) | The laws of the canonical demonstration system: arrival, placement, routing, stubs, S3 offsets, clusters, anchors, Field geometry, viewports. |
+| [`data/demonstration-fixture.json`](data/demonstration-fixture.json) | The canonical demonstration fixture: the implementation source of truth for the demonstration graph and geometry. |
+| [`schemas/demonstration-fixture.schema.json`](schemas/demonstration-fixture.schema.json) | The fixture's structural schema. |
+| [`tools/validate_fixture.py`](tools/validate_fixture.py), [`tests/`](tests/) | The fixture validator and its mutation tests (Python standard library only). |
 
 ## Order of authority
 
@@ -69,6 +73,7 @@ documents implement the foundation; they do not redefine it.
 | What may be claimed publicly | `PUBLIC_CLAIM_POLICY.md` |
 | What the interface experience must express | `SITE_ARCHITECTURE.md` |
 | How that experience may be implemented | `INTERFACE_CONTRACT.md`, with `VISUAL_SYSTEM.md`, `MOTION_SEMANTICS.md`, and `RESPONSIVE_ACCESSIBILITY.md` |
+| What the demonstration system contains | `data/demonstration-fixture.json`, under the laws in `DEMONSTRATION_FIXTURE.md` |
 | Whether an implementation is accepted | `INTERFACE_ACCEPTANCE.md` |
 
 Each level is bound by the levels above it. `DECISION_LOG.md` records why. A
@@ -78,6 +83,7 @@ corrected, not as a second meaning.
 ## Status
 
 - **Sprint 0 — conceptual foundation:** closed.
-- **Sprint 1 — interface contract:** defined.
+- **Sprint 1 — interface contract:** closed.
+- **Sprint 2 — canonical demonstration fixture:** defined.
 
 No public site has been built or published.

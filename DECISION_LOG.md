@@ -223,3 +223,65 @@ Status values: **Accepted**, **Superseded**, **Proposed**.
 - **Consequences:** `INTERFACE_CONTRACT.md` §7.4 defines the invariants.
   Acceptance Test 12 fails any reference content that diverges from the
   canonical Markdown. No renderer or dependency is introduced in Sprint 1.
+
+## DEC-018 — The demonstration uses one canonical fixture
+
+- **Status:** Accepted
+- **Decision:** The graph, entities, anchors, arrival order, Lattice geometry, S3
+  offsets, and Field coordinates are governed data in
+  `data/demonstration-fixture.json`, not implementation-local choices. The
+  fixture is validated by `tools/validate_fixture.py` and explained in
+  `DEMONSTRATION_FIXTURE.md`.
+- **Rationale:** DEC-011 and DEC-012 are only testable if the system that
+  crosses the transition is fixed and inspectable. A graph invented inside
+  rendering code could drift from the doctrine without anyone noticing.
+- **Consequences:** Future browser code consumes this fixture, or is compiled
+  from it mechanically, and may not invent an independent graph. Every viewport
+  uses the same fixture. Gate 0 in `INTERFACE_ACCEPTANCE.md` requires the
+  validator to pass before interface testing.
+
+## DEC-019 — The canonical Lattice contains 24 logical cells
+
+- **Status:** Accepted
+- **Decision:** The demonstration uses 24 entities (`N01`–`N24`) in a 4 × 6
+  logical Lattice, with the arrival schedule 3 / 15 / 22 / 24 entities at
+  S0 / S1 / S2 / S3.
+- **Rationale:** 24 fits both the wide and narrow node budgets in
+  `INTERFACE_CONTRACT.md` §8, and it produces exact sparse, scale,
+  near-capacity, and full-capacity states without separate entity sets for
+  different viewports. **24 has no scientific meaning.** It is an
+  implementation choice.
+- **Consequences:** Viewports may transform the logical coordinates but may not
+  add or remove entities or anchors. The node-count adaptations previously
+  allowed in `RESPONSIVE_ACCESSIBILITY.md` and `VISUAL_SYSTEM.md` are replaced
+  by this fixed set. Occupancy values are layout facts, never public readouts.
+
+## DEC-020 — Lattice routability is deterministic
+
+- **Status:** Accepted
+- **Decision:** A relationship is Lattice-routable only when its endpoints are
+  in the same lane with a cell distance of at most 2, or in adjacent lanes with
+  a cell distance of at most 1. Everything else is unroutable, and an active
+  unroutable relationship is shown as a stub until S4.
+- **Rationale:** Sprint 1 left the bounded routing distance to the
+  implementation. Fixing it makes S1 purity, S2 strain, and S3 growth provable
+  rather than a matter of judgement.
+- **Consequences:** Routability is always computed from this law, never
+  declared. The validator requires no stubs at S0 and S1, at least four at S2,
+  and more at S3 than at S2.
+
+## DEC-021 — Field geometry is precomputed governed data
+
+- **Status:** Accepted
+- **Decision:** Field coordinates ship as part of the canonical fixture. No
+  runtime randomized, force-directed, or physics-based layout is allowed.
+  Relationships govern the authored geometry, and validation proves it.
+- **Rationale:** A layout computed in the browser could differ between loads and
+  devices, and could lose the relationship structure it is meant to reveal.
+  Fixed coordinates make Tests 2, 3, and 14 checkable and reproducible.
+- **Consequences:** The validator requires linked pairs to be closer than
+  unlinked pairs (at most 0.80 of the mean unlinked distance), intra-cluster
+  pairs to be closer than inter-cluster pairs, legible and distinct clusters,
+  and the anchor separation and convergence proofs, at 1:1, 16:9, and 9:16.
+  Changing the coordinates is a fixture change and is subject to the same
+  validation.
