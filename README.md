@@ -70,6 +70,7 @@ documents implement the foundation; they do not redefine it.
 | [`docs/`](docs/) | The generated static site. Never edited by hand (DEC-022). |
 | [ACCESSIBILITY_TEST_17.md](ACCESSIBILITY_TEST_17.md) | The human screen-reader record that closed Interface Acceptance Test 17. |
 | [`tools/preflight_accessibility.py`](tools/preflight_accessibility.py) | Automated accessibility preflight. Machine evidence only; it does not satisfy Test 17. |
+| [PUBLICATION.md](PUBLICATION.md) | Public origin, publication files, operator steps, rollback, and post-deployment smoke test. |
 
 ## Order of authority
 
@@ -99,5 +100,6 @@ Interface acceptance: Gate 0 and all 18 tests in `INTERFACE_ACCEPTANCE.md`
 have passed. Test 17 rests on human evidence (an Android TalkBack traversal),
 and the other tests on machine verification and browser review.
 
-The static interface is built in `docs/`. **The site has not been published.**
-Publishing is a separate gate (DEC-024).
+The static interface is built in `docs/` and prepared for publication at
+`https://siburst.com/` (`PUBLICATION.md`). **The site has not been published.**
+Publishing is a separate gate (DEC-024) and awaits explicit approval.

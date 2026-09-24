@@ -391,5 +391,86 @@ class ReferenceFieldTests(SiteTestCase):
         self.assertIn("differs from build output: index.html", build_site.compare_trees(changed, build_site.OUT))
 
 
+class PublicationTests(SiteTestCase):
+    def test_build_produces_exact_cname(self):
+        with open(os.path.join(self.fresh, "CNAME"), "rb") as handle:
+            self.assertEqual(handle.read(), b"siburst.com")
+
+    def test_missing_nojekyll_fails(self):
+        docs = self.copy()
+        os.remove(os.path.join(docs, ".nojekyll"))
+        self.assertRejected(docs, "publication.nojekyll")
+
+    def test_wrong_cname_fails(self):
+        docs = self.copy()
+        write(os.path.join(docs, "CNAME"), "www.siburst.com")
+        self.assertRejected(docs, "publication.cname")
+
+    def test_missing_cname_fails(self):
+        docs = self.copy()
+        os.remove(os.path.join(docs, "CNAME"))
+        self.assertRejected(docs, "publication.cname")
+
+    def test_robots_disallow_fails(self):
+        docs = self.copy()
+        self.edit(docs, "robots.txt", "Allow: /", "Disallow: /")
+        self.assertRejected(docs, "publication.robots")
+
+    def test_stale_sitemap_entry_fails(self):
+        docs = self.copy()
+        self.edit(docs, "sitemap.xml", "</urlset>", "  <url><loc>http://localhost:8000/old.html</loc></url>\n</urlset>")
+        codes = self.codes(docs)
+        self.assertIn("publication.sitemap", codes)
+        self.assertIn("publication.dev_url", codes)
+
+    def test_sitemap_missing_page_fails(self):
+        docs = self.copy()
+        self.edit(docs, "sitemap.xml", "  <url><loc>https://siburst.com/reference/glossary.html</loc></url>\n", "")
+        self.assertRejected(docs, "publication.sitemap")
+
+    def test_malformed_sitemap_fails(self):
+        docs = self.copy()
+        self.edit(docs, "sitemap.xml", "</urlset>", "<url>")
+        self.assertRejected(docs, "publication.sitemap")
+
+    def test_wrong_root_canonical_fails(self):
+        docs = self.copy()
+        self.edit(docs, "index.html", '<link rel="canonical" href="https://siburst.com/">',
+                  '<link rel="canonical" href="https://www.siburst.com/">')
+        self.assertRejected(docs, "publication.canonical")
+
+    def test_missing_404_fails(self):
+        docs = self.copy()
+        os.remove(os.path.join(docs, "404.html"))
+        self.assertRejected(docs, "publication.404")
+
+    def test_404_with_script_fails(self):
+        docs = self.copy()
+        self.edit(docs, "404.html", "</head>", '<script src="/assets/system.js" type="module"></script></head>')
+        self.assertRejected(docs, "publication.404")
+
+    def test_root_absolute_path_outside_404_fails(self):
+        docs = self.copy()
+        self.edit(docs, "index.html", 'href="assets/system.css"', 'href="/assets/system.css"')
+        self.assertRejected(docs, "links.root_absolute")
+
+    def test_dev_url_fails(self):
+        docs = self.copy()
+        self.edit(docs, "reference/index.html", '<a href="../#s0">', '<a href="http://127.0.0.1:8765/#s0">')
+        self.assertRejected(docs, "publication.dev_url")
+
+    def test_preview_url_fails(self):
+        docs = self.copy()
+        self.edit(docs, "index.html", '<meta property="og:url" content="https://siburst.com/">',
+                  '<meta property="og:url" content="https://sohadot.github.io/SIBurst/">')
+        self.assertRejected(docs, "publication.dev_url")
+
+    def test_missing_description_fails(self):
+        docs = self.copy()
+        path = os.path.join(docs, "index.html")
+        write(path, re.sub(r'<meta name="description" content="[^"]*">', "", read(path)))
+        self.assertRejected(docs, "publication.metadata")
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -33,6 +33,11 @@ OUT = os.path.join(REPO_ROOT, "docs")
 FIXTURE = os.path.join(REPO_ROOT, "data", "demonstration-fixture.json")
 GITHUB_BLOB = "https://github.com/Sohadot/SIBurst/blob/main/"
 SITE_URL = "https://siburst.com/"
+SITE_DOMAIN = "siburst.com"
+# Metadata description (not announced by screen readers; the page body is unchanged).
+META_DESCRIPTION = ("SIBurst names the transition from incremental capability growth into a "
+                    "materially different operating regime — a governed conceptual system, "
+                    "not a measurement or prediction.")
 
 # Reference pages, in reading order: (group, source file).
 REFERENCE_DOCS = [
@@ -658,6 +663,7 @@ def build_index(model, roles, target, titles):
     values = dict(fixture_facts(model))
     values.update({
         "tagline": esc(extract_tagline()),
+        "meta_description": esc(META_DESCRIPTION),
         "site_url": SITE_URL,
         "thesis": esc(extract_thesis()),
         "claim_boundary": esc(extract_claim_boundary()),
@@ -723,6 +729,29 @@ def build(target):
     titles = reference_titles()
     build_index(model, roles, target, titles)
     build_reference(roles, target, titles)
+    build_publication(target)
+
+
+def public_urls():
+    """Canonical public URLs, in a fixed order. Every page declares the same URL
+    as its canonical link; the 404 page is not a public URL."""
+    return [SITE_URL, SITE_URL + "reference/"] + [SITE_URL + "reference/" + slug_for(n) for n in REFERENCE_FILES]
+
+
+def build_publication(target):
+    """Publication files for GitHub Pages at the custom domain (PUBLICATION.md)."""
+    with open(os.path.join(target, "CNAME"), "wb") as handle:
+        handle.write(SITE_DOMAIN.encode("ascii"))
+    write_text(os.path.join(target, "robots.txt"),
+               "User-agent: *\nAllow: /\n\nSitemap: %ssitemap.xml\n" % SITE_URL)
+    entries = "".join("  <url><loc>%s</loc></url>\n" % esc(url) for url in public_urls())
+    write_text(os.path.join(target, "sitemap.xml"),
+               '<?xml version="1.0" encoding="UTF-8"?>\n'
+               '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n%s</urlset>\n' % entries)
+    copy_bytes(os.path.join(SRC, "404.template.html"), os.path.join(target, "404.html"))
+    # Serve the validated artifact as built: no Jekyll processing on GitHub Pages.
+    with open(os.path.join(target, ".nojekyll"), "wb"):
+        pass
 
 
 def tree_files(root):
