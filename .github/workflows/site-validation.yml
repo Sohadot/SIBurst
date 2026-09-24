@@ -29,6 +29,8 @@ jobs:
         run: python tools/build_site.py --check
       - name: Validate site
         run: python tools/validate_site.py
+      - name: Accessibility preflight (automated; does not satisfy Test 17)
+        run: python tools/preflight_accessibility.py
       - name: Run all Python tests
         run: python -m unittest discover -s tests -v
       - uses: actions/setup-node@v4

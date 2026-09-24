@@ -68,6 +68,8 @@ documents implement the foundation; they do not redefine it.
 | [`src/site/`](src/site/) | Interface source: HTML templates, stylesheet, and the vanilla JavaScript module. |
 | [`tools/build_site.py`](tools/build_site.py), [`tools/validate_site.py`](tools/validate_site.py) | The deterministic site build and the site validator. |
 | [`docs/`](docs/) | The generated static site. Never edited by hand (DEC-022). |
+| [ACCESSIBILITY_TEST_17.md](ACCESSIBILITY_TEST_17.md) | The human screen-reader record that closed Interface Acceptance Test 17. |
+| [`tools/preflight_accessibility.py`](tools/preflight_accessibility.py) | Automated accessibility preflight. Machine evidence only; it does not satisfy Test 17. |
 
 ## Order of authority
 
@@ -89,7 +91,13 @@ corrected, not as a second meaning.
 - **Sprint 0 — conceptual foundation:** closed.
 - **Sprint 1 — interface contract:** closed.
 - **Sprint 2 — canonical demonstration fixture:** closed.
-- **Sprint 3 — executable static interface:** built, pending review.
+- **Sprint 3 — executable static interface:** merged.
+- **Sprint 3A — accessibility closure:** closed by a real screen-reader
+  acceptance test (`ACCESSIBILITY_TEST_17.md`).
 
-The static interface is built in `docs/` for review. **The site has not been
-published.** Publishing is a separate gate (DEC-024).
+Interface acceptance: Gate 0 and all 18 tests in `INTERFACE_ACCEPTANCE.md`
+have passed. Test 17 rests on human evidence (an Android TalkBack traversal),
+and the other tests on machine verification and browser review.
+
+The static interface is built in `docs/`. **The site has not been published.**
+Publishing is a separate gate (DEC-024).
