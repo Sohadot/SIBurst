@@ -505,7 +505,8 @@ The governed doctrine, reached from S6 and from the persistent reference link:
 Rules:
 
 - The Markdown documents in this repository are the **single source of truth**.
-  Reference pages present them; they do not paraphrase or fork them.
+  Reference pages present them; they do not paraphrase or fork them. Reference
+  pages are generated from the Markdown as specified in §7.4.
 - In S6 the reference index is laid out in the Field grammar: items are nodes,
   and links show real relationships between documents (for example, the
   thesis relates to the name architecture and the claim policy). In the page
@@ -520,6 +521,38 @@ Benefits, Testimonials, Pricing, Customers, Integrations, and filler FAQs. Any
 of them requires a recorded decision in `DECISION_LOG.md` before it can be admitted.
 
 ---
+
+### 7.4 Reference generation
+
+Canonical Markdown remains the single source of truth. Public HTML reference
+pages are generated derivatives and are never edited as independent content
+(DEC-017).
+
+Invariants:
+
+- **One-way flow.** `Markdown → generated reference HTML`. Generated HTML is
+  never used as input to change the Markdown.
+- **No manual edits.** Generated reference HTML is never edited by hand. Any
+  change to reference content is made in the canonical Markdown and regenerated.
+- **Deterministic regeneration.** The same Markdown and the same pinned
+  generation process always produce the same reference HTML.
+- **Zero unexplained drift.** Validation regenerates the reference pages and
+  compares them with the published or committed output. Any difference that is
+  not explained by a change to the canonical Markdown fails validation.
+- **Integrated reading.** The reference index links to the generated pages
+  inside the site's own reference layer. Visitors are not required to leave the
+  site to read the doctrine.
+- **Provenance links.** Each generated page may link to its canonical Markdown
+  file as its source. GitHub-rendered Markdown is an auxiliary source link, not
+  the primary reading experience.
+- **No runtime dependency.** Generation happens before publication. The public
+  site loads no renderer and needs no conversion at runtime.
+- **Presentation, not meaning.** Generation may change presentation (layout,
+  navigation, typography). It never changes wording, claim class, or meaning.
+
+The renderer and generation tooling are selected in a later implementation
+sprint. Once selected, they are pinned to exact versions so regeneration is
+reproducible. No renderer is selected by this contract.
 
 ## 8. Implementation constraints
 
@@ -556,6 +589,35 @@ Without JavaScript, the document still presents the full sequence:
 
 JavaScript enhances this document by combining the stage figures into one
 persistent, progress-driven system. It does not create the content.
+
+### 8.2 Demonstration fixture (next implementation sprint)
+
+The next implementation sprint must establish a **deterministic demonstration
+fixture** before any animation logic is written. The fixture is a single,
+reviewable, static data source that governs:
+
+- entity identifiers;
+- arrival order;
+- the relationship graph;
+- the stage at which each relationship becomes active;
+- anchors;
+- Lattice placement (lane and cell for each entity);
+- unroutable relationships (stubs) under rules L4–L5;
+- Field placement;
+- viewport variants, or deterministic rules for deriving them.
+
+Rules:
+
+- Rendering and animation code reads the fixture. It never invents, randomizes,
+  or recomputes any of these values independently.
+- The fixture must satisfy §1.1, §1.2, and §3.1, and must allow acceptance
+  Tests 2, 3, and 14 to be checked against it.
+- The fixture is implementation data. It cannot redefine the thesis, the name,
+  the stages, or the claim boundary. If a fixture conflicts with this contract,
+  the fixture is defective.
+
+This is an implementation integrity rule derived from DEC-011, DEC-012, and
+DEC-016, not a new conceptual decision. No fixture data is defined in Sprint 1.
 
 ---
 

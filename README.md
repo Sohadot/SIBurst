@@ -33,7 +33,9 @@ nor does it predict when or whether a specific transition will occur.
 "Phase change" is the conceptual lens of this project. It is not presented
 as an established scientific law of AI development.
 
-## Foundation documents
+## Conceptual foundation
+
+What SIBurst means, what it may claim, and what the interface must express.
 
 | Document | Role |
 |---|---|
@@ -43,16 +45,39 @@ as an established scientific law of AI development.
 | [COMMERCIAL_TERRITORY.md](COMMERCIAL_TERRITORY.md) | Public map of application areas: Build, Act, Measure, Cross. |
 | [GLOSSARY.md](GLOSSARY.md) | Governed definitions of the project's working vocabulary. |
 | [PUBLIC_CLAIM_POLICY.md](PUBLIC_CLAIM_POLICY.md) | Claim classes, prohibited claims, and the standard every public statement must meet. |
-| [SITE_ARCHITECTURE.md](SITE_ARCHITECTURE.md) | Conceptual design of the future interface. No site code exists yet. |
-| [DECISION_LOG.md](DECISION_LOG.md) | Durable record of foundational decisions and their consequences. |
+| [SITE_ARCHITECTURE.md](SITE_ARCHITECTURE.md) | Conceptual design of the future interface: the seven-stage experience and its prohibitions. |
+| [DECISION_LOG.md](DECISION_LOG.md) | Durable record of decisions and their consequences. |
+
+## Implementation doctrine
+
+How the conceptual interface may be built and how any build is judged. These
+documents implement the foundation; they do not redefine it.
+
+| Document | Role |
+|---|---|
+| [INTERFACE_CONTRACT.md](INTERFACE_CONTRACT.md) | The implementation contract: seven-stage state machine, Lattice-to-Field rule change, semantic primitives, scoped state language, progress, content and reference architecture, and implementation constraints. |
+| [VISUAL_SYSTEM.md](VISUAL_SYSTEM.md) | Spatial character, semantic color and typography roles, and density progression. |
+| [MOTION_SEMANTICS.md](MOTION_SEMANTICS.md) | The permitted motion classes and the reduced-motion path. |
+| [RESPONSIVE_ACCESSIBILITY.md](RESPONSIVE_ACCESSIBILITY.md) | Behavior across viewports and input methods, and WCAG 2.2 AA requirements. |
+| [INTERFACE_ACCEPTANCE.md](INTERFACE_ACCEPTANCE.md) | The pass/fail tests every implementation must meet. |
 
 ## Order of authority
 
-Where documents appear to differ, the canonical definitions in
-`NAME_ARCHITECTURE.md` govern meaning, `PUBLIC_CLAIM_POLICY.md` governs what
-may be asserted, and `DECISION_LOG.md` records why. A conflict between
-documents is treated as a defect to be corrected, not as a second meaning.
+| Question | Governed by |
+|---|---|
+| What the terms mean | `NAME_ARCHITECTURE.md` |
+| What may be claimed publicly | `PUBLIC_CLAIM_POLICY.md` |
+| What the interface experience must express | `SITE_ARCHITECTURE.md` |
+| How that experience may be implemented | `INTERFACE_CONTRACT.md`, with `VISUAL_SYSTEM.md`, `MOTION_SEMANTICS.md`, and `RESPONSIVE_ACCESSIBILITY.md` |
+| Whether an implementation is accepted | `INTERFACE_ACCEPTANCE.md` |
+
+Each level is bound by the levels above it. `DECISION_LOG.md` records why. A
+conflict between documents is treated as a defect in the lower document, to be
+corrected, not as a second meaning.
 
 ## Status
 
-Sprint 0 — conceptual foundation. No public site has been built or published.
+- **Sprint 0 — conceptual foundation:** closed.
+- **Sprint 1 — interface contract:** defined.
+
+No public site has been built or published.

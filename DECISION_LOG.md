@@ -197,3 +197,29 @@ Status values: **Accepted**, **Superseded**, **Proposed**.
   performance, and accessibility.
 - **Consequences:** `INTERFACE_CONTRACT.md` §8 defines the constraints, budgets,
   and progressive-enhancement baseline. Acceptance Tests 11 and 18 enforce them.
+
+## DEC-017 — Reference HTML is generated from canonical Markdown
+
+- **Status:** Accepted
+- **Decision:** Canonical Markdown remains the single source of truth. Public
+  HTML reference pages are generated derivatives and are never edited as
+  independent content.
+  - The canonical `.md` documents in this repository remain authoritative.
+  - Reference HTML may be generated for the public site. It is not a second
+    editorial source and is never edited by hand.
+  - Generation is one-way, from Markdown to HTML, and is deterministic.
+  - Validation fails whenever committed or published reference output does not
+    match what the canonical Markdown regenerates.
+  - The public site presents the documents inside its own reference layer.
+    GitHub-rendered Markdown may remain an auxiliary source link, not the
+    primary reading experience.
+  - Generation introduces no runtime dependency into the public site.
+  - Renderer and tool selection is an implementation detail for a later sprint.
+    Once selected, the tooling is pinned and reproducible.
+- **Rationale:** The doctrine must be readable on the site without creating a
+  second version of it. A single canonical source, with derivatives that are
+  checked mechanically, keeps what the site says identical to what the
+  repository governs.
+- **Consequences:** `INTERFACE_CONTRACT.md` §7.4 defines the invariants.
+  Acceptance Test 12 fails any reference content that diverges from the
+  canonical Markdown. No renderer or dependency is introduced in Sprint 1.
