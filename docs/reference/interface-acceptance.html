@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'none'; style-src 'self'; img-src 'self'; font-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="light">
+<title>Interface Acceptance · SIBurst reference</title>
+<meta name="description" content="Gate 0 (fixture integrity) and the pass/fail tests every implementation must meet.">
+<link rel="canonical" href="https://siburst.com/reference/interface-acceptance.html">
+<link rel="stylesheet" href="../assets/system.css">
+</head>
+<body class="reference-page">
+<a class="skip-link" href="#document">Skip to document</a>
+<header class="site-header">
+  <p class="identity"><a href="../">SIBurst</a></p>
+  <nav class="reference-nav" aria-label="Reference">
+    <ol>
+      <li><a href="./">Reference index</a></li>
+      <li><a href="../#s0">Demonstration</a></li>
+    </ol>
+  </nav>
+</header>
+<main id="document">
+  <p class="reference-group-label">Implementation doctrine</p>
+  <article class="doctrine">
+<h1 id="interface-acceptance">Interface Acceptance</h1>
+<p>The pass/fail gate for any implementation of the SIBurst interface. The tests
+operationalize <code>SITE_ARCHITECTURE.md</code> and the Sprint 1 contracts:
+<code>INTERFACE_CONTRACT.md</code>, <code>VISUAL_SYSTEM.md</code>, <code>MOTION_SEMANTICS.md</code>, and
+<code>RESPONSIVE_ACCESSIBILITY.md</code>.</p>
+<h2 id="gate-0-fixture-integrity">Gate 0 — Fixture integrity</h2>
+<p><strong>Precondition.</strong> The implementation cannot enter the 18-test interface gate
+unless the canonical demonstration fixture passes its fixture validator.</p>
+<p><strong>Procedure.</strong> From the repository root, run:</p>
+<pre><code>python tools/validate_fixture.py
+python -m unittest discover -s tests
+</code></pre>
+<p>Also confirm that the implementation's demonstration data is exactly
+<code>data/demonstration-fixture.json</code>, or is derived mechanically from it
+(<code>INTERFACE_CONTRACT.md</code> §8.2).</p>
+<p><strong>PASS</strong> if both commands exit with status 0 and the implementation contains no
+independent graph or geometry.</p>
+<p><strong>FAIL</strong> otherwise. Tests 1–18 are not run until Gate 0 passes.</p>
+<p>Gate 0 is machine-verifiable and checks data and geometry integrity. It is not
+a nineteenth interface test. Tests 1–18 judge interface behavior and presentation.</p>
+<hr />
+<h2 id="how-to-run-the-gate">How to run the gate</h2>
+<ul>
+<li>Every test is either <strong>PASS</strong> or <strong>FAIL</strong>. There is no partial pass.</li>
+<li>An implementation is accepted only if <strong>Gate 0 passes and all 18 tests pass</strong>.</li>
+<li>Each test is run on at least one wide viewport and one mobile viewport, unless
+it names its own conditions.</li>
+<li>Where a test asks a reviewer to judge without reading, the reviewer covers or
+ignores all captions, headings, and labels other than anchor identifiers.</li>
+<li>Results are recorded with the implementation, including the viewports,
+browsers, and settings used.</li>
+<li>If a test cannot be run, it is recorded as FAIL until it can be.</li>
+</ul>
+<hr />
+<h2 id="test-1-more-vs-different">Test 1 — More vs Different</h2>
+<p><strong>Question.</strong> Without reading explanatory prose, can a reviewer tell S1 SCALE
+apart from S4 PHASE CHANGE (as completed at the start of S5)?</p>
+<p><strong>Procedure.</strong> Capture the system at the end of S1 and at the start of S5. Show
+both to a reviewer with captions hidden. Ask what distinguishes them.</p>
+<p><strong>PASS</strong> if the reviewer names a difference in organization, such as &quot;the grid
+is gone&quot;, &quot;things are grouped differently&quot;, or &quot;lines go directly now&quot;.</p>
+<p><strong>FAIL</strong> if the only differences named are intensity, density, brightness,
+speed, or quantity.</p>
+<p><em>Source: INTERFACE_CONTRACT §2.3; DEC-011.</em></p>
+<h2 id="test-2-structural-transition">Test 2 — Structural transition</h2>
+<p><strong>Question.</strong> Does S4 change a genuine rule of organization?</p>
+<p><strong>Procedure.</strong> At the end of S3 and at the start of S5, check the positioning rule:</p>
+<ul>
+<li>At the end of S3, arrival index and lane predict each node's position.</li>
+<li>At the start of S5, check whether they still do. Check whether the anchors
+required by INTERFACE_CONTRACT §3.1 have separated or converged as specified.
+Confirm that no rail remains.</li>
+</ul>
+<p><strong>PASS</strong> if position is governed by index and lane before S4, and by
+relationships after it, with the anchor conditions met.</p>
+<p><strong>FAIL</strong> if the same positioning rule holds on both sides, or if the only change
+is visual styling.</p>
+<p><em>Source: INTERFACE_CONTRACT §2.1–2.3; DEC-011.</em></p>
+<h2 id="test-3-identity-continuity">Test 3 — Identity continuity</h2>
+<p><strong>Question.</strong> Is the post-transition system recognizably the same system,
+reorganized?</p>
+<p><strong>Procedure.</strong> Count the nodes at the end of S3 and at the start of S5. Compare
+the anchor identifiers. Watch S4 (and the reduced-motion S4 frames) and check
+that anchors stay visible throughout.</p>
+<p><strong>PASS</strong> if the node counts are equal, every anchor persists with the same
+identifier, no relationship is lost, and the boundary persists.</p>
+<p><strong>FAIL</strong> if any entity is added or removed at S4, any anchor disappears or is
+relabeled, or the transition looks like one scene replacing another, including
+a cross-fade between independent compositions.</p>
+<p><em>Source: INTERFACE_CONTRACT §1.2, §4.3; DEC-012.</em></p>
+<h2 id="test-4-no-spectacle-substitution">Test 4 — No spectacle substitution</h2>
+<p><strong>Question.</strong> Does the transition depend on spectacle?</p>
+<p><strong>Procedure.</strong> Watch S3–S5 at normal and at slow scroll speed.</p>
+<p><strong>PASS</strong> if none of the following occurs: explosion, flash, glitch, shake,
+vortex or spiral motion, particle blast, random scattering, speed ramp, or
+dramatic acceleration.</p>
+<p><strong>FAIL</strong> if any one occurs.</p>
+<p><em>Source: INTERFACE_CONTRACT §2.4; MOTION_SEMANTICS M5; DEC-002.</em></p>
+<h2 id="test-5-claim-integrity">Test 5 — Claim integrity</h2>
+<p><strong>Question.</strong> Could a reasonable visitor read an interface state as a factual
+claim that AGI, superintelligence, or a real-world intelligence transition has
+occurred?</p>
+<p><strong>Procedure.</strong> For every stage, check that:</p>
+<ul>
+<li>the state readout carries its scope prefix and stage index;</li>
+<li>the boundary caption identifies the system as a demonstration;</li>
+<li>no prohibited vocabulary or telemetry device from INTERFACE_CONTRACT §5.3
+appears;</li>
+<li>no number other than the stage index is shown;</li>
+<li>every caption can be classified under <code>PUBLIC_CLAIM_POLICY.md</code>.</li>
+</ul>
+<p>Then ask a reviewer who has not read the repository what the state labels refer to.</p>
+<p><strong>PASS</strong> if every check holds and the reviewer says the labels describe the
+on-screen demonstration.</p>
+<p><strong>FAIL</strong> if any check fails, or the reviewer believes the site is reporting on
+real AI systems.</p>
+<p><em>Source: INTERFACE_CONTRACT §5; DEC-004, DEC-005, DEC-013.</em></p>
+<h2 id="test-6-reduced-motion">Test 6 — Reduced motion</h2>
+<p><strong>Question.</strong> Does the reduced-motion path keep the conceptual distinction?</p>
+<p><strong>Procedure.</strong> Turn on <code>prefers-reduced-motion: reduce</code>. Traverse S0–S6 with the
+stage navigation. Repeat Tests 1, 2, and 3 in this mode.</p>
+<p><strong>PASS</strong> if all seven stages are reachable, S4 appears as two explicit states,
+the S5 transition record is shown, no node travels, and Tests 1–3 pass.</p>
+<p><strong>FAIL</strong> if any stage is missing or merged, or if the distinction between S1 and
+S4 depends on motion.</p>
+<p><em>Source: MOTION_SEMANTICS §4; DEC-015.</em></p>
+<h2 id="test-7-mobile">Test 7 — Mobile</h2>
+<p><strong>Question.</strong> Do mobile visitors experience the same semantic progression?</p>
+<p><strong>Procedure.</strong> On a viewport 360 CSS px wide, and again below 360, traverse the
+full sequence. Repeat Tests 1–3.</p>
+<p><strong>PASS</strong> if all seven stages occur in one persistent system, with rails, stubs,
+slipped nodes, anchors, the scoped readout, and the transition record, and
+Tests 1–3 pass.</p>
+<p><strong>FAIL</strong> if mobile shows the stages as ordinary stacked marketing blocks, or
+drops any stage, primitive, or the rule change.</p>
+<p><em>Source: RESPONSIVE_ACCESSIBILITY §2.1; DEC-015.</em></p>
+<h2 id="test-8-keyboard-accessibility">Test 8 — Keyboard accessibility</h2>
+<p><strong>Question.</strong> Can the entire sequence be traversed by keyboard alone?</p>
+<p><strong>Procedure.</strong> Without a pointer, go from page load through S0–S6 and into every
+reference item and back.</p>
+<p><strong>PASS</strong> if every stage and reference item is reachable, focus is always visible,
+there is no keyboard trap, and each stage reached by keyboard shows the same
+state as when reached by scrolling.</p>
+<p><strong>FAIL</strong> otherwise.</p>
+<p><em>Source: RESPONSIVE_ACCESSIBILITY §3.2–3.3; DEC-015.</em></p>
+<h2 id="test-9-semantic-motion">Test 9 — Semantic motion</h2>
+<p><strong>Question.</strong> Can every animation be mapped to an explicit state or relationship
+change?</p>
+<p><strong>Procedure.</strong> List every animation in the implementation and assign each one a
+motion class (M1–M6) and a stage. Then stop scrolling at a point in each stage
+and watch the demonstration for ten seconds.</p>
+<p><strong>PASS</strong> if every animation maps to one class and stage allowed by
+<code>MOTION_SEMANTICS.md</code>, and nothing inside the demonstration moves while the
+visitor is idle.</p>
+<p><strong>FAIL</strong> if any animation cannot be mapped, is used outside its allowed stages,
+or runs while the visitor is idle.</p>
+<p><em>Source: MOTION_SEMANTICS §1–2; DEC-014.</em></p>
+<h2 id="test-10-generic-ai-appearance">Test 10 — Generic AI appearance</h2>
+<p><strong>Question.</strong> Could the interface be mistaken for a generic AI product landing
+page if the name were removed?</p>
+<p><strong>Procedure.</strong> Remove the name and show screenshots of S0, S3, S5, and S6 to a
+reviewer. Check them against the visual prohibitions in <code>SITE_ARCHITECTURE.md</code>,
+the additions in <code>VISUAL_SYSTEM.md</code> §1, and the excluded sections in
+INTERFACE_CONTRACT §7.3.</p>
+<p><strong>PASS</strong> if no prohibited image, pattern, or section is present and the reviewer
+does not identify the page as a typical AI product landing page.</p>
+<p><strong>FAIL</strong> otherwise.</p>
+<p><em>Source: SITE_ARCHITECTURE visual prohibitions; DEC-007.</em></p>
+<h2 id="test-11-static-fallback">Test 11 — Static fallback</h2>
+<p><strong>Question.</strong> Without JavaScript, can a visitor still understand accumulation,
+threshold, regime change, and SIBurst as the transition?</p>
+<p><strong>Procedure.</strong> Disable JavaScript and load the page.</p>
+<p><strong>PASS</strong> if all seven stages appear in order with static figures of the same
+system, state labels with scope prefixes, captions, and state descriptions; the
+figures for S3 and S5 show the rule change with the same anchors; and stage
+navigation and reference links work.</p>
+<p><strong>FAIL</strong> if content is missing, blank, or only understandable with scripting.</p>
+<p><em>Source: INTERFACE_CONTRACT §8.1; DEC-016.</em></p>
+<h2 id="test-12-reference-access">Test 12 — Reference access</h2>
+<p><strong>Question.</strong> Can a visitor reach the governed foundation documents without
+fighting the visual experience?</p>
+<p><strong>Procedure.</strong> From the first view, reach the reference layer by the shortest
+route. Then open each reference item.</p>
+<p><strong>PASS</strong> if a reference link is visible and usable from the first view, every
+item in INTERFACE_CONTRACT §7.2 is reachable, and reference content matches the
+repository's Markdown sources.</p>
+<p><strong>FAIL</strong> if the visitor must traverse the demonstration to reach the doctrine,
+any item is missing, or reference content has been paraphrased or has diverged.</p>
+<p><em>Source: INTERFACE_CONTRACT §7.</em></p>
+<h2 id="test-13-instability-confinement">Test 13 — Instability confinement</h2>
+<p><strong>Question.</strong> Does S3 instability stay inside the demonstration?</p>
+<p><strong>Procedure.</strong> In S3, tab through the page, read the captions, and use the stage
+navigation.</p>
+<p><strong>PASS</strong> if focus order, navigation position, caption layout, and control
+visibility are identical to S0.</p>
+<p><strong>FAIL</strong> if anything outside the boundary moves, misaligns, or becomes harder to use.</p>
+<p><em>Source: RESPONSIVE_ACCESSIBILITY §2.2; DEC-015.</em></p>
+<h2 id="test-14-determinism-and-reversibility">Test 14 — Determinism and reversibility</h2>
+<p><strong>Question.</strong> Is the state a pure function of progress?</p>
+<p><strong>Procedure.</strong> Move to the middle of each stage by scrolling, by stage
+navigation, and by loading its fragment address directly. Compare the results.
+Scroll from S6 back to S0.</p>
+<p><strong>PASS</strong> if each method produces the same state at the same point, reloading
+produces the same layout, and scrolling back reverses the sequence exactly.</p>
+<p><strong>FAIL</strong> if layout varies between loads or methods, or if any randomness is visible.</p>
+<p><em>Source: INTERFACE_CONTRACT §4.1, §6.3.</em></p>
+<h2 id="test-15-progress-is-not-a-measurement">Test 15 — Progress is not a measurement</h2>
+<p><strong>Question.</strong> Is <code>p</code> kept strictly as visitor progress?</p>
+<p><strong>Procedure.</strong> Inspect every visible label, the accessible text, and the page title.</p>
+<p><strong>PASS</strong> if progress appears only as a stage position (for example <code>S3 / S6</code>)
+and is never shown as a percentage, score, level, or continuously changing number.</p>
+<p><strong>FAIL</strong> otherwise.</p>
+<p><em>Source: INTERFACE_CONTRACT §6.1; DEC-005, DEC-013.</em></p>
+<h2 id="test-16-color-and-contrast">Test 16 — Color and contrast</h2>
+<p><strong>Question.</strong> Do color roles meet contrast requirements and never carry meaning alone?</p>
+<p><strong>Procedure.</strong> Measure contrast for each shipped scheme. View S2, S3, and S5 in
+grayscale.</p>
+<p><strong>PASS</strong> if all text and essential graphics meet <code>VISUAL_SYSTEM.md</code> §2, the
+threshold-warning and post-transition roles appear only in their allowed stages,
+and every state is still distinguishable in grayscale.</p>
+<p><strong>FAIL</strong> otherwise.</p>
+<p><em>Source: VISUAL_SYSTEM §2; RESPONSIVE_ACCESSIBILITY §3.4.</em></p>
+<h2 id="test-17-assistive-technology-sequence">Test 17 — Assistive-technology sequence</h2>
+<p><strong>Question.</strong> Does a screen-reader user meet the complete thesis?</p>
+<p><strong>Procedure.</strong> Traverse the page with a screen reader.</p>
+<p><strong>PASS</strong> if the visitor hears the demonstration scope statement, seven stages in
+order with scoped labels and state descriptions, a text equivalent of the
+transition record, and then the reference layer. Stage changes are announced
+once each, and decorative geometry is not announced.</p>
+<p><strong>FAIL</strong> otherwise.</p>
+<p><em>Source: RESPONSIVE_ACCESSIBILITY §3.6–3.9; DEC-015.</em></p>
+<h2 id="test-18-implementation-constraints">Test 18 — Implementation constraints</h2>
+<p><strong>Question.</strong> Does the build respect the static-first, dependency-minimal constraints?</p>
+<p><strong>Procedure.</strong> Inspect network requests and source.</p>
+<p><strong>PASS</strong> if there are no external script or font sources, no framework or
+analytics dependency without a recorded decision, no required WebGL, video, or
+autoplay media, and the indicative size budgets in INTERFACE_CONTRACT §8 are met, or
+any excess is recorded and justified.</p>
+<p><strong>FAIL</strong> otherwise.</p>
+<p><em>Source: INTERFACE_CONTRACT §8; DEC-016.</em></p>
+<hr />
+<h2 id="summary">Summary</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Test</th>
+<th>Guards</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>More vs Different</td>
+<td>The thesis distinction</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Structural transition</td>
+<td>The rule change</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Identity continuity</td>
+<td>Same system, different regime</td>
+</tr>
+<tr>
+<td>4</td>
+<td>No spectacle substitution</td>
+<td>The meaning of Burst</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Claim integrity</td>
+<td>The public claim boundary</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Reduced motion</td>
+<td>Meaning without animation</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Mobile</td>
+<td>Semantics on every viewport</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Keyboard accessibility</td>
+<td>Equal access to the sequence</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Semantic motion</td>
+<td>Motion as meaning</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Generic AI appearance</td>
+<td>Distinctiveness</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Static fallback</td>
+<td>Meaning without scripting</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Reference access</td>
+<td>Access to the doctrine</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Instability confinement</td>
+<td>Usability during S3</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Determinism and reversibility</td>
+<td>Reproducible states</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Progress is not a measurement</td>
+<td>No implied scores</td>
+</tr>
+<tr>
+<td>16</td>
+<td>Color and contrast</td>
+<td>Perceivable states</td>
+</tr>
+<tr>
+<td>17</td>
+<td>Assistive-technology sequence</td>
+<td>The thesis without sight</td>
+</tr>
+<tr>
+<td>18</td>
+<td>Implementation constraints</td>
+<td>Static-first build</td>
+</tr>
+</tbody>
+</table>
+  </article>
+  <p class="source-link">Generated from the canonical source <a href="https://github.com/Sohadot/SIBurst/blob/main/INTERFACE_ACCEPTANCE.md">INTERFACE_ACCEPTANCE.md</a>. The Markdown file is authoritative; this page is a derived rendering (DEC-017).</p>
+  <p class="back-link"><a href="./">Back to the reference index</a></p>
+</main>
+</body>
+</html>

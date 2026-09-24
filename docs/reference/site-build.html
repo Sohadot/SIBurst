@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'none'; style-src 'self'; img-src 'self'; font-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="light">
+<title>Site Build · SIBurst reference</title>
+<meta name="description" content="How the static interface is built, checked, and validated: sources, deterministic build, reference generation, runtime constraints.">
+<link rel="canonical" href="https://siburst.com/reference/site-build.html">
+<link rel="stylesheet" href="../assets/system.css">
+</head>
+<body class="reference-page">
+<a class="skip-link" href="#document">Skip to document</a>
+<header class="site-header">
+  <p class="identity"><a href="../">SIBurst</a></p>
+  <nav class="reference-nav" aria-label="Reference">
+    <ol>
+      <li><a href="./">Reference index</a></li>
+      <li><a href="../#s0">Demonstration</a></li>
+    </ol>
+  </nav>
+</header>
+<main id="document">
+  <p class="reference-group-label">Implementation doctrine</p>
+  <article class="doctrine">
+<h1 id="site-build">Site Build</h1>
+<p>How the SIBurst static interface is built, checked, and validated. The site is
+built for review only. <strong>It is not published</strong> (DEC-024).</p>
+<h2 id="1-architecture">1. Architecture</h2>
+<pre><code>canonical Markdown (*.md)
+canonical fixture (data/demonstration-fixture.json)
+site sources (src/site/)
+        ↓
+tools/build_site.py
+        ↓
+docs/   (generated; never edited by hand — DEC-022)
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>src/site/index.template.html</code></td>
+<td>The main page: seven stage sections, the persistent demonstration panel, and the reference entry.</td>
+</tr>
+<tr>
+<td><code>src/site/reference.template.html</code></td>
+<td>The shell for each generated reference page.</td>
+</tr>
+<tr>
+<td><code>src/site/reference-index.template.html</code></td>
+<td>The reference index shell.</td>
+</tr>
+<tr>
+<td><code>src/site/assets/system.css</code></td>
+<td>The only stylesheet.</td>
+</tr>
+<tr>
+<td><code>src/site/assets/system.js</code></td>
+<td>The only script: a vanilla JavaScript module.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Output in <code>docs/</code></th>
+<th>Produced from</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>index.html</code></td>
+<td>The template, the canonical fixture (static figures, counts, labels, anchors), and governed copy extracted from the Markdown.</td>
+</tr>
+<tr>
+<td><code>assets/system.css</code>, <code>assets/system.js</code></td>
+<td>Byte copies of <code>src/site/assets/</code>.</td>
+</tr>
+<tr>
+<td><code>data/demonstration-fixture.json</code></td>
+<td>A byte copy of <code>data/demonstration-fixture.json</code>.</td>
+</tr>
+<tr>
+<td><code>reference/*.html</code>, <code>reference/index.html</code></td>
+<td>Canonical Markdown rendered by the pinned renderer.</td>
+</tr>
+</tbody>
+</table>
+<p>Flow is one-way. Nothing in <code>docs/</code> is ever an input.</p>
+<h2 id="2-commands">2. Commands</h2>
+<pre><code>python -m pip install --require-hashes -r requirements-build.txt
+python tools/build_site.py                       # build docs/
+python tools/build_site.py --check               # fail if docs/ differs from a fresh build
+python tools/validate_site.py                    # validate the generated site
+python -m http.server 8000 --directory docs      # local preview at http://localhost:8000/
+</code></pre>
+<p>Local preview needs no build step and no application server. Opening
+<code>docs/index.html</code> directly from disk shows the complete static document. The
+enhanced demonstration needs HTTP, because browsers block <code>fetch</code> on <code>file:</code>
+URLs, and the static document stays in place when that happens.</p>
+<h2 id="3-deterministic-build">3. Deterministic build</h2>
+<ul>
+<li>Output is UTF-8 with LF line endings and a trailing newline.</li>
+<li>Files and pages are produced in a fixed order.</li>
+<li>No timestamps, machine paths, user names, run identifiers, or random values
+are written.</li>
+<li>The same inputs produce byte-identical output. <code>--check</code> rebuilds into a
+temporary directory and reports any missing, extra, or differing file.</li>
+</ul>
+<h2 id="4-governed-copy">4. Governed copy</h2>
+<p>The page does not restate doctrine. The build extracts these exact strings
+from the canonical sources, and fails if one cannot be found:</p>
+<table>
+<thead>
+<tr>
+<th>Copy</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tagline and claim-boundary sentence</td>
+<td><code>README.md</code></td>
+</tr>
+<tr>
+<td>Thesis paragraph</td>
+<td><code>FOUNDATION_THESIS.md</code>, &quot;Thesis&quot;</td>
+</tr>
+<tr>
+<td>Stage captions</td>
+<td><code>INTERFACE_CONTRACT.md</code> §5.4 reference captions</td>
+</tr>
+<tr>
+<td>Scope statement (<code>SYSTEM DEMONSTRATION — …</code>)</td>
+<td><code>INTERFACE_CONTRACT.md</code> §5.2</td>
+</tr>
+<tr>
+<td>Stage names and state labels</td>
+<td><code>data/demonstration-fixture.json</code></td>
+</tr>
+<tr>
+<td>Entity, relationship, and stub counts; anchor pairs</td>
+<td><code>data/demonstration-fixture.json</code> (<code>derived</code>, <code>anchors</code>)</td>
+</tr>
+<tr>
+<td>Reference document roles</td>
+<td>The document tables in <code>README.md</code></td>
+</tr>
+</tbody>
+</table>
+<p>The accessible state descriptions in the template are implementation copy.
+Their counts and anchor names are filled from the fixture.</p>
+<h2 id="5-reference-generation-dec-017">5. Reference generation (DEC-017)</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Renderer</td>
+<td><code>markdown-it-py</code></td>
+</tr>
+<tr>
+<td>Version</td>
+<td>3.0.0, hash-pinned in <code>requirements-build.txt</code></td>
+</tr>
+<tr>
+<td>Transitive dependency</td>
+<td><code>mdurl</code> 0.1.2, hash-pinned</td>
+</tr>
+<tr>
+<td>License</td>
+<td>MIT (both packages)</td>
+</tr>
+<tr>
+<td>Mode</td>
+<td>CommonMark with tables; raw HTML <strong>disabled</strong>; no linkify or typographic replacement</td>
+</tr>
+</tbody>
+</table>
+<p><code>markdown-it-py</code> was selected because:</p>
+<ul>
+<li>it implements CommonMark faithfully;</li>
+<li>it has a single small dependency;</li>
+<li>raw HTML can be switched off completely;</li>
+<li>it is widely used and permissively licensed.</li>
+</ul>
+<p>It runs only inside <code>tools/build_site.py</code>. <strong>It does not ship to the public
+site</strong>, which performs no Markdown conversion at runtime.</p>
+<p>Generation rules:</p>
+<ul>
+<li>Wording is never changed. Presentation is: headings get stable <code>id</code>
+attributes, and pages share the site header.</li>
+<li>Links to other reference documents are rewritten to their generated pages.
+Links to other repository files point to their canonical source on GitHub.</li>
+<li>Each page names its canonical source file and links to it on GitHub.</li>
+<li>Markdown cannot inject markup or scripts: raw HTML is escaped, and unsafe
+link schemes are refused by the renderer.</li>
+</ul>
+<h2 id="6-runtime">6. Runtime</h2>
+<p><strong>Runtime dependency count: 0.</strong> The public runtime consists of static HTML,
+one stylesheet, inline SVG, one vanilla JavaScript module, and the local
+fixture.</p>
+<ul>
+<li>There is no framework, library, CDN, font service, analytics, cookie, or
+storage.</li>
+<li>There is no canvas, WebGL, or media.</li>
+<li>The only network request is <code>data/demonstration-fixture.json</code>, from the same
+origin.</li>
+</ul>
+<h3 id="content-security-policy">Content Security Policy</h3>
+<p>Set with a <code>&lt;meta http-equiv&gt;</code> on every page:</p>
+<pre><code>default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self';
+connect-src 'self'; font-src 'none'; object-src 'none'; frame-src 'none';
+base-uri 'none'; form-action 'none'
+</code></pre>
+<p>Reference pages use <code>script-src 'none'</code> and omit <code>connect-src</code>. The pages
+contain no inline scripts, <code>&lt;style&gt;</code> elements, or <code>style</code> attributes. The
+script sets geometry through SVG attributes and one CSS custom property through
+the CSSOM, both of which the policy allows. <code>frame-ancestors</code> cannot be set
+through a <code>&lt;meta&gt;</code> element; it belongs to the server headers when publishing is
+authorized.</p>
+<h3 id="javascript-architecture-systemjs">JavaScript architecture (<code>system.js</code>)</h3>
+<p>The script is an ES module (<code>&lt;script type=&quot;module&quot;&gt;</code>). It has two parts.</p>
+<p><strong>Pure functions</strong>, exported and tested in Node without a browser:</p>
+<ul>
+<li>progress to stage, following the §6.2 ranges of <code>INTERFACE_CONTRACT.md</code> unchanged;</li>
+<li>the local S4 progress <code>t</code>;</li>
+<li>fixture indexing and minimal validation;</li>
+<li>entity visibility and relationship activation;</li>
+<li>stub derivation by the DEC-020 law, read from the fixture's lattice parameters;</li>
+<li>Lattice and Field coordinate transforms;</li>
+<li>route and stub geometry;</li>
+<li>the complete frame for a given progress.</li>
+</ul>
+<p><strong>DOM code:</strong></p>
+<ul>
+<li>loads the fixture;</li>
+<li>builds one SVG scene with a stable element for every entity and every relationship;</li>
+<li>updates attributes when the visitor scrolls, resizes, follows a fragment
+link, or changes preferences;</li>
+<li>announces stage changes.</li>
+</ul>
+<p>The script contains no entity, relationship, cluster, coordinate, or anchor
+data. Rendering is event-driven: each event requests at most one
+<code>requestAnimationFrame</code>. There is no loop, no interval, and no timer, so the
+system is still whenever the visitor is.</p>
+<h3 id="progress">Progress</h3>
+<p>Native scrolling drives progress. The stage sections are sized in proportion to
+the contract ranges:</p>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Height</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S0</td>
+<td>84vh</td>
+</tr>
+<tr>
+<td>S1</td>
+<td>126vh</td>
+</tr>
+<tr>
+<td>S2</td>
+<td>105vh</td>
+</tr>
+<tr>
+<td>S3</td>
+<td>91vh</td>
+</tr>
+<tr>
+<td>S4</td>
+<td>112vh</td>
+</tr>
+<tr>
+<td>S5</td>
+<td>98vh</td>
+</tr>
+<tr>
+<td>S6</td>
+<td>84vh</td>
+</tr>
+</tbody>
+</table>
+<p>The section under a reference line (mid-viewport, or mid-way down the reading
+area on narrow screens) gives the stage. The position within it gives <code>p</code>
+inside that stage's range. The ranges in use are exactly those of
+<code>INTERFACE_CONTRACT.md</code> §6.2.</p>
+<p>There is no scroll-jacking, no wheel handling, and no snapping. Fragments <code>#s0</code>
+to <code>#s6</code> and <code>#reference</code> are ordinary anchors and work with and without
+JavaScript.</p>
+<h2 id="7-demonstration-rendering">7. Demonstration rendering</h2>
+<p><strong>Coordinates.</strong> The landscape scene is 640 × 440 SVG units and the portrait
+scene is 440 × 640, each with a 40-unit margin.</p>
+<p><strong>Lattice.</strong></p>
+<ul>
+<li>Positions come only from <code>lane</code> and <code>cell</code>: cells run along x and lanes
+along y in landscape; in portrait, lanes run along x.</li>
+<li>S3 displacement adds the fixture's <code>offset_cell</code> and <code>offset_lane</code>, in cell
+units.</li>
+</ul>
+<p><strong>Field.</strong> Fixture coordinates are scaled into the inner area:</p>
+<ul>
+<li>landscape 560 × 360, an aspect ratio of about 1.56;</li>
+<li>portrait 360 × 560, about 0.64.</li>
+</ul>
+<p>Both are inside the validated 9:16 to 16:9 range. Nothing is recomputed.</p>
+<p><strong>Routes (routable relationships).</strong> One deterministic orthogonal convention:</p>
+<ul>
+<li>from the source, the route goes perpendicular to the rail direction until it
+meets a rail;</li>
+<li>then along that rail to the partner's cell line;</li>
+<li>then to the partner.</li>
+</ul>
+<p>The rail used is the one above the lane for same-lane relationships, and the
+rail the two lanes share for adjacent-lane relationships. The same inputs
+always give the same path, and nothing moves along a link.</p>
+<p><strong>Stubs (unroutable relationships, S2–S3).</strong></p>
+<ul>
+<li>A straight segment from the source toward its partner, ending where it meets
+the source cell's edge.</li>
+<li>It ends in a perpendicular tick, so it is distinguishable without colour.</li>
+<li>At S4 the same element extends to the partner.</li>
+</ul>
+<p><strong>S4 phases,</strong> with internal <code>t</code> (never displayed):</p>
+<table>
+<thead>
+<tr>
+<th><code>t</code> range</th>
+<th>Phase</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0–0.25</td>
+<td>Rails retire (opacity).</td>
+</tr>
+<tr>
+<td>0.25–0.70</td>
+<td>The same entity elements move from S3 positions to Field coordinates.</td>
+</tr>
+<tr>
+<td>0.70–1</td>
+<td>Routes straighten into direct paths, stubs extend to their partners, and ticks fade.</td>
+</tr>
+</tbody>
+</table>
+<p>Easing is monotonic smoothstep, with no overshoot.</p>
+<p><strong>Reduced motion.</strong></p>
+<ul>
+<li>Every stage is discrete.</li>
+<li>S4 shows &quot;rules in force&quot; (the S3 state) for the first half of its range and
+&quot;rules changed&quot; (the Field) for the second, with no movement or path morphing
+in between.</li>
+<li>The S5 transition record is always present.</li>
+</ul>
+<h2 id="8-progressive-enhancement-dec-023">8. Progressive enhancement (DEC-023)</h2>
+<p>The HTML document is complete without JavaScript. It contains, in order, all
+seven stages, each with:</p>
+<ul>
+<li>its state label and caption;</li>
+<li>an accessible state description;</li>
+<li>a static figure generated from the fixture (landscape and portrait
+variants). S4 has two explicit frames.</li>
+</ul>
+<p>It also contains the S5 transition record with its text equivalent, and the
+reference layer.</p>
+<p>After the script has loaded and indexed the fixture and built the scene, it
+adds <code>js-ready</code> to the root element and reveals the persistent panel. CSS then
+hides the per-stage figures. If loading or initialization fails, nothing
+changes and the static document remains.</p>
+<p>When the viewport is shorter than about 30rem (including 400% zoom), the
+persistent panel yields to the per-stage figures, so every entity and anchor
+stays visible without leaving too little room to read.</p>
+<h2 id="9-colour-and-budgets">9. Colour and budgets</h2>
+<p>The colour roles from <code>VISUAL_SYSTEM.md</code> §2, on background <code>#F3F2EE</code>. Contrast
+is measured by <code>tools/validate_site.py</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Value</th>
+<th>Contrast</th>
+<th>Minimum</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Primary information</td>
+<td><code>#15171B</code></td>
+<td>16.02:1</td>
+<td>4.5</td>
+</tr>
+<tr>
+<td>Secondary information</td>
+<td><code>#4A4E55</code></td>
+<td>7.46:1</td>
+<td>4.5</td>
+</tr>
+<tr>
+<td>Structure (rails, boundary, receded Field)</td>
+<td><code>#7A7F86</code></td>
+<td>3.60:1</td>
+<td>3.0</td>
+</tr>
+<tr>
+<td>Dormant signal</td>
+<td><code>#545A63</code></td>
+<td>6.21:1</td>
+<td>3.0</td>
+</tr>
+<tr>
+<td>Active signal</td>
+<td><code>#1F4E8C</code></td>
+<td>7.42:1</td>
+<td>3.0</td>
+</tr>
+<tr>
+<td>Threshold warning (S2–S3 only)</td>
+<td><code>#A1420F</code></td>
+<td>5.68:1</td>
+<td>4.5</td>
+</tr>
+<tr>
+<td>Post-transition distinction (S4–S6 only)</td>
+<td><code>#0D6657</code></td>
+<td>6.14:1</td>
+<td>4.5</td>
+</tr>
+<tr>
+<td>Focus indicator</td>
+<td><code>#1F4E8C</code></td>
+<td>7.42:1</td>
+<td>3.0</td>
+</tr>
+</tbody>
+</table>
+<p>Budgets (<code>INTERFACE_CONTRACT.md</code> §8):</p>
+<ul>
+<li>JavaScript at most about 30 KB compressed.</li>
+<li>The first view at most about 150 KB compressed.</li>
+</ul>
+<p><code>tools/validate_site.py</code> measures both and fails if either is exceeded.</p>
+<h2 id="10-validation">10. Validation</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it proves</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>python tools/validate_fixture.py</code></td>
+<td>Gate 0: the fixture passes every law.</td>
+</tr>
+<tr>
+<td><code>python tools/build_site.py --check</code></td>
+<td><code>docs/</code> is exactly the build output.</td>
+</tr>
+<tr>
+<td><code>python tools/validate_site.py</code></td>
+<td>Generation integrity, runtime surface, CSP, structure and links, claim boundary, fixture integration, static fallback, contrast, budgets, and public safety.</td>
+</tr>
+<tr>
+<td><code>python -m unittest discover -s tests</code></td>
+<td>Fixture and site mutation tests.</td>
+</tr>
+<tr>
+<td><code>node --test tests/site-state.test.mjs</code></td>
+<td>State, geometry, and interpolation logic, and agreement between static figures and runtime geometry.</td>
+</tr>
+</tbody>
+</table>
+<p><code>.github/workflows/site-validation.yml</code> runs all of these with read-only
+permissions. It never deploys.</p>
+<h2 id="11-not-performed">11. Not performed</h2>
+<p>Sprint 3 does not publish. It adds no GitHub Pages configuration, DNS, or
+deployment workflow, and it does not launch the site. Those are a separate
+gate (DEC-024).</p>
+  </article>
+  <p class="source-link">Generated from the canonical source <a href="https://github.com/Sohadot/SIBurst/blob/main/SITE_BUILD.md">SITE_BUILD.md</a>. The Markdown file is authoritative; this page is a derived rendering (DEC-017).</p>
+  <p class="back-link"><a href="./">Back to the reference index</a></p>
+</main>
+</body>
+</html>
