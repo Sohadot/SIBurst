@@ -1,0 +1,251 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Sohadot/SIBurst/schemas/demonstration-fixture.schema.json",
+  "title": "SIBurst demonstration fixture",
+  "description": "Structural schema for data/demonstration-fixture.json. Semantic laws (placement, routing, stubs, offsets, Field integrity, anchors) are enforced by tools/validate_fixture.py.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "fixture_id",
+    "description",
+    "scope",
+    "lattice",
+    "stages",
+    "clusters",
+    "entities",
+    "relationships",
+    "field",
+    "anchors",
+    "derived"
+  ],
+  "$defs": {
+    "entityId": {
+      "type": "string",
+      "pattern": "^N(0[1-9]|1[0-9]|2[0-4])$"
+    },
+    "relationshipId": {
+      "type": "string",
+      "pattern": "^R[0-9]{2}$"
+    },
+    "clusterId": {
+      "enum": ["C1", "C2", "C3", "C4"]
+    },
+    "stageId": {
+      "enum": ["S0", "S1", "S2", "S3", "S4", "S5", "S6"]
+    },
+    "latticeStageId": {
+      "enum": ["S0", "S1", "S2", "S3"]
+    },
+    "unit": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    }
+  },
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "fixture_id": {
+      "const": "siburst-demonstration-fixture"
+    },
+    "description": {
+      "type": "string"
+    },
+    "scope": {
+      "type": "string"
+    },
+    "lattice": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lanes",
+        "cells_per_lane",
+        "placement",
+        "same_lane_max_cell_distance",
+        "adjacent_lane_max_cell_distance",
+        "s3_offset_step",
+        "s3_offset_cap",
+        "offset_units"
+      ],
+      "properties": {
+        "lanes": { "const": 4 },
+        "cells_per_lane": { "const": 6 },
+        "placement": { "type": "string" },
+        "same_lane_max_cell_distance": { "const": 2 },
+        "adjacent_lane_max_cell_distance": { "const": 1 },
+        "s3_offset_step": { "const": 0.1 },
+        "s3_offset_cap": { "const": 0.4 },
+        "offset_units": { "const": "logical cells" }
+      }
+    },
+    "stages": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "state_label"],
+        "properties": {
+          "id": { "$ref": "#/$defs/stageId" },
+          "name": { "type": "string" },
+          "state_label": { "type": "string" }
+        }
+      }
+    },
+    "clusters": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "members"],
+        "properties": {
+          "id": { "$ref": "#/$defs/clusterId" },
+          "members": {
+            "type": "array",
+            "minItems": 6,
+            "maxItems": 6,
+            "uniqueItems": true,
+            "items": { "$ref": "#/$defs/entityId" }
+          }
+        }
+      }
+    },
+    "entities": {
+      "type": "array",
+      "minItems": 24,
+      "maxItems": 24,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "arrival_index",
+          "arrival_stage",
+          "cluster_id",
+          "anchor",
+          "lattice",
+          "s3",
+          "field"
+        ],
+        "properties": {
+          "id": { "$ref": "#/$defs/entityId" },
+          "arrival_index": { "type": "integer", "minimum": 0, "maximum": 23 },
+          "arrival_stage": { "$ref": "#/$defs/latticeStageId" },
+          "cluster_id": { "$ref": "#/$defs/clusterId" },
+          "anchor": { "type": "boolean" },
+          "lattice": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["lane", "cell"],
+            "properties": {
+              "lane": { "type": "integer", "minimum": 0, "maximum": 3 },
+              "cell": { "type": "integer", "minimum": 0, "maximum": 5 }
+            }
+          },
+          "s3": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["pressure", "offset_cell", "offset_lane"],
+            "properties": {
+              "pressure": { "type": "integer", "minimum": 0 },
+              "offset_cell": { "type": "number", "minimum": -0.5, "maximum": 0.5 },
+              "offset_lane": { "type": "number", "minimum": -0.5, "maximum": 0.5 }
+            }
+          },
+          "field": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["x", "y"],
+            "properties": {
+              "x": { "$ref": "#/$defs/unit" },
+              "y": { "$ref": "#/$defs/unit" }
+            }
+          }
+        }
+      }
+    },
+    "relationships": {
+      "type": "array",
+      "minItems": 36,
+      "maxItems": 48,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "source", "target", "activation_stage"],
+        "properties": {
+          "id": { "$ref": "#/$defs/relationshipId" },
+          "source": { "$ref": "#/$defs/entityId" },
+          "target": { "$ref": "#/$defs/entityId" },
+          "activation_stage": { "$ref": "#/$defs/latticeStageId" }
+        }
+      }
+    },
+    "field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["coordinate_space", "method"],
+      "properties": {
+        "coordinate_space": { "type": "string" },
+        "method": { "type": "string" }
+      }
+    },
+    "anchors": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ids", "separation_pair", "convergence_pair"],
+      "properties": {
+        "ids": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/entityId" }
+        },
+        "separation_pair": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": { "$ref": "#/$defs/entityId" }
+        },
+        "convergence_pair": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": { "$ref": "#/$defs/entityId" }
+        }
+      }
+    },
+    "derived": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "stage",
+          "regime",
+          "entity_count",
+          "active_relationship_count",
+          "stub_relationship_ids"
+        ],
+        "properties": {
+          "stage": { "$ref": "#/$defs/stageId" },
+          "regime": { "enum": ["lattice", "field"] },
+          "entity_count": { "type": "integer", "minimum": 0, "maximum": 24 },
+          "active_relationship_count": { "type": "integer", "minimum": 0 },
+          "stub_relationship_ids": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": { "$ref": "#/$defs/relationshipId" }
+          }
+        }
+      }
+    }
+  }
+}

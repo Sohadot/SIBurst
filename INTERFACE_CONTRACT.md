@@ -45,7 +45,8 @@ The system is defined by a fixed, authored graph:
   stage at which it comes into existence.
 
 The graph is authored in advance and ships with the page. It is not generated
-randomly at runtime. Its construction must satisfy three conditions:
+randomly at runtime. The canonical graph is defined in
+`data/demonstration-fixture.json` (§8.2). Its construction must satisfy three conditions:
 
 1. **Arrival order is not relationship order.** Entities are placed in the
    pre-transition geometry by the order in which they appear. Relationships are
@@ -296,8 +297,8 @@ Occupancy means the share of Lattice cells holding a node.
 - **Semantic purpose:** name the crossing.
 - **Visual condition:** the Field is stable. The name **SIBurst** appears in the
   display voice, placed at the boundary, not on any node. A **transition
-  record** shows a reduced Lattice view (the end of S3) next to the Field, with
-  the same anchors marked in both.
+  record** shows a smaller-scale Lattice view (the end of S3, with all 24
+  entities) next to the Field, with the same anchors marked in both.
 - **Geometry:** Field.
 - **Density:** unchanged.
 - **Relationship behavior:** static.
@@ -572,9 +573,12 @@ reproducible. No renderer is selected by this contract.
   ordinary mid-range phone. Where motion cannot run smoothly, the
   implementation falls back to the reduced-motion path rather than degrading
   meaning.
-- **Indicative budgets:** 24–64 nodes on wide viewports and 16–40 on narrow
-  ones; JavaScript no more than about 30 KB compressed; the complete first view
-  no more than about 150 KB compressed, excluding reference pages.
+- **Canonical entity set:** the canonical demonstration contains exactly 24
+  entities on every viewport. No viewport may add, remove, substitute, or
+  independently regenerate entities or anchors (§8.2, DEC-018, DEC-019).
+- **Indicative size budgets:** JavaScript no more than about 30 KB compressed;
+  the complete first view no more than about 150 KB compressed, excluding
+  reference pages.
 
 ### 8.1 Progressive enhancement
 
@@ -590,11 +594,12 @@ Without JavaScript, the document still presents the full sequence:
 JavaScript enhances this document by combining the stage figures into one
 persistent, progress-driven system. It does not create the content.
 
-### 8.2 Demonstration fixture (next implementation sprint)
+### 8.2 Demonstration fixture
 
-The next implementation sprint must establish a **deterministic demonstration
-fixture** before any animation logic is written. The fixture is a single,
-reviewable, static data source that governs:
+The **deterministic demonstration fixture** exists before any animation logic
+is written. It is established in `data/demonstration-fixture.json`, explained in
+`DEMONSTRATION_FIXTURE.md`, and enforced by `tools/validate_fixture.py`. It is a
+single, reviewable, static data source that governs:
 
 - entity identifiers;
 - arrival order;
@@ -604,12 +609,24 @@ reviewable, static data source that governs:
 - Lattice placement (lane and cell for each entity);
 - unroutable relationships (stubs) under rules L4–L5;
 - Field placement;
-- viewport variants, or deterministic rules for deriving them.
+- viewport variants, or deterministic rules for deriving them. There is one
+  logical fixture for every viewport; only the transformations listed in
+  `DEMONSTRATION_FIXTURE.md` §13 are permitted.
+
+`data/demonstration-fixture.json` is the implementation source of truth for the
+demonstration graph and geometry (DEC-018).
 
 Rules:
 
 - Rendering and animation code reads the fixture. It never invents, randomizes,
   or recomputes any of these values independently.
+- Future HTML and JavaScript consume the fixture, or are compiled from it
+  faithfully. Runtime interface code contains no independent duplicate of the
+  graph or geometry. If fixture data is embedded in generated HTML, it is
+  derived mechanically from the fixture file, in the same way DEC-017 governs
+  reference pages.
+- The fixture must pass its validator before any interface acceptance testing
+  (`INTERFACE_ACCEPTANCE.md`, Gate 0).
 - The fixture must satisfy §1.1, §1.2, and §3.1, and must allow acceptance
   Tests 2, 3, and 14 to be checked against it.
 - The fixture is implementation data. It cannot redefine the thesis, the name,
@@ -617,7 +634,8 @@ Rules:
   the fixture is defective.
 
 This is an implementation integrity rule derived from DEC-011, DEC-012, and
-DEC-016, not a new conceptual decision. No fixture data is defined in Sprint 1.
+DEC-016, not a new conceptual decision. The fixture was established in Sprint 2
+(DEC-018 to DEC-021).
 
 ---
 

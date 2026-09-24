@@ -103,8 +103,9 @@ changes behavior between stages.
   are no smaller than reading text.
 - System labels and identifiers are never rendered below a legible minimum
   (about 12 CSS px at 100% zoom), and they scale with user font settings.
-- If a viewport cannot fit identifiers at the minimum size, fewer anchors are
-  shown (never below three). Labels are not shrunk.
+- If a viewport cannot fit identifiers at the minimum size, the demonstration
+  takes more space. Labels are not shrunk, and anchors are never dropped: the
+  four anchors in the canonical fixture appear on every viewport.
 
 ## 4. Density progression
 
@@ -133,5 +134,6 @@ signal of S4. The signal of S4 is the change of rule defined in
 - The stage navigation and state readout sit outside the boundary, in stable
   positions that do not change between stages.
 - Captions sit outside the boundary and never overlap nodes or links.
-- In S5, the transition record (a reduced Lattice beside the Field) uses the
-  same primitives at a smaller scale. It introduces no new visual elements.
+- In S5, the transition record (a smaller-scale Lattice beside the Field) uses
+  the same primitives and all 24 entities at a smaller scale. It introduces no
+  new visual elements.

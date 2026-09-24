@@ -5,10 +5,36 @@ operationalize `SITE_ARCHITECTURE.md` and the Sprint 1 contracts:
 `INTERFACE_CONTRACT.md`, `VISUAL_SYSTEM.md`, `MOTION_SEMANTICS.md`, and
 `RESPONSIVE_ACCESSIBILITY.md`.
 
+## Gate 0 — Fixture integrity
+
+**Precondition.** The implementation cannot enter the 18-test interface gate
+unless the canonical demonstration fixture passes its fixture validator.
+
+**Procedure.** From the repository root, run:
+
+```
+python tools/validate_fixture.py
+python -m unittest discover -s tests
+```
+
+Also confirm that the implementation's demonstration data is exactly
+`data/demonstration-fixture.json`, or is derived mechanically from it
+(`INTERFACE_CONTRACT.md` §8.2).
+
+**PASS** if both commands exit with status 0 and the implementation contains no
+independent graph or geometry.
+
+**FAIL** otherwise. Tests 1–18 are not run until Gate 0 passes.
+
+Gate 0 is machine-verifiable and checks data and geometry integrity. It is not
+a nineteenth interface test. Tests 1–18 judge interface behavior and presentation.
+
+---
+
 ## How to run the gate
 
 - Every test is either **PASS** or **FAIL**. There is no partial pass.
-- An implementation is accepted only if **all 18 tests pass**.
+- An implementation is accepted only if **Gate 0 passes and all 18 tests pass**.
 - Each test is run on at least one wide viewport and one mobile viewport, unless
   it names its own conditions.
 - Where a test asks a reviewer to judge without reading, the reviewer covers or
@@ -305,7 +331,7 @@ once each, and decorative geometry is not announced.
 
 **PASS** if there are no external script or font sources, no framework or
 analytics dependency without a recorded decision, no required WebGL, video, or
-autoplay media, and the indicative budgets in INTERFACE_CONTRACT §8 are met, or
+autoplay media, and the indicative size budgets in INTERFACE_CONTRACT §8 are met, or
 any excess is recorded and justified.
 
 **FAIL** otherwise.
