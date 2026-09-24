@@ -118,3 +118,82 @@ Status values: **Accepted**, **Superseded**, **Proposed**.
   unsettled ideas in visible form.
 - **Consequences:** Sprint 0 contains only the nine foundation documents. No
   `index.html` and no site publishing configuration exist.
+
+## DEC-011 — Phase change is represented by a rule change
+
+- **Status:** Accepted
+- **Decision:** The visual transition must alter geometry, topology, hierarchy,
+  or another structural rule. Increased intensity alone is not enough. The chosen
+  rule change is grid → relational field: before S4, position is assigned by
+  index within lanes and cells; after S4, position is derived from relationships.
+- **Rationale:** The thesis separates "more capability" from "a different
+  operating regime". An interface that shows the transition only as more
+  density, brightness, or speed would show more of the same, which is the
+  opposite of the thesis.
+- **Consequences:** `INTERFACE_CONTRACT.md` §2 defines the Lattice and Field
+  rules. Acceptance Tests 1 and 2 fail any implementation whose S4 differs from
+  S1 only in intensity or quantity.
+
+## DEC-012 — Identity persists across the transition
+
+- **Status:** Accepted
+- **Decision:** The interface represents one system crossing regimes, not one
+  scene being replaced by another. The entity set is frozen at the end of S3;
+  entities, anchors, relationships, and the boundary all persist through S4.
+- **Rationale:** The transition SIBurst names happens to a system. If the system
+  were replaced, the interface would show substitution, not transition.
+- **Consequences:** Cross-fading between independent compositions is prohibited.
+  Anchors carry permanent identifiers. Acceptance Test 3 enforces the invariant.
+
+## DEC-013 — Interface states are scoped to the demonstration
+
+- **Status:** Accepted
+- **Decision:** Labels such as `TRANSITION DETECTED` describe the on-screen model
+  state and must not imply real-world AI telemetry. Every state label carries a
+  scope prefix and stage index, the boundary identifies the system as a
+  demonstration, and telemetry vocabulary and devices are prohibited.
+- **Rationale:** An interface that looked like a live instrument would make an
+  implicit claim that a real transition is being observed, which
+  `PUBLIC_CLAIM_POLICY.md` forbids.
+- **Consequences:** `INTERFACE_CONTRACT.md` §5 defines the labels, framing rule,
+  and prohibited vocabulary. The progress variable `p` is never displayed as a
+  number. Acceptance Tests 5 and 15 enforce the boundary. This resolves the
+  Sprint 0 open question on interface-state framing.
+
+## DEC-014 — Motion must carry semantic information
+
+- **Status:** Accepted
+- **Decision:** Every animation must correspond to a defined state or
+  relationship change, within the six motion classes in `MOTION_SEMANTICS.md`.
+  Demonstration motion is driven by progress, and the system is still when the
+  visitor is idle.
+- **Rationale:** Ornamental motion is the most common route to generic AI imagery,
+  and it competes with the one change that matters.
+- **Consequences:** Ambient, looping, and decorative motion are prohibited.
+  Acceptance Test 9 fails any animation that cannot be mapped to a class and stage.
+
+## DEC-015 — Accessibility preserves the thesis
+
+- **Status:** Accepted
+- **Decision:** Reduced-motion, keyboard, mobile, zoomed, and assistive-technology
+  experiences must preserve the distinction between accumulation and regime
+  change. The target is WCAG 2.2 AA.
+- **Rationale:** A thesis that survives only under ideal viewing conditions is an
+  effect, not a concept. Every visitor should be able to see the difference
+  between more and different.
+- **Consequences:** `MOTION_SEMANTICS.md` §4 and `RESPONSIVE_ACCESSIBILITY.md`
+  define equivalent paths. Instability is confined to the demonstration.
+  Acceptance Tests 6, 7, 8, 13, and 17 enforce the requirement.
+
+## DEC-016 — Implementation remains static-first and dependency-minimal
+
+- **Status:** Accepted
+- **Decision:** The future site should prefer semantic HTML, CSS, SVG, and
+  minimal vanilla JavaScript. Frameworks, external script or font sources,
+  analytics, and heavy rendering need explicit justification through a recorded
+  decision.
+- **Rationale:** The concept should be understandable on modest hardware and
+  without scripting. Every dependency is a liability for durability,
+  performance, and accessibility.
+- **Consequences:** `INTERFACE_CONTRACT.md` §8 defines the constraints, budgets,
+  and progressive-enhancement baseline. Acceptance Tests 11 and 18 enforce them.
