@@ -70,7 +70,7 @@ documents implement the foundation; they do not redefine it.
 | [`docs/`](docs/) | The generated static site. Never edited by hand (DEC-022). |
 | [ACCESSIBILITY_TEST_17.md](ACCESSIBILITY_TEST_17.md) | The human screen-reader record that closed Interface Acceptance Test 17. |
 | [`tools/preflight_accessibility.py`](tools/preflight_accessibility.py) | Automated accessibility preflight. Machine evidence only; it does not satisfy Test 17. |
-| [PUBLICATION.md](PUBLICATION.md) | Public origin, publication files, operator steps, rollback, and post-deployment smoke test. |
+| [PUBLICATION.md](PUBLICATION.md) | Publication state, public origin, deployment model, publication files, operations, rollback, and smoke test. |
 
 ## Order of authority
 
@@ -92,14 +92,22 @@ corrected, not as a second meaning.
 - **Sprint 0 — conceptual foundation:** closed.
 - **Sprint 1 — interface contract:** closed.
 - **Sprint 2 — canonical demonstration fixture:** closed.
-- **Sprint 3 — executable static interface:** merged.
+- **Sprint 3 — executable static interface:** merged. Sprint 3 did not
+  launch the site.
 - **Sprint 3A — accessibility closure:** closed by a real screen-reader
   acceptance test (`ACCESSIBILITY_TEST_17.md`).
+- **Sprint 4 — publication:** launched (DEC-026).
 
 Interface acceptance: Gate 0 and all 18 tests in `INTERFACE_ACCEPTANCE.md`
 have passed. Test 17 rests on human evidence (an Android TalkBack traversal),
 and the other tests on machine verification and browser review.
 
-The static interface is built in `docs/` and prepared for publication at
-`https://siburst.com/` (`PUBLICATION.md`). **The site has not been published.**
-Publishing is a separate gate (DEC-024) and awaits explicit approval.
+**The site is published at `https://siburst.com/`**, its canonical origin.
+Pull request #5 was merged on 2026-09-24 as merge commit
+`7e76fa5e233cd4024dd454c068563e766c8f37ca`, and that commit was deployed to the
+`github-pages` environment. That launch closed the publication gate (DEC-024)
+under DEC-026.
+
+The site is built in `docs/`. GitHub Pages publishes it from `main` / `docs`, so
+every change to `docs/` that reaches `main` goes live. The repository's
+validation workflows check every change but never deploy (`PUBLICATION.md`).
