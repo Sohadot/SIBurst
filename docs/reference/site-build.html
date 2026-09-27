@@ -27,7 +27,7 @@
   <article class="doctrine">
 <h1 id="site-build">Site Build</h1>
 <p>How the SIBurst static interface is built, checked, and validated. The site is
-built for review only. <strong>It is not published</strong> (DEC-024).</p>
+published at <code>https://siburst.com/</code> from <code>main</code> / <code>docs</code> (DEC-026).</p>
 <h2 id="1-architecture">1. Architecture</h2>
 <pre><code>canonical Markdown (*.md)
 canonical fixture (data/demonstration-fixture.json)
@@ -228,8 +228,8 @@ base-uri 'none'; form-action 'none'
 contain no inline scripts, <code>&lt;style&gt;</code> elements, or <code>style</code> attributes. The
 script sets geometry through SVG attributes and one CSS custom property through
 the CSSOM, both of which the policy allows. <code>frame-ancestors</code> cannot be set
-through a <code>&lt;meta&gt;</code> element; it belongs to the server headers when publishing is
-authorized.</p>
+through a <code>&lt;meta&gt;</code> element. It would have to be sent as a server header,
+which GitHub Pages does not let the repository set.</p>
 <h3 id="javascript-architecture-systemjs">JavaScript architecture (<code>system.js</code>)</h3>
 <p>The script is an ES module (<code>&lt;script type=&quot;module&quot;&gt;</code>). It has two parts.</p>
 <p><strong>Pure functions</strong>, exported and tested in Node without a browser:</p>
@@ -530,11 +530,19 @@ is measured by <code>tools/validate_site.py</code>.</p>
 </tbody>
 </table>
 <p><code>.github/workflows/site-validation.yml</code> runs all of these with read-only
-permissions. It never deploys.</p>
-<h2 id="12-not-performed">12. Not performed</h2>
-<p>Sprint 3 does not publish. It adds no GitHub Pages configuration, DNS, or
-deployment workflow, and it does not launch the site. Those are a separate
-gate (DEC-024).</p>
+permissions. It never deploys. Deployment is separate: GitHub Pages is
+configured to publish from <code>main</code> / <code>docs</code>, so it publishes every change to
+<code>docs/</code> that reaches <code>main</code>.</p>
+<h2 id="12-publication">12. Publication</h2>
+<p>Sprint 3 did not publish. It added no GitHub Pages configuration, DNS, or
+deployment workflow, and it did not launch the site. Publication was a
+separate gate (DEC-024).</p>
+<p>That gate was closed by the launch (DEC-026). Pull request #5 was merged on
+2026-09-24 as merge commit <code>7e76fa5e233cd4024dd454c068563e766c8f37ca</code>. It was
+deployed to the <code>github-pages</code> environment, and <code>https://siburst.com/</code> is the
+canonical origin.</p>
+<p>The repository still contains no deployment workflow. GitHub Pages publishes
+<code>docs/</code> from <code>main</code> through its branch-publication setting.</p>
   </article>
   <p class="source-link">Generated from the canonical source <a href="https://github.com/Sohadot/SIBurst/blob/main/SITE_BUILD.md">SITE_BUILD.md</a>. The Markdown file is authoritative; this page is a derived rendering (DEC-017).</p>
   <p class="back-link"><a href="./">Back to the reference index</a></p>

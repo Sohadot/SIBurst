@@ -343,3 +343,23 @@ Status values: **Accepted**, **Superseded**, **Proposed**.
   documents change their explicit references, and the build check fails until
   the site is regenerated. The Reference Field is separate from the
   demonstration fixture and never alters it.
+
+## DEC-026 — The publication gate is closed by the live launch
+
+- **Status:** Accepted
+- **Decision:** The publication gate established by DEC-024 is formally
+  closed. Pull request #5 was merged into `main` on 2026-09-24 as merge commit
+  `7e76fa5e233cd4024dd454c068563e766c8f37ca`. That commit was successfully
+  deployed to the `github-pages` environment, and `https://siburst.com/` is the
+  active canonical origin.
+- **Rationale:** DEC-024 required governance review and a separately
+  authorized launch before public deployment. That launch has taken place.
+  The public record must describe the site as it is, not as it was before
+  launch.
+- **Consequences:** DEC-024 remains historically valid and is neither rewritten
+  nor deleted. It governed the period before launch. This decision ratifies
+  the existing publication only. It does not authorize infrastructure changes,
+  conceptual changes, or changes to the thesis, claims, or interface. Each such
+  change still follows its own governing document. Because GitHub Pages
+  publishes from `main` / `docs`, every merge to `main` that changes `docs/`
+  is published.

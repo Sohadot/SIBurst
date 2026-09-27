@@ -370,6 +370,26 @@ documents change their explicit references, and the build check fails until
 the site is regenerated. The Reference Field is separate from the
 demonstration fixture and never alters it.</li>
 </ul>
+<h2 id="dec-026-the-publication-gate-is-closed-by-the-live-launch">DEC-026 — The publication gate is closed by the live launch</h2>
+<ul>
+<li><strong>Status:</strong> Accepted</li>
+<li><strong>Decision:</strong> The publication gate established by DEC-024 is formally
+closed. Pull request #5 was merged into <code>main</code> on 2026-09-24 as merge commit
+<code>7e76fa5e233cd4024dd454c068563e766c8f37ca</code>. That commit was successfully
+deployed to the <code>github-pages</code> environment, and <code>https://siburst.com/</code> is the
+active canonical origin.</li>
+<li><strong>Rationale:</strong> DEC-024 required governance review and a separately
+authorized launch before public deployment. That launch has taken place.
+The public record must describe the site as it is, not as it was before
+launch.</li>
+<li><strong>Consequences:</strong> DEC-024 remains historically valid and is neither rewritten
+nor deleted. It governed the period before launch. This decision ratifies
+the existing publication only. It does not authorize infrastructure changes,
+conceptual changes, or changes to the thesis, claims, or interface. Each such
+change still follows its own governing document. Because GitHub Pages
+publishes from <code>main</code> / <code>docs</code>, every merge to <code>main</code> that changes <code>docs/</code>
+is published.</li>
+</ul>
   </article>
   <p class="source-link">Generated from the canonical source <a href="https://github.com/Sohadot/SIBurst/blob/main/DECISION_LOG.md">DECISION_LOG.md</a>. The Markdown file is authoritative; this page is a derived rendering (DEC-017).</p>
   <p class="back-link"><a href="./">Back to the reference index</a></p>

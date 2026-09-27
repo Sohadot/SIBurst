@@ -1,7 +1,7 @@
 # Site Build
 
 How the SIBurst static interface is built, checked, and validated. The site is
-built for review only. **It is not published** (DEC-024).
+published at `https://siburst.com/` from `main` / `docs` (DEC-026).
 
 ## 1. Architecture
 
@@ -128,8 +128,8 @@ Reference pages use `script-src 'none'` and omit `connect-src`. The pages
 contain no inline scripts, `<style>` elements, or `style` attributes. The
 script sets geometry through SVG attributes and one CSS custom property through
 the CSSOM, both of which the policy allows. `frame-ancestors` cannot be set
-through a `<meta>` element; it belongs to the server headers when publishing is
-authorized.
+through a `<meta>` element. It would have to be sent as a server header,
+which GitHub Pages does not let the repository set.
 
 ### JavaScript architecture (`system.js`)
 
@@ -332,10 +332,20 @@ Budgets (`INTERFACE_CONTRACT.md` §8):
 | `node --test tests/site-state.test.mjs` | State, geometry, and interpolation logic, and agreement between static figures and runtime geometry. |
 
 `.github/workflows/site-validation.yml` runs all of these with read-only
-permissions. It never deploys.
+permissions. It never deploys. Deployment is separate: GitHub Pages is
+configured to publish from `main` / `docs`, so it publishes every change to
+`docs/` that reaches `main`.
 
-## 12. Not performed
+## 12. Publication
 
-Sprint 3 does not publish. It adds no GitHub Pages configuration, DNS, or
-deployment workflow, and it does not launch the site. Those are a separate
-gate (DEC-024).
+Sprint 3 did not publish. It added no GitHub Pages configuration, DNS, or
+deployment workflow, and it did not launch the site. Publication was a
+separate gate (DEC-024).
+
+That gate was closed by the launch (DEC-026). Pull request #5 was merged on
+2026-09-24 as merge commit `7e76fa5e233cd4024dd454c068563e766c8f37ca`. It was
+deployed to the `github-pages` environment, and `https://siburst.com/` is the
+canonical origin.
+
+The repository still contains no deployment workflow. GitHub Pages publishes
+`docs/` from `main` through its branch-publication setting.
